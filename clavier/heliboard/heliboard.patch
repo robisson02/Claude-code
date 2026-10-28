@@ -186,7 +186,7 @@ index 8235e1f..fc9d039 100644
          // what user typed. Note: currently this is done much later in
          // LastComposedWord#didCommitTypedWord by string equality of the remembered
 diff --git a/app/src/main/java/helium314/keyboard/latin/settings/Defaults.kt b/app/src/main/java/helium314/keyboard/latin/settings/Defaults.kt
-index ae25420..3294191 100644
+index ae25420..07305cf 100644
 --- a/app/src/main/java/helium314/keyboard/latin/settings/Defaults.kt
 +++ b/app/src/main/java/helium314/keyboard/latin/settings/Defaults.kt
 @@ -64,6 +64,8 @@ object Defaults {
@@ -198,6 +198,25 @@ index ae25420..3294191 100644
      const val PREF_MORE_AUTO_CORRECTION = false
      const val PREF_AUTO_CORRECT_CONFIDENCE = 0.24f
      const val PREF_AUTOCORRECT_SHORTCUTS = true
+@@ -88,7 +90,8 @@ object Defaults {
+     @JvmField
+     val PREF_SPLIT_SPACER_SCALE = Array(4) { DEFAULT_SIZE_SCALE }
+     @JvmField
+-    val PREF_KEYBOARD_HEIGHT_SCALE = Array(4) { DEFAULT_SIZE_SCALE }
++    // Correcteur Réel : touches un peu moins hautes (90 %), pour compenser la rangée de chiffres affichée par défaut
++    val PREF_KEYBOARD_HEIGHT_SCALE = Array(4) { 0.9f }
+     @JvmField
+     val PREF_BOTTOM_ROW_SCALE = Array(4) { DEFAULT_SIZE_SCALE }
+     @JvmField
+@@ -145,7 +148,7 @@ object Defaults {
+     @SuppressLint("RtlHardcoded")
+     const val PREF_ONE_HANDED_GRAVITY = Gravity.LEFT
+     const val PREF_ONE_HANDED_SCALE = 1f
+-    const val PREF_SHOW_NUMBER_ROW = false
++    const val PREF_SHOW_NUMBER_ROW = true // Correcteur Réel : chiffres en haut du clavier
+     const val PREF_SHOW_NUMBER_ROW_IN_SYMBOLS = true
+     const val PREF_LOCALIZED_NUMBER_ROW = true
+     const val PREF_SHOW_NUMBER_ROW_HINTS = false
 diff --git a/app/src/main/java/helium314/keyboard/latin/settings/Settings.java b/app/src/main/java/helium314/keyboard/latin/settings/Settings.java
 index eb333f4..20599ef 100644
 --- a/app/src/main/java/helium314/keyboard/latin/settings/Settings.java

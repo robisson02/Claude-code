@@ -28,6 +28,10 @@ la correction d'un mot inconnu (`mdr`) le fait apprendre ; annuler celle de `ree
 5. Les réglages du correcteur sont dans **Correction du texte** : « Correcteur Réel (français) » et
    « Grammaire pendant la frappe ». La correction automatique de HeliBoard doit rester activée.
 
+Par défaut, le clavier affiche une rangée de chiffres en haut, et ses touches font 90 % de la hauteur
+habituelle de HeliBoard. Pour ajuster : dans l'application, **Apparence › Hauteur du clavier**, et
+**Préférences › Rangée de chiffres**.
+
 Au premier lancement, le dictionnaire (142 000 formes) met environ une seconde à se charger ; le clavier
 fonctionne normalement pendant ce temps.
 
