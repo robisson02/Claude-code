@@ -1,0 +1,891 @@
+<meta charset="utf-8">
+<title>Correcteur Réel</title>
+<meta name="claude:viewport-fit-sides" content="cover">
+<meta name="description" content="Prototype de correcteur pour clavier de téléphone : accents, fautes de frappe, grammaire et apprentissage qui ne retient jamais une faute.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Atkinson+Hyperlegible:ital,wght@0,400;0,700;1,400&family=Bricolage+Grotesque:opsz,wght@12..96,600;12..96,800&family=IBM+Plex+Mono:wght@400;500&display=swap">
+<style>
+/* Mise en page : une colonne « téléphone » (saisie + barre de suggestions, puis journal) et, sur grand écran,
+   la mémoire du clavier dans une seconde colonne. Le bleu est le crayon du correcteur : barré, puis corrigé. */
+:root {
+  --fond: #f3f5f8;
+  --surface: #ffffff;
+  --encre: #151922;
+  --gris: #586174;
+  --trait: #d9dee8;
+  --bleu: #2343c2;
+  --bleu-pale: #e5eafb;
+  --vert: #17704a;
+  --vert-pale: #e1f2e9;
+  --rouge: #b0281f;
+  --rouge-pale: #fbe8e5;
+  --ambre: #855600;
+  --ambre-pale: #faefd6;
+  --f-titre: "Bricolage Grotesque", "Segoe UI", system-ui, sans-serif;
+  --f-texte: "Atkinson Hyperlegible", system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;
+  --f-code: "IBM Plex Mono", ui-monospace, Menlo, Consolas, monospace;
+  --rayon: 14px;
+}
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme="light"]) {
+    --fond: #0f1218; --surface: #171b24; --encre: #e8ebf1; --gris: #9aa3b5; --trait: #2a303d;
+    --bleu: #93a8ff; --bleu-pale: #1d2647; --vert: #62c896; --vert-pale: #13301f;
+    --rouge: #ff8e7f; --rouge-pale: #3a1814; --ambre: #e4b54a; --ambre-pale: #33270c;
+    color-scheme: dark;
+  }
+}
+:root[data-theme="dark"] {
+  --fond: #0f1218; --surface: #171b24; --encre: #e8ebf1; --gris: #9aa3b5; --trait: #2a303d;
+  --bleu: #93a8ff; --bleu-pale: #1d2647; --vert: #62c896; --vert-pale: #13301f;
+  --rouge: #ff8e7f; --rouge-pale: #3a1814; --ambre: #e4b54a; --ambre-pale: #33270c;
+  color-scheme: dark;
+}
+
+* { box-sizing: border-box; }
+[hidden] { display: none !important; }
+body {
+  background: var(--fond);
+  color: var(--encre);
+  font: 16px/1.5 var(--f-texte);
+  padding-left: max(16px, env(safe-area-inset-left, 0px));
+  padding-right: max(16px, env(safe-area-inset-right, 0px));
+  padding-block: 20px 48px;
+}
+.page { max-width: 1080px; margin: 0 auto; display: grid; gap: 24px; }
+
+header { display: grid; gap: 8px; max-width: 62ch; }
+.surtitre, .etiquette, .compteur, .tag {
+  font-family: var(--f-code);
+  font-size: 0.75rem;
+  letter-spacing: 0.04em;
+}
+.surtitre { color: var(--gris); text-transform: uppercase; }
+h1 {
+  font-family: var(--f-titre);
+  font-weight: 800;
+  font-size: clamp(2rem, 7vw, 3rem);
+  line-height: 1.05;
+  margin: 0;
+  letter-spacing: -0.02em;
+  text-wrap: balance;
+}
+h1 .barre { text-decoration: line-through; text-decoration-color: var(--rouge); text-decoration-thickness: 0.08em; color: var(--gris); }
+h1 .corrige { color: var(--bleu); }
+.chapeau { margin: 0; color: var(--gris); font-size: 1.05rem; }
+h2 {
+  font-family: var(--f-titre);
+  font-weight: 600;
+  font-size: 1.2rem;
+  margin: 0;
+  text-wrap: balance;
+}
+
+.colonnes { display: grid; gap: 24px; align-items: start; }
+@media (min-width: 900px) { .colonnes { grid-template-columns: minmax(0, 1.35fr) minmax(0, 1fr); } }
+.colonne { display: grid; gap: 24px; min-width: 0; }
+
+/* Zone de saisie façon messagerie */
+.ecrire {
+  background: var(--surface);
+  border: 1px solid var(--trait);
+  border-radius: var(--rayon);
+  overflow: hidden;
+}
+.ecrire-tete { display: flex; justify-content: space-between; align-items: center; gap: 12px; padding: 10px 14px; border-bottom: 1px solid var(--trait); }
+.etat { color: var(--gris); font-family: var(--f-code); font-size: 0.75rem; }
+.etat[data-pret="oui"] { color: var(--vert); }
+textarea {
+  display: block;
+  width: 100%;
+  min-height: 9.5rem;
+  resize: vertical;
+  border: 0;
+  padding: 14px;
+  font: 1.2rem/1.5 var(--f-texte);
+  color: var(--encre);
+  background: transparent;
+}
+textarea:focus { outline: none; }
+.ecrire:focus-within { border-color: var(--bleu); box-shadow: 0 0 0 3px var(--bleu-pale); }
+textarea:disabled { color: var(--gris); }
+
+/* Barre de suggestions, comme au-dessus d'un clavier */
+.barre-suggestions {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  border-top: 1px solid var(--trait);
+  background: var(--fond);
+}
+.barre-suggestions button {
+  min-height: 48px;
+  border: 0;
+  background: transparent;
+  color: var(--encre);
+  font: 1.02rem var(--f-texte);
+  padding: 6px 8px;
+  cursor: pointer;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+.barre-suggestions button + button { border-left: 1px solid var(--trait); }
+.barre-suggestions button[data-principal="oui"] { font-weight: 700; color: var(--bleu); }
+.barre-suggestions button[data-tape="oui"]::before { content: "« "; color: var(--gris); }
+.barre-suggestions button[data-tape="oui"]::after { content: " »"; color: var(--gris); }
+.barre-suggestions button:disabled { cursor: default; color: var(--gris); }
+.barre-suggestions button:not(:disabled):hover, .barre-suggestions button:focus-visible { background: var(--bleu-pale); outline: none; }
+
+.annulation {
+  display: flex; align-items: center; gap: 10px; flex-wrap: wrap;
+  padding: 10px 14px; border-top: 1px solid var(--trait); font-size: 0.95rem;
+}
+.annulation .vers { min-width: 0; }
+
+/* Corrections : le mot fautif barré, la correction au crayon bleu */
+.avant { text-decoration: line-through; text-decoration-color: var(--rouge); color: var(--gris); }
+.apres { color: var(--bleu); font-weight: 700; }
+.fleche { color: var(--gris); padding-inline: 4px; }
+
+button.lien, button.bouton {
+  font: inherit;
+  cursor: pointer;
+  border-radius: 999px;
+  padding: 6px 14px;
+  border: 1px solid var(--trait);
+  background: var(--surface);
+  color: var(--encre);
+}
+button.bouton.fort { background: var(--bleu); border-color: var(--bleu); color: var(--surface); font-weight: 700; }
+button.lien { border: 0; padding: 4px 6px; background: transparent; color: var(--bleu); font-weight: 700; text-decoration: underline; text-underline-offset: 3px; }
+button.lien.danger { color: var(--rouge); }
+button:focus-visible, input:focus-visible { outline: 2px solid var(--bleu); outline-offset: 2px; }
+button:disabled { opacity: 0.55; cursor: default; }
+
+.essais { display: grid; gap: 10px; }
+.essais-liste { display: flex; flex-wrap: wrap; gap: 8px; }
+.essais-liste button { font-family: var(--f-texte); }
+.astuce { margin: 0; color: var(--gris); font-size: 0.95rem; max-width: 62ch; }
+.astuce kbd { font-family: var(--f-code); font-size: 0.85em; border: 1px solid var(--trait); border-radius: 5px; padding: 0 5px; background: var(--surface); }
+
+section.bloc { display: grid; gap: 12px; }
+.bloc-tete { display: flex; justify-content: space-between; align-items: baseline; gap: 12px; flex-wrap: wrap; }
+.compteur { color: var(--gris); font-variant-numeric: tabular-nums; }
+
+ul.liste { list-style: none; margin: 0; padding: 0; display: grid; }
+ul.liste li {
+  display: grid;
+  grid-template-columns: auto minmax(0, 1fr);
+  gap: 4px 12px;
+  align-items: baseline;
+  padding: 10px 0;
+  border-top: 1px solid var(--trait);
+}
+ul.liste li:first-child { border-top: 0; }
+.tag {
+  border-radius: 6px;
+  padding: 2px 7px;
+  white-space: nowrap;
+  background: var(--bleu-pale);
+  color: var(--bleu);
+  justify-self: start;
+}
+.tag[data-genre="grammaire"] { background: var(--ambre-pale); color: var(--ambre); }
+.tag[data-genre="appris"] { background: var(--vert-pale); color: var(--vert); }
+.tag[data-genre="refus"] { background: var(--rouge-pale); color: var(--rouge); }
+.tag[data-genre="neutre"] { background: var(--fond); color: var(--gris); }
+.detail { min-width: 0; overflow-wrap: anywhere; }
+.message { display: block; color: var(--gris); font-size: 0.9rem; }
+.vide { color: var(--gris); font-size: 0.95rem; margin: 0; padding: 4px 0; }
+.exemple-note { color: var(--gris); font-size: 0.85rem; margin: 0; }
+
+/* Mémoire du clavier */
+.memoire {
+  background: var(--surface);
+  border: 1px solid var(--trait);
+  border-radius: var(--rayon);
+  padding: 16px;
+  display: grid;
+  gap: 20px;
+}
+.groupe { display: grid; gap: 6px; }
+.groupe h3 { margin: 0; font: 700 0.95rem var(--f-texte); display: flex; gap: 8px; align-items: baseline; }
+.groupe .regle { margin: 0; color: var(--gris); font-size: 0.88rem; }
+.groupe ul.liste li { grid-template-columns: minmax(0, 1fr) auto; }
+.mot-memoire { font-weight: 700; }
+.pastille { width: 10px; height: 10px; border-radius: 50%; display: inline-block; flex: none; }
+.pastille.vert { background: var(--vert); }
+.pastille.ambre { background: var(--ambre); }
+.pastille.rouge { background: var(--rouge); }
+
+form.ajout { display: flex; gap: 8px; flex-wrap: wrap; }
+form.ajout input {
+  flex: 1 1 10rem;
+  min-width: 0;
+  font: 1rem var(--f-texte);
+  padding: 8px 12px;
+  border-radius: 10px;
+  border: 1px solid var(--trait);
+  background: var(--fond);
+  color: var(--encre);
+}
+.retour-ajout { margin: 0; font-size: 0.92rem; display: flex; flex-wrap: wrap; gap: 6px 10px; align-items: baseline; }
+.retour-ajout[data-ton="ok"] { color: var(--vert); }
+.retour-ajout[data-ton="refus"] { color: var(--rouge); }
+.options { display: grid; gap: 10px; border-top: 1px solid var(--trait); padding-top: 14px; }
+.options label { display: flex; gap: 10px; align-items: flex-start; font-size: 0.95rem; }
+.options input[type="checkbox"] { margin-top: 4px; accent-color: var(--bleu); width: 18px; height: 18px; flex: none; }
+
+footer { color: var(--gris); font-size: 0.88rem; max-width: 70ch; display: grid; gap: 6px; }
+footer p { margin: 0; }
+footer a { color: var(--bleu); }
+
+@media (prefers-reduced-motion: no-preference) {
+  ul.liste li.nouveau { animation: apparition 0.35s ease-out; }
+  @keyframes apparition { from { background: var(--bleu-pale); } to { background: transparent; } }
+}
+</style>
+
+<div class="page">
+  <header>
+    <span class="surtitre">Prototype · français · clavier AZERTY</span>
+    <h1>Correcteur <span class="barre">Reel</span> <span class="corrige">Réel</span></h1>
+    <p class="chapeau">Tapez comme sur votre téléphone. À chaque espace, le mot est corrigé, puis la phrase est relue
+      pour la grammaire. Le clavier apprend vos mots, jamais vos fautes : « reel » sera toujours corrigé en « réel ».</p>
+  </header>
+
+  <div class="colonnes">
+    <div class="colonne">
+      <div class="ecrire">
+        <div class="ecrire-tete">
+          <span class="etiquette">Message</span>
+          <span class="etat" id="etat">Chargement du dictionnaire…</span>
+        </div>
+        <textarea id="saisie" rows="5" disabled autocomplete="off" autocorrect="off" autocapitalize="sentences"
+          spellcheck="false" placeholder="Écrivez ici, par exemple : c'est tres reel"></textarea>
+        <div class="barre-suggestions" id="barre" aria-label="Suggestions">
+          <button type="button" tabindex="-1" disabled></button>
+          <button type="button" tabindex="-1" disabled>Suggestions</button>
+          <button type="button" tabindex="-1" disabled></button>
+        </div>
+        <div class="annulation" id="annulation" hidden></div>
+      </div>
+
+      <div class="essais">
+        <div class="bloc-tete"><h2>Essayer une phrase</h2>
+          <button type="button" class="lien" id="effacer-texte">Effacer le message</button></div>
+        <div class="essais-liste" id="essais">
+          <button type="button" class="bouton" data-phrase="c'est tres reel ">c'est tres reel</button>
+          <button type="button" class="bouton" data-phrase="je vais a paris demain ">je vais a paris demain</button>
+          <button type="button" class="bouton" data-phrase="ils mange, j'ai manger ">ils mange, j'ai manger</button>
+          <button type="button" class="bouton" data-phrase="ou est le telephonne ? ">ou est le telephonne ?</button>
+          <button type="button" class="bouton" data-phrase="sa va, bien sur que oui. ">sa va, bien sur que oui</button>
+        </div>
+        <p class="astuce">Pour voir l'apprentissage : tapez « mdr » puis une espace. Le clavier le corrige ; appuyez sur
+          <kbd>⌫</kbd> juste après pour annuler. Au deuxième refus, « mdr » rejoint vos mots. Faites pareil avec « reel » :
+          il reste corrigé, quoi que vous fassiez.</p>
+      </div>
+
+      <section class="bloc" aria-labelledby="titre-verifier" id="bloc-verifier" hidden>
+        <div class="bloc-tete"><h2 id="titre-verifier">À vérifier</h2>
+          <span class="compteur">propositions non appliquées</span></div>
+        <ul class="liste" id="verifier"></ul>
+      </section>
+
+      <section class="bloc" aria-labelledby="titre-journal">
+        <div class="bloc-tete"><h2 id="titre-journal">Journal des corrections</h2>
+          <button type="button" class="lien" id="tout-corriger" disabled>Corriger tout le message</button></div>
+        <p class="exemple-note" id="note-exemple" hidden>Exemple calculé au chargement, sur « c'est tres reel, je vais a paris et ils mange ».
+          Vos propres corrections s'afficheront ici.</p>
+        <ul class="liste" id="journal"></ul>
+      </section>
+    </div>
+
+    <aside class="memoire" aria-labelledby="titre-memoire">
+      <div class="bloc-tete"><h2 id="titre-memoire">Ce que le clavier a retenu</h2>
+        <span class="compteur" id="compteur-memoire"></span></div>
+
+      <div class="groupe">
+        <h3><span class="pastille vert"></span>Mots appris</h3>
+        <p class="regle">Valides pour le correcteur : vos prénoms, votre argot, vos abréviations.</p>
+        <ul class="liste" id="appris"></ul>
+      </div>
+
+      <div class="groupe">
+        <h3><span class="pastille ambre"></span>En observation</h3>
+        <p class="regle">Un mot inconnu est appris après 3 usages dans 2 contextes différents (2 pour un nom propre).
+          S'il ressemble à une faute de frappe, il faut annuler la correction 2 fois.</p>
+        <ul class="liste" id="quarantaine"></ul>
+      </div>
+
+      <div class="groupe">
+        <h3><span class="pastille rouge"></span>Jamais appris</h3>
+        <p class="regle">Les formes sans accent, sans apostrophe ou sans trait d'union d'un mot existant restent des fautes,
+          même tapées cent fois.</p>
+        <ul class="liste" id="bloques"></ul>
+      </div>
+
+      <form class="ajout" id="form-ajout">
+        <label for="mot-ajout" class="etiquette" style="flex-basis:100%">Ajouter un mot au dictionnaire</label>
+        <input id="mot-ajout" name="mot" autocomplete="off" autocapitalize="off" spellcheck="false" placeholder="ex. Kylian, wesh">
+        <button type="submit" class="bouton fort">Ajouter</button>
+      </form>
+      <p class="retour-ajout" id="retour-ajout" hidden></p>
+
+      <div class="options">
+        <label for="prive"><input type="checkbox" id="prive"><span><strong>Mode privé.</strong> Le clavier corrige mais
+          n'apprend rien, comme dans un champ de mot de passe.</span></label>
+        <div><button type="button" class="lien danger" id="oublier-tout">Effacer ce que le clavier a appris</button></div>
+      </div>
+    </aside>
+  </div>
+
+  <footer>
+    <p>Dictionnaire : Lexique 3.83 (New, Pallier et al., licence CC BY-SA 4.0), 142 000 formes avec leurs fréquences
+      et leurs conjugaisons. Tout tourne dans votre navigateur ; ce que le clavier apprend reste sur cet appareil.</p>
+    <p>Prototype du moteur : le code est dans le dossier <code>correcteur/</code> du dépôt. Si le clavier Samsung corrige
+      en même temps, désactivez un instant sa correction automatique pour voir celle-ci seule.</p>
+  </footer>
+</div>
+
+<script type="module">
+import { Correcteur } from "./src/moteur.js";
+import { Lexique } from "./src/lexique.js";
+import { ProfilUtilisateur, SEUILS } from "./src/profil.js";
+import { tokeniser } from "./src/texte.js";
+
+const $ = (id) => document.getElementById(id);
+const saisie = $("saisie");
+const CLE_STOCKAGE = "correcteur-reel-profil";
+const SEPARATEUR = /[\s.,;:!?…)\]"»]/u;
+const MOT_FINI = /(\p{L}+(?:['’-]\p{L}+)*['’]?)([^\p{L}\d'’-]+)$/u;
+const MOT_EN_COURS = /(\p{L}+(?:['’-]\p{L}+)*)$/u;
+const DERNIER_MOT = /(\p{L}+(?:['’-]\p{L}+)*['’]?)([^\p{L}\d'’-]*)$/u;
+const ETIQUETTES = {
+  "accent manquant": "accent", "apostrophe ou trait d'union manquant": "ponctuation",
+  "faute de frappe probable": "frappe", "nom propre": "majuscule",
+};
+
+let correcteur = null;
+let derniere = null;     // dernière correction automatique, pour l'annuler
+let traite = null;       // dernier mot déjà traité, pour ne pas le corriger deux fois
+let aVerifier = [];
+let journal = [];
+let exemple = true;
+let frappeAuto = null;
+const refusGrammaire = new Set();
+
+// --- Chargement --------------------------------------------------------------------------------
+
+async function lireTexte(url) {
+  const reponse = await fetch(url);
+  if (!reponse.ok) throw new Error(`${url} : ${reponse.status}`);
+  let octets = new Uint8Array(await reponse.arrayBuffer());
+  // Certains hébergeurs ne servent pas de .gz : le fichier compressé peut alors arriver encodé en base64.
+  if (octets[0] === 0x48 && octets[1] === 0x34 && octets[2] === 0x73 && octets[3] === 0x49) {
+    octets = Uint8Array.from(atob(new TextDecoder().decode(octets).trim()), (c) => c.charCodeAt(0));
+  }
+  if (octets[0] === 0x1f && octets[1] === 0x8b) {
+    const flux = new Blob([octets]).stream().pipeThrough(new DecompressionStream("gzip"));
+    return new Response(flux).text();
+  }
+  return new TextDecoder().decode(octets);
+}
+
+function chargerProfil(lexique) {
+  try {
+    const brut = localStorage.getItem(CLE_STOCKAGE);
+    if (brut) return ProfilUtilisateur.importer(JSON.parse(brut), lexique);
+  } catch { /* stockage indisponible : profil vierge */ }
+  return new ProfilUtilisateur(lexique);
+}
+
+function sauvegarder() {
+  try { localStorage.setItem(CLE_STOCKAGE, JSON.stringify(correcteur.profil.exporter())); } catch { /* ignoré */ }
+}
+
+async function demarrer() {
+  try {
+    const [principal, complements] = await Promise.all([lireTexte("data/lexique-fr.tsv.gz"), lireTexte("data/complements.tsv")]);
+    const lexique = Lexique.depuisTextes(principal, complements);
+    correcteur = new Correcteur(lexique, chargerProfil(lexique));
+    $("etat").textContent = `${lexique.entrees.size.toLocaleString("fr-FR")} mots prêts`;
+    $("etat").dataset.pret = "oui";
+    saisie.disabled = false;
+    $("tout-corriger").disabled = false;
+    remplirExemple();
+    rendreMemoire();
+    rendreSuggestions();
+  } catch (erreur) {
+    console.error(erreur);
+    $("etat").textContent = "Dictionnaire indisponible : rechargez la page";
+  }
+}
+
+function remplirExemple() {
+  const { corrections } = correcteur.corrigerTexte("c'est tres reel, je vais a paris et ils mange");
+  journal = corrections.map((c) => ({
+    genre: c.type === "grammaire" ? "grammaire" : "orthographe",
+    tag: c.type === "grammaire" ? c.regle : ETIQUETTES[c.message] ?? "orthographe",
+    avant: c.avant, apres: c.apres, message: c.message,
+  }));
+  exemple = true;
+  rendreJournal();
+}
+
+// --- Modification du texte ---------------------------------------------------------------------
+
+function contexteAvant(texte, debut) {
+  const mots = tokeniser(texte.slice(0, debut), (f) => correcteur.lexique.contient(f));
+  const separateur = mots.length ? texte.slice(mots[mots.length - 1].fin, debut) : "";
+  const coupe = /[.!?…\n,;:()"«»]/.test(separateur);
+  return {
+    precedent: mots.length && !coupe ? mots[mots.length - 1].texte : null,
+    debutPhrase: !mots.length || /[.!?…\n]/.test(separateur),
+  };
+}
+
+function remplacer(debut, fin, texte) {
+  const curseur = saisie.selectionStart;
+  const valeur = saisie.value;
+  saisie.value = valeur.slice(0, debut) + texte + valeur.slice(fin);
+  const ecart = texte.length - (fin - debut);
+  const nouveau = curseur >= fin ? curseur + ecart : Math.min(curseur, debut + texte.length);
+  saisie.setSelectionRange(nouveau, nouveau);
+}
+
+// --- Frappe ------------------------------------------------------------------------------------
+
+saisie.addEventListener("input", (e) => {
+  if (e.isTrusted) arreterFrappe();
+  if (!correcteur || e.isComposing) return rendreSuggestions();
+  surSaisie(e.inputType || "insertText");
+});
+saisie.addEventListener("compositionend", () => { if (correcteur) surSaisie("insertText"); });
+saisie.addEventListener("click", () => rendreSuggestions());
+saisie.addEventListener("keyup", (e) => { if (e.key.startsWith("Arrow")) rendreSuggestions(); });
+
+function surSaisie(type) {
+  const curseur = saisie.selectionStart;
+  if (type.startsWith("delete")) {
+    // ⌫ juste après une correction automatique : on rend le mot tapé, comme sur un téléphone.
+    if (type === "deleteContentBackward" && derniere?.type === "mot" && derniere.curseur === curseur + 1
+        && curseur === derniere.fin && saisie.value.slice(derniere.debut, derniere.fin) === derniere.apres) {
+      annulerDerniere();
+    }
+    return rendreSuggestions();
+  }
+  if (saisie.selectionEnd === curseur) {
+    const avant = saisie.value.slice(0, curseur);
+    if (SEPARATEUR.test(avant.slice(-1))) finDeMot(avant);
+  }
+  rendreSuggestions();
+}
+
+function finDeMot(avant) {
+  const m = MOT_FINI.exec(avant);
+  if (!m) return;
+  const debutBrut = m.index;
+  const finBrut = m.index + m[1].length;
+  if (traite && traite.fin === finBrut && traite.mot === m[1]) return;
+
+  const morceaux = tokeniser(avant.slice(0, finBrut), (f) => correcteur.lexique.contient(f))
+    .filter((t) => t.debut >= debutBrut);
+  let decalage = 0;
+  let correction = null;
+  for (const t of morceaux) {
+    const debut = t.debut + decalage;
+    const contexte = contexteAvant(saisie.value, debut);
+    const r = correcteur.motTermine(t.texte, contexte);
+    noterApprentissage(r.final, r.apprentissage);
+    if (r.auto && r.correction && r.correction !== t.texte) {
+      remplacer(debut, debut + t.texte.length, r.correction);
+      decalage += r.correction.length - t.texte.length;
+      correction = { type: "mot", debut, fin: debut + r.correction.length, avant: t.texte, apres: r.correction, contexte };
+      ajouterJournal({ genre: "orthographe", tag: ETIQUETTES[r.raison] ?? "accent", avant: t.texte, apres: r.correction, message: r.raison });
+    }
+  }
+  marquerTraite();
+  derniere = correction ? { ...correction, curseur: saisie.selectionStart } : null;
+  grammaireVivante();
+  sauvegarder();
+  rendreMemoire();
+  rendreAnnulation();
+}
+
+/** Retient le dernier mot avant le curseur comme déjà traité : une nouvelle espace ne le recorrigera pas. */
+function marquerTraite() {
+  const m = DERNIER_MOT.exec(saisie.value.slice(0, saisie.selectionStart));
+  traite = m ? { fin: m.index + m[1].length, mot: m[1] } : null;
+}
+
+function cleRefus(texte, c) {
+  return `${texte.slice(Math.max(0, c.debut - 30), c.debut)}|${c.avant}→${c.apres}`;
+}
+
+/** Relit la phrase en cours : les corrections sûres sur les derniers mots sont appliquées, les autres proposées. */
+function grammaireVivante() {
+  const curseur = saisie.selectionStart;
+  const texte = saisie.value.slice(0, curseur);
+  const trouvees = correcteur.verifierGrammaire(texte, { enCours: true })
+    .filter((c) => !refusGrammaire.has(cleRefus(texte, c)));
+  const mots = tokeniser(texte, (f) => correcteur.lexique.contient(f));
+  const limite = mots.length > 4 ? mots[mots.length - 4].debut : 0;
+  const sures = trouvees.filter((c) => c.confiance === "haute" && c.debut >= limite);
+  aVerifier = trouvees.filter((c) => !sures.includes(c));
+
+  let decalage = 0;
+  for (const c of sures) {
+    const debut = c.debut + decalage;
+    remplacer(debut, debut + c.avant.length, c.apres);
+    decalage += c.apres.length - c.avant.length;
+    ajouterJournal({ genre: "grammaire", tag: c.regle, avant: c.avant, apres: c.apres, message: c.message });
+    derniere = {
+      type: "grammaire", debut, fin: debut + c.apres.length, avant: c.avant, apres: c.apres,
+      cle: cleRefus(texte, c), curseur: saisie.selectionStart,
+    };
+  }
+  if (sures.length) marquerTraite();
+  rendreVerifier();
+  rendreAnnulation();
+}
+
+function annulerDerniere() {
+  const d = derniere;
+  derniere = null;
+  if (!d || saisie.value.slice(d.debut, d.fin) !== d.apres) return rendreAnnulation();
+  remplacer(d.debut, d.fin, d.avant);
+  marquerTraite();
+  if (d.type === "mot") {
+    const resultat = correcteur.annulerCorrection(d.avant, d.apres, d.contexte);
+    ajouterJournal({ genre: "neutre", tag: "annulé", avant: d.apres, apres: d.avant, message: "Correction annulée à votre demande" });
+    noterApprentissage(d.avant, resultat);
+  } else {
+    refusGrammaire.add(d.cle);
+    ajouterJournal({ genre: "neutre", tag: "annulé", avant: d.apres, apres: d.avant, message: "Cette correction ne sera plus proposée ici" });
+  }
+  sauvegarder();
+  rendreMemoire();
+  rendreAnnulation();
+  rendreSuggestions();
+}
+
+function noterApprentissage(mot, resultat) {
+  if (resultat?.statut === "appris") {
+    ajouterJournal({ genre: "appris", tag: "appris", mot, message: `« ${mot} » fait maintenant partie de vos mots` });
+  } else if (resultat?.statut === "bloque") {
+    ajouterJournal({ genre: "refus", tag: "jamais appris", mot, message: resultat.raison });
+  }
+}
+
+// --- Barre de suggestions ----------------------------------------------------------------------
+
+function rendreSuggestions() {
+  const boutons = [...$("barre").children];
+  let cases = [null, { texte: "Suggestions", inerte: true }, null];
+  if (correcteur && saisie.selectionStart === saisie.selectionEnd) {
+    const curseur = saisie.selectionStart;
+    const avant = saisie.value.slice(0, curseur);
+    const m = MOT_EN_COURS.exec(avant);
+    if (m) {
+      const partiel = m[1];
+      const contexte = contexteAvant(saisie.value, m.index);
+      const propositions = correcteur.suggestions(partiel, contexte, 3).filter((s) => s !== partiel);
+      const tape = { texte: partiel, tape: true, action: () => choisir(m.index, curseur, partiel, contexte, true) };
+      const autres = propositions.map((s) => ({ texte: s, action: () => choisir(m.index, curseur, s, contexte, false) }));
+      cases = [tape, autres[0] ? { ...autres[0], principal: true } : null, autres[1] ?? null];
+    } else if (derniere?.type === "mot" && derniere.curseur === curseur) {
+      cases = [{ texte: derniere.avant, tape: true, action: annulerDerniere }, { texte: derniere.apres, principal: true, inerte: true }, null];
+    }
+  }
+  boutons.forEach((b, i) => {
+    const c = cases[i];
+    b.textContent = c?.texte ?? "";
+    b.disabled = !c || Boolean(c.inerte && !c.principal) || !c.action;
+    b.dataset.principal = c?.principal ? "oui" : "non";
+    b.dataset.tape = c?.tape ? "oui" : "non";
+    b.onclick = c?.action ?? null;
+  });
+}
+
+// Garder le clavier du téléphone ouvert quand on touche une suggestion.
+$("barre").addEventListener("mousedown", (e) => e.preventDefault());
+
+function choisir(debut, fin, mot, contexte, garder) {
+  remplacer(debut, fin, mot + " ");
+  const resultat = garder ? correcteur.garderMot(mot, contexte) : correcteur.motTermine(mot, contexte).apprentissage;
+  noterApprentissage(mot, resultat);
+  marquerTraite();
+  derniere = null;
+  grammaireVivante();
+  sauvegarder();
+  rendreMemoire();
+  rendreSuggestions();
+  saisie.focus();
+}
+
+function rendreAnnulation() {
+  const zone = $("annulation");
+  zone.replaceChildren();
+  if (!derniere) { zone.hidden = true; return; }
+  const vers = document.createElement("span");
+  vers.className = "vers";
+  vers.append(span("avant", derniere.avant), span("fleche", "→"), span("apres", derniere.apres));
+  const bouton = document.createElement("button");
+  bouton.type = "button";
+  bouton.className = "lien";
+  bouton.textContent = "Annuler";
+  bouton.addEventListener("mousedown", (e) => e.preventDefault());
+  bouton.addEventListener("click", () => { annulerDerniere(); saisie.focus(); });
+  zone.append(vers, bouton);
+  zone.hidden = false;
+}
+
+// --- Rendu ---------------------------------------------------------------------------------------
+
+function span(classe, texte) {
+  const s = document.createElement("span");
+  s.className = classe;
+  s.textContent = texte;
+  return s;
+}
+
+function ajouterJournal(entree) {
+  if (exemple) { journal = []; exemple = false; }
+  journal.unshift({ ...entree, nouveau: true });
+  journal = journal.slice(0, 14);
+  rendreJournal();
+}
+
+function rendreJournal() {
+  $("note-exemple").hidden = !exemple;
+  const liste = $("journal");
+  liste.replaceChildren();
+  if (!journal.length) {
+    const li = document.createElement("li");
+    li.append(span("vide", "Rien pour l'instant. Tapez un message ou essayez une phrase ci-dessus."));
+    li.style.gridTemplateColumns = "1fr";
+    liste.append(li);
+  }
+  for (const e of journal) {
+    const li = document.createElement("li");
+    if (e.nouveau) { li.className = "nouveau"; e.nouveau = false; }
+    const tag = span("tag", e.tag);
+    tag.dataset.genre = e.genre;
+    const detail = document.createElement("span");
+    detail.className = "detail";
+    if (e.avant !== undefined) detail.append(span("avant", e.avant), span("fleche", "→"), span("apres", e.apres));
+    else detail.append(span("mot-memoire", e.mot));
+    detail.append(span("message", e.message ?? ""));
+    li.append(tag, detail);
+    liste.append(li);
+  }
+}
+
+function rendreVerifier() {
+  $("bloc-verifier").hidden = aVerifier.length === 0;
+  const liste = $("verifier");
+  liste.replaceChildren();
+  for (const c of aVerifier) {
+    const li = document.createElement("li");
+    const tag = span("tag", c.regle);
+    tag.dataset.genre = "grammaire";
+    const detail = document.createElement("span");
+    detail.className = "detail";
+    const bouton = document.createElement("button");
+    bouton.type = "button";
+    bouton.className = "lien";
+    bouton.textContent = "Appliquer";
+    bouton.addEventListener("click", () => {
+      if (saisie.value.slice(c.debut, c.fin) === c.avant) {
+        remplacer(c.debut, c.fin, c.apres);
+        ajouterJournal({ genre: "grammaire", tag: c.regle, avant: c.avant, apres: c.apres, message: c.message });
+      }
+      aVerifier = aVerifier.filter((x) => x !== c);
+      rendreVerifier();
+    });
+    detail.append(span("avant", c.avant), span("fleche", "→"), span("apres", c.apres), " ", bouton, span("message", c.message));
+    li.append(tag, detail);
+    liste.append(li);
+  }
+}
+
+function elementMemoire(mot, message, actions) {
+  const li = document.createElement("li");
+  const detail = document.createElement("span");
+  detail.className = "detail";
+  detail.append(span("mot-memoire", mot), span("message", message));
+  const boutons = document.createElement("span");
+  for (const [libelle, action, danger] of actions) {
+    const b = document.createElement("button");
+    b.type = "button";
+    b.className = danger ? "lien danger" : "lien";
+    b.textContent = libelle;
+    b.addEventListener("click", action);
+    boutons.append(b);
+  }
+  li.append(detail, boutons);
+  return li;
+}
+
+function remplirListe(id, elements, vide) {
+  const liste = $(id);
+  liste.replaceChildren();
+  if (!elements.length) {
+    const li = document.createElement("li");
+    li.style.gridTemplateColumns = "1fr";
+    li.append(span("vide", vide));
+    liste.append(li);
+  }
+  for (const el of elements) liste.append(el);
+}
+
+const SOURCES = { usage: "appris à l'usage", manuel: "ajouté à la main", contact: "contact" };
+
+function rendreMemoire() {
+  if (!correcteur) return;
+  const p = correcteur.profil;
+  const apres = () => { sauvegarder(); rendreMemoire(); };
+
+  remplirListe("appris", [...p.appris].reverse().map(([f, infos]) => elementMemoire(
+    infos.ecriture ?? f, `${SOURCES[infos.source] ?? infos.source} · tapé ${infos.occurrences} fois`,
+    [["Oublier", () => { p.oublier(f); apres(); }, true]],
+  )), "Aucun mot pour l'instant.");
+
+  remplirListe("quarantaine", [...p.quarantaine].reverse().map(([f, q]) => {
+    const progression = q.fauteProbableDe
+      ? `ressemble à « ${q.fauteProbableDe} » · annulé ${q.annulations} fois sur ${SEUILS.annulations}`
+      : `vu ${q.occurrences} fois sur ${SEUILS.occurrences}, dans ${q.contextes.length} contexte${q.contextes.length > 1 ? "s" : ""}`;
+    return elementMemoire(q.ecriture ?? f, progression, [["Apprendre", () => { p.ajouter(q.ecriture ?? f); apres(); }]]);
+  }), "Aucun mot en attente.");
+
+  remplirListe("bloques", [...p.bloques].reverse().map(([f, b]) => elementMemoire(
+    f, `forme sans accent de « ${b.correction} » · tapé ${b.tentatives} fois`,
+    [["Autoriser quand même", () => { p.ajouter(f, { forcer: true }); apres(); }]],
+  )), "Aucune faute refusée pour l'instant. Tapez « reel » puis annulez la correction pour voir.");
+
+  $("compteur-memoire").textContent = `${p.appris.size} appris · ${p.quarantaine.size} en attente · ${p.bloques.size} refusés`;
+}
+
+// --- Ajout manuel, mode privé, effacement ------------------------------------------------------
+
+$("form-ajout").addEventListener("submit", (e) => {
+  e.preventDefault();
+  if (!correcteur) return;
+  const mot = $("mot-ajout").value.trim();
+  if (!mot) return;
+  const retour = $("retour-ajout");
+  retour.replaceChildren();
+  const r = correcteur.profil.ajouter(mot);
+  if (r.ajoute) {
+    retour.dataset.ton = "ok";
+    retour.append(`« ${mot} » ajouté à vos mots.`);
+    $("mot-ajout").value = "";
+  } else if (r.correction) {
+    retour.dataset.ton = "refus";
+    const forcer = document.createElement("button");
+    forcer.type = "button";
+    forcer.className = "lien";
+    forcer.textContent = "L'ajouter quand même";
+    forcer.addEventListener("click", () => {
+      correcteur.profil.ajouter(mot, { forcer: true });
+      retour.dataset.ton = "ok";
+      retour.replaceChildren(`« ${mot} » ajouté à vos mots.`);
+      $("mot-ajout").value = "";
+      sauvegarder();
+      rendreMemoire();
+    });
+    retour.append(r.raison, forcer);
+  } else {
+    retour.dataset.ton = "ok";
+    retour.append(`« ${mot} » est ${r.raison}.`);
+  }
+  retour.hidden = false;
+  sauvegarder();
+  rendreMemoire();
+});
+
+$("prive").addEventListener("change", (e) => {
+  if (correcteur) correcteur.profil.apprentissageActif = !e.target.checked;
+});
+
+let confirmation = null;
+$("oublier-tout").addEventListener("click", (e) => {
+  const bouton = e.currentTarget;
+  if (!confirmation) {
+    bouton.textContent = "Confirmer : tout effacer";
+    confirmation = setTimeout(() => { bouton.textContent = "Effacer ce que le clavier a appris"; confirmation = null; }, 4000);
+    return;
+  }
+  clearTimeout(confirmation);
+  confirmation = null;
+  bouton.textContent = "Effacer ce que le clavier a appris";
+  if (!correcteur) return;
+  const actif = correcteur.profil.apprentissageActif;
+  correcteur.profil = new ProfilUtilisateur(correcteur.lexique);
+  correcteur.profil.apprentissageActif = actif;
+  sauvegarder();
+  rendreMemoire();
+});
+
+$("tout-corriger").addEventListener("click", () => {
+  if (!correcteur || !saisie.value.trim()) return;
+  const { texte, corrections } = correcteur.corrigerTexte(saisie.value);
+  saisie.value = texte;
+  for (const c of corrections) {
+    ajouterJournal({
+      genre: c.type === "grammaire" ? "grammaire" : "orthographe",
+      tag: c.type === "grammaire" ? c.regle : ETIQUETTES[c.message] ?? "orthographe",
+      avant: c.avant, apres: c.apres, message: c.message,
+    });
+  }
+  derniere = null;
+  traite = null;
+  rendreAnnulation();
+  rendreSuggestions();
+});
+
+$("effacer-texte").addEventListener("click", () => {
+  arreterFrappe();
+  saisie.value = "";
+  derniere = null;
+  traite = null;
+  aVerifier = [];
+  rendreVerifier();
+  rendreAnnulation();
+  rendreSuggestions();
+});
+
+// --- Phrases d'essai, tapées lettre par lettre ---------------------------------------------------
+
+const lent = !matchMedia("(prefers-reduced-motion: reduce)").matches;
+const pause = (ms) => new Promise((r) => setTimeout(r, ms));
+
+function arreterFrappe() { frappeAuto = null; }
+
+async function taper(phrase) {
+  if (!correcteur || saisie.disabled) return;
+  const jeton = {};
+  frappeAuto = jeton;
+  const fin = saisie.value.length;
+  saisie.setSelectionRange(fin, fin);
+  if (saisie.value && !/\s$/.test(saisie.value)) {
+    saisie.setRangeText(" ", fin, fin, "end");
+  }
+  for (const caractere of phrase) {
+    if (frappeAuto !== jeton) return;
+    const p = saisie.selectionStart;
+    saisie.setRangeText(caractere, p, saisie.selectionEnd, "end");
+    surSaisie("insertText");
+    if (lent) await pause(55);
+  }
+  frappeAuto = null;
+}
+
+$("essais").addEventListener("click", (e) => {
+  const bouton = e.target.closest("button[data-phrase]");
+  if (bouton) taper(bouton.dataset.phrase);
+});
+
+demarrer();
+</script>

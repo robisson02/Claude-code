@@ -1,0 +1,303 @@
+# Compléments au lexique de référence, même format que data/lexique-fr.tsv.gz :
+# forme	lemme	catégorie	genre	nombre	fréquence	conjugaisons
+# Lexique 3 ne contient pas les formes élidées (sauf « l' »), ni certains mots courants récents.
+j'	je	PRO:per			3000	
+c'	ce	PRO:dem			2500	
+qu'	que	CON			1500	
+m'	me	PRO:per			1200	
+t'	te	PRO:per			800	
+s'	se	PRO:per			1000	
+d'	de	PRE			2500	
+n'	ne	ADV			1500	
+jusqu'	jusque	PRE			100	
+lorsqu'	lorsque	CON			20	
+puisqu'	puisque	CON			20	
+quoiqu'	quoique	CON			5	
+email		NOM	m	s	5	
+smartphone		NOM	m	s	5	
+smartphones	smartphone	NOM	m	p	2	
+wifi		NOM	m	s	5	
+appli		NOM	f	s	5	
+applis	appli	NOM	f	p	2	
+sms		NOM	m		5	
+selfie		NOM	m	s	3	
+selfies	selfie	NOM	m	p	1	
+emoji		NOM	m	s	3	
+emojis	emoji	NOM	m	p	1	
+blog		NOM	m	s	3	
+blogs	blog	NOM	m	p	1	
+podcast		NOM	m	s	3	
+podcasts	podcast	NOM	m	p	1	
+streaming		NOM	m	s	2	
+spam		NOM	m	s	2	
+spams	spam	NOM	m	p	1	
+textos	texto	NOM	m	p	1	
+ordi		NOM	m	s	5	
+ordis	ordi	NOM	m	p	1	
+tchat		NOM	m	s	2	
+quelqu'	quelque	ADJ:ind			20	
+# Prénoms courants (NPR : nom propre), pour ne pas les « corriger » en mots du dictionnaire.
+marie		NPR			1	
+paul		NPR			1	
+pierre		NPR			1	
+jean		NPR			1	
+jeanne		NPR			1	
+léa		NPR			1	
+emma		NPR			1	
+lucas		NPR			1	
+hugo		NPR			1	
+louis		NPR			1	
+gabriel		NPR			1	
+arthur		NPR			1	
+jules		NPR			1	
+chloé		NPR			1	
+manon		NPR			1	
+camille		NPR			1	
+sarah		NPR			1	
+inès		NPR			1	
+jade		NPR			1	
+louise		NPR			1	
+alice		NPR			1	
+lina		NPR			1	
+mila		NPR			1	
+ambre		NPR			1	
+rose		NPR			1	
+anna		NPR			1	
+julia		NPR			1	
+zoé		NPR			1	
+juliette		NPR			1	
+léna		NPR			1	
+nathan		NPR			1	
+mathis		NPR			1	
+théo		NPR			1	
+tom		NPR			1	
+noah		NPR			1	
+raphaël		NPR			1	
+léo		NPR			1	
+adam		NPR			1	
+ethan		NPR			1	
+nolan		NPR			1	
+enzo		NPR			1	
+maël		NPR			1	
+sacha		NPR			1	
+timéo		NPR			1	
+mathéo		NPR			1	
+victor		NPR			1	
+martin		NPR			1	
+antoine		NPR			1	
+thomas		NPR			1	
+nicolas		NPR			1	
+julien		NPR			1	
+maxime		NPR			1	
+alexandre		NPR			1	
+romain		NPR			1	
+kevin		NPR			1	
+mehdi		NPR			1	
+karim		NPR			1	
+mohamed		NPR			1	
+yanis		NPR			1	
+rayan		NPR			1	
+amine		NPR			1	
+sofiane		NPR			1	
+nadia		NPR			1	
+sophie		NPR			1	
+céline		NPR			1	
+nathalie		NPR			1	
+isabelle		NPR			1	
+sandrine		NPR			1	
+stéphanie		NPR			1	
+valérie		NPR			1	
+christine		NPR			1	
+catherine		NPR			1	
+françoise		NPR			1	
+monique		NPR			1	
+sylvie		NPR			1	
+laurence		NPR			1	
+aurélie		NPR			1	
+émilie		NPR			1	
+julie		NPR			1	
+laura		NPR			1	
+marine		NPR			1	
+pauline		NPR			1	
+clara		NPR			1	
+lucie		NPR			1	
+océane		NPR			1	
+mathilde		NPR			1	
+margaux		NPR			1	
+charlotte		NPR			1	
+élise		NPR			1	
+eva		NPR			1	
+lola		NPR			1	
+nina		NPR			1	
+romane		NPR			1	
+agathe		NPR			1	
+capucine		NPR			1	
+léonie		NPR			1	
+margot		NPR			1	
+valentin		NPR			1	
+clément		NPR			1	
+quentin		NPR			1	
+florian		NPR			1	
+benjamin		NPR			1	
+guillaume		NPR			1	
+vincent		NPR			1	
+sébastien		NPR			1	
+stéphane		NPR			1	
+laurent		NPR			1	
+olivier		NPR			1	
+philippe		NPR			1	
+patrick		NPR			1	
+michel		NPR			1	
+alain		NPR			1	
+bernard		NPR			1	
+christophe		NPR			1	
+frédéric		NPR			1	
+éric		NPR			1	
+david		NPR			1	
+daniel		NPR			1	
+didier		NPR			1	
+thierry		NPR			1	
+pascal		NPR			1	
+françois		NPR			1	
+jacques		NPR			1	
+gérard		NPR			1	
+rené		NPR			1	
+andré		NPR			1	
+henri		NPR			1	
+robert		NPR			1	
+claude		NPR			1	
+yves		NPR			1	
+jérôme		NPR			1	
+fabien		NPR			1	
+damien		NPR			1	
+arnaud		NPR			1	
+cédric		NPR			1	
+loïc		NPR			1	
+yann		NPR			1	
+dylan		NPR			1	
+baptiste		NPR			1	
+axel		NPR			1	
+evan		NPR			1	
+samuel		NPR			1	
+simon		NPR			1	
+noé		NPR			1	
+aaron		NPR			1	
+gabin		NPR			1	
+liam		NPR			1	
+malo		NPR			1	
+lino		NPR			1	
+valentine		NPR			1	
+anaïs		NPR			1	
+mélissa		NPR			1	
+jessica		NPR			1	
+audrey		NPR			1	
+caroline		NPR			1	
+hélène		NPR			1	
+anne		NPR			1	
+claire		NPR			1	
+marion		NPR			1	
+élodie		NPR			1	
+amandine		NPR			1	
+jennifer		NPR			1	
+coralie		NPR			1	
+nadège		NPR			1	
+patricia		NPR			1	
+martine		NPR			1	
+dominique		NPR			1	
+brigitte		NPR			1	
+chantal		NPR			1	
+danielle		NPR			1	
+annie		NPR			1	
+josiane		NPR			1	
+odile		NPR			1	
+ginette		NPR			1	
+josette		NPR			1	
+yvette		NPR			1	
+michèle		NPR			1	
+nicole		NPR			1	
+colette		NPR			1	
+denise		NPR			1	
+paulette		NPR			1	
+suzanne		NPR			1	
+germaine		NPR			1	
+lucien		NPR			1	
+marcel		NPR			1	
+georges		NPR			1	
+roger		NPR			1	
+maurice		NPR			1	
+raymond		NPR			1	
+fernand		NPR			1	
+gilles		NPR			1	
+serge		NPR			1	
+bruno		NPR			1	
+franck		NPR			1	
+xavier		NPR			1	
+hervé		NPR			1	
+joël		NPR			1	
+lionel		NPR			1	
+mickaël		NPR			1	
+anthony		NPR			1	
+jordan		NPR			1	
+jérémy		NPR			1	
+alexis		NPR			1	
+adrien		NPR			1	
+bastien		NPR			1	
+corentin		NPR			1	
+dorian		NPR			1	
+erwan		NPR			1	
+gaël		NPR			1	
+hadrien		NPR			1	
+killian		NPR			1	
+lilian		NPR			1	
+mathieu		NPR			1	
+matthieu		NPR			1	
+morgan		NPR			1	
+rémi		NPR			1	
+tristan		NPR			1	
+ulysse		NPR			1	
+william		NPR			1	
+yohan		NPR			1	
+ayoub		NPR			1	
+bilal		NPR			1	
+hamza		NPR			1	
+ibrahim		NPR			1	
+ilyes		NPR			1	
+ismaël		NPR			1	
+issa		NPR			1	
+moussa		NPR			1	
+omar		NPR			1	
+youssef		NPR			1	
+ali		NPR			1	
+aya		NPR			1	
+fatima		NPR			1	
+leïla		NPR			1	
+lilou		NPR			1	
+lyna		NPR			1	
+maëlys		NPR			1	
+nour		NPR			1	
+salomé		NPR			1	
+yasmine		NPR			1	
+assia		NPR			1	
+imane		NPR			1	
+kenza		NPR			1	
+sonia		NPR			1	
+samia		NPR			1	
+rania		NPR			1	
+cyril		NPR			1	
+mathias		NPR			1	
+benoît		NPR			1	
+grégoire		NPR			1	
+estelle		NPR			1	
+fanny		NPR			1	
+gaëlle		NPR			1	
+joséphine		NPR			1	
+lise		NPR			1	
+maëlle		NPR			1	
+noémie		NPR			1	
+ophélie		NPR			1	
+perrine		NPR			1	
+solène		NPR			1	
+tiphaine		NPR			1	
+victoire		NPR			1	
+apolline		NPR			1	
+clémence		NPR			1	

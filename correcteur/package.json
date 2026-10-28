@@ -1,0 +1,15 @@
+{
+  "name": "correcteur-clavier",
+  "version": "0.1.0",
+  "description": "Prototype de moteur de correction pour clavier de téléphone : orthographe, accents, grammaire et apprentissage protégé",
+  "type": "module",
+  "private": true,
+  "scripts": {
+    "test": "node --test test/*.test.js",
+    "corriger": "node outils/corriger.mjs",
+    "construire-lexique": "node scripts/construire-lexique.mjs"
+  },
+  "engines": {
+    "node": ">=18"
+  }
+}
