@@ -1,0 +1,68 @@
+# Construit l'APK du clavier Correcteur Réel sur les serveurs de GitHub (qui ont le SDK Android)
+# et le publie dans la version « clavier » des Releases du dépôt, à télécharger depuis le téléphone.
+name: APK du clavier
+
+on:
+  push:
+    paths:
+      - "clavier/**"
+      - "correcteur/data/**"
+      - ".github/workflows/clavier-apk.yml"
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+concurrency:
+  group: clavier-apk
+  cancel-in-progress: true
+
+jobs:
+  apk:
+    runs-on: ubuntu-latest
+    timeout-minutes: 60
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-java@v4
+        with:
+          distribution: temurin
+          java-version: 21
+
+      - uses: gradle/actions/setup-gradle@v4
+        with:
+          gradle-version: "8.14.3"
+
+      - name: Tests du moteur (parité avec la version JavaScript)
+        run: gradle --no-daemon -p clavier/moteur test
+
+      - name: Composants Android (plateforme et NDK demandés par HeliBoard)
+        run: |
+          yes | "$ANDROID_HOME/cmdline-tools/latest/bin/sdkmanager" --licenses > /dev/null || true
+          "$ANDROID_HOME/cmdline-tools/latest/bin/sdkmanager" "platforms;android-37" "ndk;28.0.13004108" > /dev/null || true
+
+      # La clé de signature créée à la première construction est gardée dans le cache de GitHub (jamais dans
+      # le dépôt) : les versions suivantes s'installent par-dessus sans perdre ce que le clavier a appris.
+      - name: Clé de signature
+        uses: actions/cache@v4
+        with:
+          path: ~/.android/debug.keystore
+          key: cle-signature-clavier-correcteur-reel
+
+      - name: Construction de l'APK
+        run: clavier/heliboard/construire-apk.sh
+
+      - uses: actions/upload-artifact@v4
+        with:
+          name: CorrecteurReel-apk
+          path: clavier/build/CorrecteurReel.apk
+
+      - name: Publication dans les Releases
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          gh release delete clavier --cleanup-tag --yes || true
+          gh release create clavier clavier/build/CorrecteurReel.apk \
+            --target "${{ github.sha }}" --prerelease \
+            --title "Clavier Correcteur Réel (prototype)" \
+            --notes "Construit à partir du commit ${{ github.sha }}. Sur le téléphone : télécharger CorrecteurReel.apk, l'ouvrir et autoriser l'installation, puis Paramètres › Gestion globale › Clavier et méthode de saisie › activer « Correcteur Réel » et le choisir comme clavier par défaut. Voir clavier/README.md."

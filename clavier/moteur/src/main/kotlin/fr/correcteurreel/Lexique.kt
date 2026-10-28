@@ -25,7 +25,7 @@ class FormeConjuguee(val forme: String, val lecture: Lecture) {
 
 class Entree(val forme: String) {
     var freq = 0.0
-    val lectures = mutableListOf<Lecture>()
+    val lectures = ArrayList<Lecture>(1)
 }
 
 class Lexique {
@@ -38,8 +38,9 @@ class Lexique {
     private var clesTriees: Array<String> = emptyArray()
     /** première lettre → longueur → clés, pour chercher les mots à deux fautes près */
     private val parInitiale = HashMap<Char, HashMap<Int, MutableList<String>>>()
-    // Partage des petites chaînes répétées des milliers de fois (catégories, tags, lemmes).
+    // Partage des petites chaînes et listes répétées des milliers de fois (catégories, conjugaisons, lemmes).
     private val chaines = HashMap<String, String>()
+    private val listesDeTags = HashMap<String, List<String>>()
 
     private fun partager(s: String) = chaines.getOrPut(s) { s }
 
@@ -59,7 +60,7 @@ class Lexique {
                     genre = partager(c.getOrNull(3).orEmpty()),
                     nombre = partager(c.getOrNull(4).orEmpty()),
                     freq = c.getOrNull(5)?.toDoubleOrNull()?.takeUnless { it.isNaN() } ?: 0.0,
-                    tags = if (tags.isEmpty()) emptyList() else tags.split(',').map(::partager),
+                    tags = listesDeTags.getOrPut(tags) { if (tags.isEmpty()) emptyList() else tags.split(',').map(::partager) },
                 ),
             )
         }
@@ -68,7 +69,9 @@ class Lexique {
     fun ajouter(ortho: String, lecture: Lecture) {
         val f = forme(ortho)
         val entree = entrees.getOrPut(f) {
-            parCle.getOrPut(cle(f)) { mutableListOf() }.add(f)
+            val k = cle(f)
+            // La plupart des mots n'ont ni accent ni apostrophe : leur clé est la forme elle-même.
+            parCle.getOrPut(if (k == f) f else k) { ArrayList(1) }.add(f)
             Entree(f)
         }
         entree.freq += lecture.freq
@@ -88,6 +91,7 @@ class Lexique {
             parInitiale.getOrPut(k[0]) { HashMap() }.getOrPut(k.length) { mutableListOf() } += k
         }
         chaines.clear()
+        listesDeTags.clear()
     }
 
     /** Clés de même initiale et de longueur proche (on se trompe rarement sur la première lettre deux fois). */

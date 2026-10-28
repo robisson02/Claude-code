@@ -1,0 +1,293 @@
+diff --git a/app/src/debug/res/values/strings.xml b/app/src/debug/res/values/strings.xml
+index e8755c2..fbb8921 100644
+--- a/app/src/debug/res/values/strings.xml
++++ b/app/src/debug/res/values/strings.xml
+@@ -3,8 +3,8 @@
+     SPDX-License-Identifier: GPL-3.0-only
+ -->
+ <resources>
+-    <string name="english_ime_name" translatable="false">HeliBoard debug</string>
+-    <string name="spell_checker_service_name" translatable="false">HeliBoard debug Spell Checker</string>
+-    <string name="ime_settings" translatable="false">HeliBoard debug Settings</string>
++    <string name="english_ime_name" translatable="false">Correcteur Réel</string>
++    <string name="spell_checker_service_name" translatable="false">Correcteur Réel (orthographe)</string>
++    <string name="ime_settings" translatable="false">Réglages de Correcteur Réel</string>
+ 
+ </resources>
+diff --git a/app/src/debugNoMinify/res/values/strings.xml b/app/src/debugNoMinify/res/values/strings.xml
+index 73f1a95..1197ea0 100644
+--- a/app/src/debugNoMinify/res/values/strings.xml
++++ b/app/src/debugNoMinify/res/values/strings.xml
+@@ -3,7 +3,7 @@
+     SPDX-License-Identifier: GPL-3.0-only
+ -->
+ <resources>
+-    <string name="english_ime_name" translatable="false">HeliBoard debug</string>
+-    <string name="spell_checker_service_name" translatable="false">HeliBoard debug Spell Checker</string>
+-    <string name="ime_settings" translatable="false">HeliBoard debug Settings</string>
++    <string name="english_ime_name" translatable="false">Correcteur Réel</string>
++    <string name="spell_checker_service_name" translatable="false">Correcteur Réel (orthographe)</string>
++    <string name="ime_settings" translatable="false">Réglages de Correcteur Réel</string>
+ </resources>
+diff --git a/app/src/main/java/helium314/keyboard/latin/LatinIME.java b/app/src/main/java/helium314/keyboard/latin/LatinIME.java
+index 61a1805..f10b99a 100644
+--- a/app/src/main/java/helium314/keyboard/latin/LatinIME.java
++++ b/app/src/main/java/helium314/keyboard/latin/LatinIME.java
+@@ -51,6 +51,7 @@ import helium314.keyboard.keyboard.MainKeyboardView;
+ import helium314.keyboard.latin.SuggestedWords.SuggestedWordInfo;
+ import helium314.keyboard.latin.common.ColorType;
+ import helium314.keyboard.latin.common.Constants;
++import helium314.keyboard.latin.correcteur.CorrecteurReel;
+ import helium314.keyboard.latin.common.CoordinateUtils;
+ import helium314.keyboard.latin.common.InputPointers;
+ import helium314.keyboard.latin.common.ViewOutlineProviderUtilsKt;
+@@ -503,6 +504,7 @@ public class LatinIME extends InputMethodService implements
+         mDisplayContext = KtxKt.getDisplayContext(this);
+         KeyboardSwitcher.init(this);
+         super.onCreate();
++        CorrecteurReel.initialiser(this);
+ 
+         loadSettings();
+         mClipboardHistoryManager.onCreate();
+@@ -621,6 +623,7 @@ public class LatinIME extends InputMethodService implements
+ 
+     @Override
+     public void onDestroy() {
++        CorrecteurReel.sauvegarder();
+         mClipboardHistoryManager.onDestroy();
+         mDictionaryFacilitator.closeDictionaries();
+         mSettings.onDestroy();
+@@ -954,6 +957,7 @@ public class LatinIME extends InputMethodService implements
+         Log.i(TAG, "onFinishInput");
+ 
+         mDictionaryFacilitator.onFinishInput();
++        CorrecteurReel.sauvegarder();
+         final MainKeyboardView mainKeyboardView = mKeyboardSwitcher.getMainKeyboardView();
+         if (mainKeyboardView != null) {
+             mainKeyboardView.closing();
+diff --git a/app/src/main/java/helium314/keyboard/latin/Suggest.kt b/app/src/main/java/helium314/keyboard/latin/Suggest.kt
+index b50fd40..2dfd6b2 100644
+--- a/app/src/main/java/helium314/keyboard/latin/Suggest.kt
++++ b/app/src/main/java/helium314/keyboard/latin/Suggest.kt
+@@ -14,6 +14,7 @@ import helium314.keyboard.latin.common.ComposedData
+ import helium314.keyboard.latin.common.Constants
+ import helium314.keyboard.latin.common.InputPointers
+ import helium314.keyboard.latin.common.StringUtils
++import helium314.keyboard.latin.correcteur.CorrecteurReel
+ import helium314.keyboard.latin.define.DebugFlags
+ import helium314.keyboard.latin.define.DecoderSpecificConstants.SHOULD_AUTO_CORRECT_USING_NON_WHITE_LISTED_SUGGESTION
+ import helium314.keyboard.latin.define.DecoderSpecificConstants.SHOULD_REMOVE_PREVIOUSLY_REJECTED_SUGGESTION
+@@ -82,6 +83,10 @@ class Suggest(private val mDictionaryFacilitator: DictionaryFacilitator) {
+         val trailingSingleQuotesCount = StringUtils.getTrailingSingleQuotesCount(typedWordString)
+         val capsMode = getCapsModeForTyping(wordComposer, keyboard)
+         val suggestionsContainer = ArrayList(suggestionResults)
++        // Correcteur Réel : ses propositions passent en tête, et c'est lui qui décide de la correction automatique.
++        val avisCorrecteur = if (resultsArePredictions || wordComposer.isResumed) null
++            else CorrecteurReel.avis(Settings.getValues(), typedWordString, ngramContext)
++        if (avisCorrecteur != null) CorrecteurReel.ajouterPropositions(suggestionsContainer, avisCorrecteur, ngramContext)
+         capitalizeAndAddTrailingSingleQuotes(suggestionsContainer, capsMode, trailingSingleQuotesCount, mDictionaryFacilitator.mainLocale)
+         val capitalizedTypedWord = capitalize(typedWordString, capsMode, mDictionaryFacilitator.mainLocale)
+ 
+@@ -92,7 +97,7 @@ class Suggest(private val mDictionaryFacilitator: DictionaryFacilitator) {
+         val firstOccurrenceOfTypedWordInSuggestions = SuggestedWordInfo.removeDupsAndTypedWord(capitalizedTypedWord, suggestionsContainer)
+         makeFirstTwoSuggestionsNonEmoji(suggestionsContainer)
+ 
+-        val (allowsToBeAutoCorrected, hasAutoCorrection) = shouldBeAutoCorrected(
++        var (allowsToBeAutoCorrected, hasAutoCorrection) = shouldBeAutoCorrected(
+             trailingSingleQuotesCount,
+             capitalizedTypedWord,
+             suggestionsContainer.firstOrNull(),
+@@ -109,6 +114,11 @@ class Suggest(private val mDictionaryFacilitator: DictionaryFacilitator) {
+             firstOccurrenceOfTypedWordInSuggestions,
+             typedWordFirstOccurrenceWordInfo
+         )
++        if (avisCorrecteur != null) {
++            allowsToBeAutoCorrected = !avisCorrecteur.valide
++            hasAutoCorrection = isCorrectionEnabled
++                && CorrecteurReel.estCorrectionDuMoteur(suggestionsContainer.firstOrNull(), avisCorrecteur)
++        }
+         val typedWordInfo = SuggestedWordInfo(typedWordString, "", SuggestedWordInfo.MAX_SCORE,
+             SuggestedWordInfo.KIND_TYPED, typedWordFirstOccurrenceWordInfo?.mSourceDict ?: Dictionary.DICTIONARY_USER_TYPED,
+             SuggestedWordInfo.NOT_AN_INDEX , SuggestedWordInfo.NOT_A_CONFIDENCE)
+diff --git a/app/src/main/java/helium314/keyboard/latin/inputlogic/InputLogic.java b/app/src/main/java/helium314/keyboard/latin/inputlogic/InputLogic.java
+index 8235e1f..fc9d039 100644
+--- a/app/src/main/java/helium314/keyboard/latin/inputlogic/InputLogic.java
++++ b/app/src/main/java/helium314/keyboard/latin/inputlogic/InputLogic.java
+@@ -51,6 +51,7 @@ import helium314.keyboard.latin.WordComposer;
+ import helium314.keyboard.latin.common.Constants;
+ import helium314.keyboard.latin.common.InputPointers;
+ import helium314.keyboard.latin.common.StringUtils;
++import helium314.keyboard.latin.correcteur.CorrecteurReel;
+ import helium314.keyboard.latin.common.StringUtilsKt;
+ import helium314.keyboard.latin.common.SuggestionSpanUtilsKt;
+ import helium314.keyboard.latin.define.DebugFlags;
+@@ -1236,9 +1237,26 @@ public final class InputLogic {
+             }
+         }
+ 
++        if (wasComposingWord) {
++            appliquerGrammaire(settingsValues, inputTransaction);
++        }
+         inputTransaction.requireShiftUpdate(InputTransaction.SHIFT_UPDATE_NOW);
+     }
+ 
++    /**
++     * Correcteur Réel : après chaque mot, corrige les mots qui le précèdent
++     * (« je vais a paris » devient « je vais à paris » dès que « paris » est tapé).
++     */
++    private void appliquerGrammaire(final SettingsValues settingsValues, final InputTransaction inputTransaction) {
++        if (mWordComposer.isComposingWord() || mConnection.hasSelection()) return;
++        final CharSequence avant = mConnection.getTextBeforeCursor(CorrecteurReel.LONGUEUR_RELUE, 0);
++        final CorrecteurReel.Remplacement remplacement = CorrecteurReel.grammaireApresMot(settingsValues, avant);
++        if (avant == null || remplacement == null) return;
++        mConnection.deleteTextBeforeCursor(avant.length() - remplacement.debut);
++        mConnection.commitText(remplacement.nouvelleFin, 1);
++        inputTransaction.setRequiresUpdateSuggestions();
++    }
++
+     /**
+      * Handle a press on the backspace key.
+      * @param event The event to handle.
+@@ -1909,6 +1927,8 @@ public final class InputLogic {
+         if (!TextUtils.isEmpty(committedWord)) {
+             unlearnWord(committedWordString, inputTransaction.getSettingsValues(), DictionaryFacilitator.UnlearnEvent.REVERT);
+         }
++        CorrecteurReel.correctionAnnulee(inputTransaction.getSettingsValues(), originallyTypedWord.toString(),
++                committedWordString, mLastComposedWord.mNgramContext);
+         final String stringToCommit = originallyTypedWord +
+                 (usePhantomSpace ? "" : separatorString);
+         final SpannableString textToCommit = new SpannableString(stringToCommit);
+@@ -2336,7 +2356,13 @@ public final class InputLogic {
+         }
+         final SuggestedWordInfo autoCorrectionOrNull = mWordComposer.getAutoCorrectionOrNull();
+         final String typedWord = mWordComposer.getTypedWord();
+-        final String stringToCommit = (autoCorrectionOrNull != null) ? autoCorrectionOrNull.mWord : typedWord;
++        String stringToCommit = (autoCorrectionOrNull != null) ? autoCorrectionOrNull.mWord : typedWord;
++        // Correcteur Réel : accorde le mot avec ce qui précède (« ils mange » → « ils mangent »).
++        // Il passe par la correction automatique : un retour arrière l'annule.
++        if (stringToCommit != null && !mWordComposer.isResumed()) {
++            stringToCommit = CorrecteurReel.accorder(settingsValues,
++                    mConnection.getTextBeforeCursor(CorrecteurReel.LONGUEUR_RELUE, 0), typedWord, stringToCommit, separator);
++        }
+         if (stringToCommit != null) {
+             final boolean isBatchMode = mWordComposer.isBatchMode();
+             commitChosenWord(settingsValues, stringToCommit, LastComposedWord.COMMIT_TYPE_DECIDED_WORD, separator);
+@@ -2414,6 +2440,12 @@ public final class InputLogic {
+                     + "performAdditionToUserHistoryDictionary()");
+             startTimeMillis = SystemClock.elapsedRealtime();
+         }
++        // Correcteur Réel : apprend le mot écrit, jamais une forme sans accent d'un mot existant
++        if (!mWordComposer.isResumed()) {
++            CorrecteurReel.motEcrit(settingsValues, chosenWord,
++                    commitType == LastComposedWord.COMMIT_TYPE_MANUAL_PICK && chosenWord.equals(mWordComposer.getTypedWord()),
++                    ngramContext);
++        }
+         // TODO: figure out here if this is an auto-correct or if the best word is actually
+         // what user typed. Note: currently this is done much later in
+         // LastComposedWord#didCommitTypedWord by string equality of the remembered
+diff --git a/app/src/main/java/helium314/keyboard/latin/settings/Defaults.kt b/app/src/main/java/helium314/keyboard/latin/settings/Defaults.kt
+index ae25420..3294191 100644
+--- a/app/src/main/java/helium314/keyboard/latin/settings/Defaults.kt
++++ b/app/src/main/java/helium314/keyboard/latin/settings/Defaults.kt
+@@ -64,6 +64,8 @@ object Defaults {
+     @JvmField
+     var PREF_POPUP_ON = true
+     const val PREF_AUTO_CORRECTION = true
++    const val PREF_CORRECTEUR_REEL = true
++    const val PREF_CORRECTEUR_REEL_GRAMMAIRE = true
+     const val PREF_MORE_AUTO_CORRECTION = false
+     const val PREF_AUTO_CORRECT_CONFIDENCE = 0.24f
+     const val PREF_AUTOCORRECT_SHORTCUTS = true
+diff --git a/app/src/main/java/helium314/keyboard/latin/settings/Settings.java b/app/src/main/java/helium314/keyboard/latin/settings/Settings.java
+index eb333f4..20599ef 100644
+--- a/app/src/main/java/helium314/keyboard/latin/settings/Settings.java
++++ b/app/src/main/java/helium314/keyboard/latin/settings/Settings.java
+@@ -78,6 +78,8 @@ public final class Settings implements SharedPreferences.OnSharedPreferenceChang
+     public static final String PREF_SHOW_EMOJI_DESCRIPTIONS = "show_emoji_descriptions";
+     public static final String PREF_POPUP_ON = "popup_on";
+     public static final String PREF_AUTO_CORRECTION = "auto_correction";
++    public static final String PREF_CORRECTEUR_REEL = "correcteur_reel";
++    public static final String PREF_CORRECTEUR_REEL_GRAMMAIRE = "correcteur_reel_grammaire";
+     public static final String PREF_MORE_AUTO_CORRECTION = "more_auto_correction";
+     public static final String PREF_AUTO_CORRECT_CONFIDENCE = "auto_correct_confidence";
+     public static final String PREF_AUTOCORRECT_SHORTCUTS = "autocorrect_shortcuts";
+diff --git a/app/src/main/java/helium314/keyboard/latin/settings/SettingsValues.java b/app/src/main/java/helium314/keyboard/latin/settings/SettingsValues.java
+index d2c7180..16e82e8 100644
+--- a/app/src/main/java/helium314/keyboard/latin/settings/SettingsValues.java
++++ b/app/src/main/java/helium314/keyboard/latin/settings/SettingsValues.java
+@@ -166,6 +166,8 @@ public class SettingsValues {
+     // Deduced settings
+     public final boolean mSuggestionStripHiddenPerUserSettings;
+     public final boolean mAutoCorrectEnabled;
++    public final boolean mCorrecteurReel;
++    public final boolean mCorrecteurReelGrammaire;
+     public final float mAutoCorrectionThreshold;
+     public final int mScoreLimitForAutocorrect;
+     public final SettingsValuesForSuggestion mSettingsValuesForSuggestion;
+@@ -225,6 +227,8 @@ public class SettingsValues {
+         mAutoCorrectEnabled = mAutoCorrectionEnabledPerUserSettings
+                 && (mInputAttributes.mInputTypeShouldAutoCorrect || prefs.getBoolean(Settings.PREF_MORE_AUTO_CORRECTION, Defaults.PREF_MORE_AUTO_CORRECTION))
+                 && (mUrlDetectionEnabled || !InputTypeUtils.isUriOrEmailType(mInputAttributes.mInputType));
++        mCorrecteurReel = prefs.getBoolean(Settings.PREF_CORRECTEUR_REEL, Defaults.PREF_CORRECTEUR_REEL);
++        mCorrecteurReelGrammaire = prefs.getBoolean(Settings.PREF_CORRECTEUR_REEL_GRAMMAIRE, Defaults.PREF_CORRECTEUR_REEL_GRAMMAIRE);
+         mCenterSuggestionTextToEnter = prefs.getBoolean(Settings.PREF_CENTER_SUGGESTION_TEXT_TO_ENTER, Defaults.PREF_CENTER_SUGGESTION_TEXT_TO_ENTER);
+         float autoCorrectConfidence = prefs.getFloat(Settings.PREF_AUTO_CORRECT_CONFIDENCE, Defaults.PREF_AUTO_CORRECT_CONFIDENCE);
+         // confidence -> threshold and score limit are just some formulas that give something similar to the old values, so that confidence can be in a nice 0-1 range
+diff --git a/app/src/main/java/helium314/keyboard/settings/screens/TextCorrectionScreen.kt b/app/src/main/java/helium314/keyboard/settings/screens/TextCorrectionScreen.kt
+index 2353362..fa44c08 100644
+--- a/app/src/main/java/helium314/keyboard/settings/screens/TextCorrectionScreen.kt
++++ b/app/src/main/java/helium314/keyboard/settings/screens/TextCorrectionScreen.kt
+@@ -63,6 +63,9 @@ fun TextCorrectionScreen(
+         R.string.settings_category_correction,
+         Settings.PREF_BLOCK_POTENTIALLY_OFFENSIVE,
+         Settings.PREF_AUTO_CORRECTION,
++        Settings.PREF_CORRECTEUR_REEL,
++        if (prefs.getBoolean(Settings.PREF_CORRECTEUR_REEL, Defaults.PREF_CORRECTEUR_REEL))
++            Settings.PREF_CORRECTEUR_REEL_GRAMMAIRE else null,
+         if (autocorrectEnabled) Settings.PREF_MORE_AUTO_CORRECTION else null,
+         if (autocorrectEnabled) Settings.PREF_AUTOCORRECT_SHORTCUTS else null,
+         if (autocorrectEnabled) Settings.PREF_AUTOCORRECT_CAPITALIZED_SUGGESTION else null,
+@@ -121,6 +124,14 @@ fun createCorrectionSettings(context: Context) = listOf(
+     ) {
+         SwitchPreference(it, Defaults.PREF_AUTO_CORRECTION)
+     },
++    Setting(context, Settings.PREF_CORRECTEUR_REEL, R.string.correcteur_reel, R.string.correcteur_reel_summary) {
++        SwitchPreference(it, Defaults.PREF_CORRECTEUR_REEL)
++    },
++    Setting(context, Settings.PREF_CORRECTEUR_REEL_GRAMMAIRE,
++        R.string.correcteur_reel_grammaire, R.string.correcteur_reel_grammaire_summary
++    ) {
++        SwitchPreference(it, Defaults.PREF_CORRECTEUR_REEL_GRAMMAIRE)
++    },
+     Setting(context, Settings.PREF_MORE_AUTO_CORRECTION,
+         R.string.more_autocorrect, R.string.more_autocorrect_summary
+     ) {
+diff --git a/app/src/main/res/values/donottranslate.xml b/app/src/main/res/values/donottranslate.xml
+index 5a7f4e5..f5822cf 100644
+--- a/app/src/main/res/values/donottranslate.xml
++++ b/app/src/main/res/values/donottranslate.xml
+@@ -70,7 +70,7 @@
+     <!-- Description for Hebrew 2 subtype. -->
+     <string name="subtype_hebrew_1452_2" translatable="false">%s (1452-2)</string>
+ 
+-    <string name="english_ime_name" translatable="false">HeliBoard</string>
++    <string name="english_ime_name" translatable="false">Correcteur Réel</string>
+     <!-- App slogan-->
+     <string name="app_slogan" translatable="false">100% FOSS keyboard, based on AOSP.</string>
+ 
+diff --git a/app/src/main/res/values/strings.xml b/app/src/main/res/values/strings.xml
+index 41445eb..72fc2f7 100644
+--- a/app/src/main/res/values/strings.xml
++++ b/app/src/main/res/values/strings.xml
+@@ -137,6 +137,11 @@
+     <!-- Option to enable auto correction -->
+     <string name="autocorrect">Auto-correction</string>
+     <!-- Description for auto correction -->
++    <!-- Correcteur Réel : réglages propres au correcteur français -->
++    <string name="correcteur_reel" translatable="false">Correcteur Réel (français)</string>
++    <string name="correcteur_reel_summary" translatable="false">Accents, fautes de frappe et apprentissage de vos mots, sans jamais apprendre une faute (« reel » reste corrigé en « réel »)</string>
++    <string name="correcteur_reel_grammaire" translatable="false">Grammaire pendant la frappe</string>
++    <string name="correcteur_reel_grammaire_summary" translatable="false">a/à, ou/où, la/là, accords du verbe, participe ou infinitif. Retour arrière juste après pour annuler.</string>
+     <string name="auto_correction_summary">Spacebar and punctuation automatically correct mistyped words</string>
+     <!-- Option to enable auto correction for many fields that do not request auto correction -->
+     <string name="more_autocorrect">More auto-correction</string>
