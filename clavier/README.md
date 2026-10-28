@@ -32,6 +32,21 @@ Par défaut, le clavier affiche une rangée de chiffres en haut, et ses touches 
 habituelle de HeliBoard. Pour ajuster : dans l'application, **Apparence › Hauteur du clavier**, et
 **Préférences › Rangée de chiffres**.
 
+### Thème « La Place des Artisans »
+
+Le clavier est habillé aux couleurs de [La Place des Artisans](https://laplacedesartisans.fr) : fond crème
+en léger dégradé avec un filet doré en haut, touches blanc cassé à texte encre, touche Entrée vert sapin.
+Le village du logo (maisons, clocher, cyprès, colline dorée) est dessiné dans la barre d'espace, la seule
+touche sans lettre : rien n'est posé derrière les autres touches, qui gardent tout leur contraste.
+Quand le téléphone passe en mode sombre, la variante « nuit » prend le relais (vert profond, or, touche
+Entrée ocre).
+
+Pour changer : **Apparence › Couleurs** (et « Couleurs (mode nuit) ») dans l'application. Une image
+choisie avec **Apparence › Définir une image d'arrière-plan** remplace le dégradé, les touches gardent
+leurs couleurs.
+Si le clavier était déjà installé et qu'un autre thème y avait été choisi, sélectionnez « La Place des
+Artisans » à cet endroit.
+
 Au premier lancement, le dictionnaire (142 000 formes) met environ une seconde à se charger ; le clavier
 fonctionne normalement pendant ce temps.
 
@@ -53,6 +68,7 @@ clavier/
 └── heliboard/
     ├── heliboard.patch     modifications de HeliBoard (une dizaine de points d'accroche)
     ├── src/CorrecteurReel.kt   pont entre HeliBoard et le moteur
+    ├── src/PlaceDesArtisans.kt thème « La Place des Artisans » (couleurs, fond, village)
     └── construire-apk.sh   récupère HeliBoard (version figée), applique le tout, compile
 ```
 
@@ -77,6 +93,7 @@ cd clavier/moteur && gradle test          # tests du moteur
 | `InputLogic.java`, `commitChosenWord` et `revertCommit` | Apprentissage, et mémorisation des corrections annulées. |
 | `LatinIME.java` | Chargement du dictionnaire au démarrage, sauvegarde de ce qui a été appris. |
 | `Settings`, `TextCorrectionScreen.kt` | Les deux réglages. |
+| `KeyboardTheme.kt`, `Colors.kt`, `MainKeyboardView.java`, `Defaults.kt` | Thème « La Place des Artisans » par défaut (jour et nuit, touches avec bordures), village dessiné dans la barre d'espace. |
 
 ### Limites
 

@@ -29,6 +29,67 @@ index 73f1a95..1197ea0 100644
 +    <string name="spell_checker_service_name" translatable="false">Correcteur Réel (orthographe)</string>
 +    <string name="ime_settings" translatable="false">Réglages de Correcteur Réel</string>
  </resources>
+diff --git a/app/src/main/java/helium314/keyboard/keyboard/KeyboardTheme.kt b/app/src/main/java/helium314/keyboard/keyboard/KeyboardTheme.kt
+index 7bb42bd..f4a1d07 100644
+--- a/app/src/main/java/helium314/keyboard/keyboard/KeyboardTheme.kt
++++ b/app/src/main/java/helium314/keyboard/keyboard/KeyboardTheme.kt
+@@ -20,6 +20,7 @@ import helium314.keyboard.latin.common.ColorType
+ import helium314.keyboard.latin.common.Colors
+ import helium314.keyboard.latin.common.DefaultColors
+ import helium314.keyboard.latin.common.DynamicColors
++import helium314.keyboard.latin.correcteur.PlaceDesArtisans
+ import helium314.keyboard.latin.settings.Defaults
+ import helium314.keyboard.latin.settings.Settings
+ import helium314.keyboard.latin.utils.ResourceUtils
+@@ -65,7 +66,10 @@ private constructor(val themeId: Int, @JvmField val mStyleId: Int) {
+         const val THEME_PINK = "pink"
+         const val THEME_SAND = "sand"
+         const val THEME_VIOLETTE = "violette"
++        const val THEME_PLACE_ARTISANS = "place_artisans"
++        const val THEME_PLACE_ARTISANS_NUIT = "place_artisans_nuit"
+         fun getAvailableDefaultColors(prefs: SharedPreferences, isNight: Boolean) = listOfNotNull(
++            if (!isNight) THEME_PLACE_ARTISANS else null, THEME_PLACE_ARTISANS_NUIT,
+             if (!isNight) THEME_LIGHT else null, THEME_DARK,
+             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.S) THEME_DYNAMIC else null,
+             if (prefs.getString(Settings.PREF_THEME_STYLE, Defaults.PREF_THEME_STYLE) == STYLE_HOLO) THEME_HOLO_WHITE else null,
+@@ -148,6 +152,8 @@ private constructor(val themeId: Int, @JvmField val mStyleId: Int) {
+             val hasBorders = prefs.getBoolean(Settings.PREF_THEME_KEY_BORDERS, Defaults.PREF_THEME_KEY_BORDERS)
+             val backgroundImage = Settings.readUserBackgroundImage(context, isNight)
+             return when (themeName) {
++                THEME_PLACE_ARTISANS, THEME_PLACE_ARTISANS_NUIT ->
++                    PlaceDesArtisans.couleurs(themeStyle, hasBorders, themeName == THEME_PLACE_ARTISANS_NUIT, backgroundImage)
+                 THEME_DYNAMIC -> {
+                     if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.S) DynamicColors(context, themeStyle, hasBorders, backgroundImage)
+                     else getThemeColors(THEME_LIGHT, themeStyle, context, prefs, isNight)
+diff --git a/app/src/main/java/helium314/keyboard/keyboard/MainKeyboardView.java b/app/src/main/java/helium314/keyboard/keyboard/MainKeyboardView.java
+index 08612d7..39c21d3 100644
+--- a/app/src/main/java/helium314/keyboard/keyboard/MainKeyboardView.java
++++ b/app/src/main/java/helium314/keyboard/keyboard/MainKeyboardView.java
+@@ -18,6 +18,7 @@ import android.graphics.Color;
+ import android.graphics.Paint;
+ import android.graphics.Paint.Align;
+ import android.graphics.Typeface;
++import android.graphics.drawable.Drawable;
+ import android.util.AttributeSet;
+ import android.view.ContextThemeWrapper;
+ import android.view.LayoutInflater;
+@@ -707,8 +708,15 @@ public final class MainKeyboardView extends KeyboardView implements DrawingProxy
+         if (key.altCodeWhileTyping() && key.isEnabled()) {
+             params.mAnimAlpha = Constants.Color.ALPHA_OPAQUE;
+         }
+-        super.onDrawKeyTopVisuals(key, canvas, paint, params);
+         final int code = key.getCode();
++        final Drawable illustration = code == Constants.CODE_SPACE ? Settings.getValues().mColors.getIllustrationEspace() : null;
++        if (illustration != null) {
++            // fainter when the language name is written on top of it
++            illustration.setBounds(0, 0, key.getDrawWidth(), key.getHeight());
++            illustration.setAlpha(mLanguageOnSpacebarFormatType != LanguageOnSpacebarUtils.FORMAT_TYPE_NONE ? 110 : 255);
++            illustration.draw(canvas);
++        }
++        super.onDrawKeyTopVisuals(key, canvas, paint, params);
+         if (code == Constants.CODE_SPACE) {
+             // If input language are explicitly selected.
+             if (mLanguageOnSpacebarFormatType != LanguageOnSpacebarUtils.FORMAT_TYPE_NONE) {
 diff --git a/app/src/main/java/helium314/keyboard/latin/LatinIME.java b/app/src/main/java/helium314/keyboard/latin/LatinIME.java
 index 61a1805..f10b99a 100644
 --- a/app/src/main/java/helium314/keyboard/latin/LatinIME.java
@@ -109,6 +170,28 @@ index b50fd40..2dfd6b2 100644
          val typedWordInfo = SuggestedWordInfo(typedWordString, "", SuggestedWordInfo.MAX_SCORE,
              SuggestedWordInfo.KIND_TYPED, typedWordFirstOccurrenceWordInfo?.mSourceDict ?: Dictionary.DICTIONARY_USER_TYPED,
              SuggestedWordInfo.NOT_AN_INDEX , SuggestedWordInfo.NOT_A_CONFIDENCE)
+diff --git a/app/src/main/java/helium314/keyboard/latin/common/Colors.kt b/app/src/main/java/helium314/keyboard/latin/common/Colors.kt
+index 278b460..dc623a2 100644
+--- a/app/src/main/java/helium314/keyboard/latin/common/Colors.kt
++++ b/app/src/main/java/helium314/keyboard/latin/common/Colors.kt
+@@ -47,6 +47,9 @@ interface Colors {
+     val accentShiftedIcon: Boolean get() =
+         Settings.getCurrentContext().prefs().getBoolean(Settings.PREF_ACCENT_SHIFTED_ICON, Defaults.PREF_ACCENT_SHIFTED_ICON)
+ 
++    /** drawn on the space bar (La Place des Artisans theme), null for other themes */
++    val illustrationEspace: Drawable? get() = null
++
+     /** use to check whether colors have changed, for colors (in)directly derived from context,
+      *  e.g. night mode or potentially changing system colors */
+     fun haveColorsChanged(context: Context): Boolean = false
+@@ -381,6 +384,7 @@ class DefaultColors (
+     private val spaceBarText: Int = keyHintText,
+     private val gesture: Int = accent,
+     private var keyboardBackground: Drawable? = null,
++    override val illustrationEspace: Drawable? = null,
+ ) : Colors {
+     private val navBar: Int
+     /** brightened or darkened variant of [background], to be used if exact background color would be
 diff --git a/app/src/main/java/helium314/keyboard/latin/inputlogic/InputLogic.java b/app/src/main/java/helium314/keyboard/latin/inputlogic/InputLogic.java
 index 8235e1f..fc9d039 100644
 --- a/app/src/main/java/helium314/keyboard/latin/inputlogic/InputLogic.java
@@ -186,9 +269,22 @@ index 8235e1f..fc9d039 100644
          // what user typed. Note: currently this is done much later in
          // LastComposedWord#didCommitTypedWord by string equality of the remembered
 diff --git a/app/src/main/java/helium314/keyboard/latin/settings/Defaults.kt b/app/src/main/java/helium314/keyboard/latin/settings/Defaults.kt
-index ae25420..07305cf 100644
+index ae25420..71a6f57 100644
 --- a/app/src/main/java/helium314/keyboard/latin/settings/Defaults.kt
 +++ b/app/src/main/java/helium314/keyboard/latin/settings/Defaults.kt
+@@ -47,9 +47,9 @@ object Defaults {
+     const val PREF_THEME_STYLE = KeyboardTheme.STYLE_MATERIAL
+     fun PREF_ICON_STYLE(prefs: SharedPreferences) = prefs.getString(Settings.PREF_THEME_STYLE, PREF_THEME_STYLE)!!
+     const val PREF_ACCENT_SHIFTED_ICON = false
+-    const val PREF_THEME_COLORS = KeyboardTheme.THEME_LIGHT
+-    const val PREF_THEME_COLORS_NIGHT = KeyboardTheme.THEME_DARK
+-    const val PREF_THEME_KEY_BORDERS = false
++    const val PREF_THEME_COLORS = KeyboardTheme.THEME_PLACE_ARTISANS
++    const val PREF_THEME_COLORS_NIGHT = KeyboardTheme.THEME_PLACE_ARTISANS_NUIT
++    const val PREF_THEME_KEY_BORDERS = true
+     @JvmField
+     val PREF_THEME_DAY_NIGHT = Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q
+     const val PREF_CUSTOM_ICON_NAMES = ""
 @@ -64,6 +64,8 @@ object Defaults {
      @JvmField
      var PREF_POPUP_ON = true
@@ -295,7 +391,7 @@ index 5a7f4e5..f5822cf 100644
      <string name="app_slogan" translatable="false">100% FOSS keyboard, based on AOSP.</string>
  
 diff --git a/app/src/main/res/values/strings.xml b/app/src/main/res/values/strings.xml
-index 41445eb..72fc2f7 100644
+index 41445eb..c215438 100644
 --- a/app/src/main/res/values/strings.xml
 +++ b/app/src/main/res/values/strings.xml
 @@ -137,6 +137,11 @@
@@ -310,3 +406,12 @@ index 41445eb..72fc2f7 100644
      <string name="auto_correction_summary">Spacebar and punctuation automatically correct mistyped words</string>
      <!-- Option to enable auto correction for many fields that do not request auto correction -->
      <string name="more_autocorrect">More auto-correction</string>
+@@ -727,6 +732,8 @@ New dictionary:
+     <string name="day_night_mode_summary">Appearance will follow system settings</string>
+     <!-- Option for setting navbar to follow keyboard color -->
+     <string name="theme_navbar">Color navigation bar</string>
++    <string name="theme_name_place_artisans" tools:keep="@string/theme_name_place_artisans" translatable="false">La Place des Artisans</string>
++    <string name="theme_name_place_artisans_nuit" tools:keep="@string/theme_name_place_artisans_nuit" translatable="false">La Place des Artisans (nuit)</string>
+     <!-- Theme name for light theme -->
+     <string name="theme_name_light" tools:keep="@string/theme_name_light">Light</string>
+     <!-- Theme name for holo white theme -->

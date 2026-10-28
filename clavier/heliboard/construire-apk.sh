@@ -33,7 +33,7 @@ echo "→ Branchement du correcteur"
 git -C "$TRAVAIL" apply "$ICI/heliboard.patch"
 APP="$TRAVAIL/app/src/main"
 mkdir -p "$APP/java/helium314/keyboard/latin/correcteur" "$APP/java/fr/correcteurreel" "$APP/assets/correcteur"
-cp "$ICI/src/CorrecteurReel.kt" "$APP/java/helium314/keyboard/latin/correcteur/"
+cp "$ICI"/src/*.kt "$APP/java/helium314/keyboard/latin/correcteur/"
 cp "$RACINE"/clavier/moteur/src/main/kotlin/fr/correcteurreel/*.kt "$APP/java/fr/correcteurreel/"
 cp "$RACINE/correcteur/data/lexique-fr.tsv.gz" "$RACINE/correcteur/data/complements.tsv" "$APP/assets/correcteur/"
 
