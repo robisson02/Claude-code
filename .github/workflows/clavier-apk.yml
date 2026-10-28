@@ -36,21 +36,31 @@ jobs:
       - name: Tests du moteur (parité avec la version JavaScript)
         run: gradle --no-daemon -p clavier/moteur test
 
-      - name: Composants Android (plateforme et NDK demandés par HeliBoard)
-        run: |
-          yes | "$ANDROID_HOME/cmdline-tools/latest/bin/sdkmanager" --licenses > /dev/null || true
-          "$ANDROID_HOME/cmdline-tools/latest/bin/sdkmanager" "platforms;android-37" "ndk;28.0.13004108" > /dev/null || true
+      # Gradle installe lui-même la plateforme et le NDK demandés par HeliBoard, une fois les licences acceptées.
+      - name: Licences du SDK Android
+        run: yes | "$ANDROID_HOME/cmdline-tools/latest/bin/sdkmanager" --licenses > /dev/null || true
 
-      # La clé de signature créée à la première construction est gardée dans le cache de GitHub (jamais dans
-      # le dépôt) : les versions suivantes s'installent par-dessus sans perdre ce que le clavier a appris.
-      - name: Clé de signature
+      # La clé de signature, créée à la première construction avec un mot de passe aléatoire, est gardée dans le
+      # cache de GitHub (jamais dans le dépôt) : les versions suivantes s'installent par-dessus sans perdre ce que
+      # le clavier a appris.
+      - name: Clé de signature (cache)
         uses: actions/cache@v4
         with:
-          path: ~/.android/debug.keystore
-          key: cle-signature-clavier-correcteur-reel
+          path: ~/.cle-clavier
+          key: cle-signature-clavier-correcteur-reel-v2
+
+      - name: Clé de signature (création la première fois)
+        run: |
+          if [ ! -f ~/.cle-clavier/signature.jks ]; then
+            mkdir -p ~/.cle-clavier
+            openssl rand -hex 24 > ~/.cle-clavier/mot-de-passe
+            keytool -genkeypair -keystore ~/.cle-clavier/signature.jks -storetype PKCS12 \
+              -storepass "$(cat ~/.cle-clavier/mot-de-passe)" -alias clavier -keyalg RSA -keysize 2048 \
+              -validity 10000 -dname "CN=Correcteur Reel"
+          fi
 
       - name: Construction de l'APK
-        run: clavier/heliboard/construire-apk.sh
+        run: SIGNATURE_DOSSIER=$HOME/.cle-clavier clavier/heliboard/construire-apk.sh
 
       - uses: actions/upload-artifact@v4
         with:

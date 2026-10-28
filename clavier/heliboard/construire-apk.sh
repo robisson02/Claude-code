@@ -43,9 +43,20 @@ if [ "${PREPARER_SEULEMENT:-0}" = 1 ]; then
 fi
 
 echo "→ Compilation"
-# L'APK est signé avec la clé de débogage de la machine (~/.android/debug.keystore, créée au besoin) :
-# tant que c'est la même clé, une nouvelle version s'installe par-dessus l'ancienne sans perdre ce qui a été appris.
-(cd "$TRAVAIL" && ./gradlew --no-daemon assembleDebug)
+# Tant que l'APK est signé avec la même clé, une nouvelle version s'installe par-dessus l'ancienne sans perdre
+# ce qui a été appris. SIGNATURE_DOSSIER désigne un dossier contenant signature.jks et son mot-de-passe ;
+# sans lui, Gradle signe avec la clé de débogage de la machine.
+SIGNATURE=()
+if [ -n "${SIGNATURE_DOSSIER:-}" ]; then
+  MOT_DE_PASSE=$(cat "$SIGNATURE_DOSSIER/mot-de-passe")
+  SIGNATURE=(
+    -Pandroid.injected.signing.store.file="$SIGNATURE_DOSSIER/signature.jks"
+    -Pandroid.injected.signing.store.password="$MOT_DE_PASSE"
+    -Pandroid.injected.signing.key.alias=clavier
+    -Pandroid.injected.signing.key.password="$MOT_DE_PASSE"
+  )
+fi
+(cd "$TRAVAIL" && ./gradlew --no-daemon assembleDebug "${SIGNATURE[@]}")
 
 APK=$(find "$TRAVAIL/app/build/outputs/apk/debug" -name "*.apk" | head -1)
 mkdir -p "$RACINE/clavier/build"
