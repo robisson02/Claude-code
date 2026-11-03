@@ -90,6 +90,131 @@ index 08612d7..39c21d3 100644
          if (code == Constants.CODE_SPACE) {
              // If input language are explicitly selected.
              if (mLanguageOnSpacebarFormatType != LanguageOnSpacebarUtils.FORMAT_TYPE_NONE) {
+diff --git a/app/src/main/java/helium314/keyboard/keyboard/PointerTracker.java b/app/src/main/java/helium314/keyboard/keyboard/PointerTracker.java
+index fc66753..f75c797 100644
+--- a/app/src/main/java/helium314/keyboard/keyboard/PointerTracker.java
++++ b/app/src/main/java/helium314/keyboard/keyboard/PointerTracker.java
+@@ -953,6 +953,7 @@ public final class PointerTracker implements PointerTrackerQueue.Element,
+ 
+             // Touchpad mode
+             mTouchpadHandler.enableTouchpadMove(x, y, sListener);
++            if (mTouchpadHandler.isInTouchpadMode()) return;
+ 
+             // Vertical movement
+             int stepsY = dY / sPointerStep;
+@@ -1104,9 +1105,10 @@ public final class PointerTracker implements PointerTrackerQueue.Element,
+             sInKeySwipe = false;
+ 
+             // Touchpad mode
++            final boolean wasInTouchpadMode = mTouchpadHandler.isInTouchpadMode();
+             mTouchpadHandler.disableTouchpadMode();
+ 
+-            if (mInHorizontalSwipe || mInVerticalSwipe) {
++            if (wasInTouchpadMode || mInHorizontalSwipe || mInVerticalSwipe) {
+                 mInHorizontalSwipe = false;
+                 mInVerticalSwipe = false;
+                 sListener.onEndSpaceSwipe();
+@@ -1170,6 +1172,12 @@ public final class PointerTracker implements PointerTrackerQueue.Element,
+             sListener.onReleaseKey(popupKeyCode, false);
+             return;
+         }
++        if (code == Constants.CODE_SPACE && key.getPopupKeys() == null && mKeySwipeAllowed
++                && Settings.getValues().mSpaceLongPressCursor) {
++            // like Samsung keyboard: keep holding the space bar and slide to move the cursor
++            mTouchpadHandler.enableTouchpadModeFromLongPress(sListener);
++            return;
++        }
+         if (code == KeyCode.LANGUAGE_SWITCH
+                 || (code == Constants.CODE_SPACE && key.getPopupKeys() == null && Settings.getValues().mSpaceForLangChange)
+         ) {
+@@ -1220,6 +1228,7 @@ public final class PointerTracker implements PointerTrackerQueue.Element,
+ 
+     private void onCancelEventInternal() {
+         sTimerProxy.cancelKeyTimersOf(this);
++        mTouchpadHandler.disableTouchpadMode();
+         setReleasedKeyGraphics(mCurrentKey, true);
+         resetKeySelectionByDraggingFinger();
+         dismissPopupKeysPanel();
+diff --git a/app/src/main/java/helium314/keyboard/keyboard/TouchpadHandler.java b/app/src/main/java/helium314/keyboard/keyboard/TouchpadHandler.java
+index c109ae9..87903d1 100644
+--- a/app/src/main/java/helium314/keyboard/keyboard/TouchpadHandler.java
++++ b/app/src/main/java/helium314/keyboard/keyboard/TouchpadHandler.java
+@@ -16,6 +16,10 @@ public class TouchpadHandler {
+     private boolean mInTouchpadMode = false;
+     private boolean mHasVibrated = false;
+     private boolean mIsScrolling = false;
++    /** false while the finger is still in the edge area where touchpad mode started (space bar is at the bottom edge) */
++    private boolean mEdgeScrollArmed = true;
++    /** the first move only sets the reference position */
++    private boolean mWaitingForFirstMove = false;
+ 
+     private static final float EDGE_THRESHOLD_PERCENTAGE = 0.1f;        // Screen edge threshold percentage
+     private static final float TOUCHPAD_ACCELERATION_FACTOR = 50.0f;    // Lower = more acceleration
+@@ -40,11 +44,30 @@ public class TouchpadHandler {
+         sTouchpadModeActive = active;
+     }
+ 
++    public boolean isInTouchpadMode() {
++        return mInTouchpadMode;
++    }
++
++    /** Like Samsung keyboard: holding the space bar turns the whole keyboard into a touchpad right away. */
++    public void enableTouchpadModeFromLongPress(KeyboardActionListener listener) {
++        if (mInTouchpadMode) return;
++        sTouchpadModeActive = true;
++        mListener = listener;
++        mInTouchpadMode = true;
++        mHasVibrated = true; // the long press already vibrated
++        mEdgeScrollArmed = false;
++        mWaitingForFirstMove = true;
++        mTouchpadActivationTime = 0; // no debounce, the finger was held still
++        mListener.onCustomRequest(KeyboardActionListener.CustomAction.TOUCHPAD_ON);
++    }
++
+     public void disableTouchpadMode() {
+         if (!mInTouchpadMode) return;
+         stopEdgeScrolling();
+         stopHapticRunnable();
+         mInTouchpadMode = false;
++        mWaitingForFirstMove = false;
++        mEdgeScrollArmed = true;
+         sTouchpadModeActive = false;
+         mListener.onCustomRequest(KeyboardActionListener.CustomAction.TOUCHPAD_OFF);
+         mListener = null;
+@@ -58,6 +81,7 @@ public class TouchpadHandler {
+             mListener = listener;
+             mInTouchpadMode = true;
+             mHasVibrated = false;
++            mEdgeScrollArmed = true;
+             mTouchpadLastX = x;
+             mTouchpadLastY = y;
+             mTouchpadActivationTime = SystemClock.elapsedRealtime();
+@@ -72,6 +96,12 @@ public class TouchpadHandler {
+ 
+     private void onMove(int x, int y) {
+         SettingsValues sv = Settings.getValues();
++        if (mWaitingForFirstMove) {
++            mWaitingForFirstMove = false;
++            mTouchpadLastX = x;
++            mTouchpadLastY = y;
++            return;
++        }
+ 
+         // Debounce
+         if (SystemClock.elapsedRealtime() - mTouchpadActivationTime < sv.mKeyLongpressTimeout) {
+@@ -165,6 +195,12 @@ public class TouchpadHandler {
+         int thresholdX = (int) (keyboardWidth * EDGE_THRESHOLD_PERCENTAGE);
+         int thresholdY = (int) (keyboardHeight * EDGE_THRESHOLD_PERCENTAGE);
+ 
++        if (!mEdgeScrollArmed) {
++            if (y > thresholdY && y < keyboardHeight - thresholdY && x > thresholdX && x < keyboardWidth - thresholdX)
++                mEdgeScrollArmed = true;
++            return false;
++        }
++
+         if (y <= thresholdY) {
+             mCurrentScrollDirection = DIRECTION_UP;
+             startEdgeScrolling();
 diff --git a/app/src/main/java/helium314/keyboard/latin/LatinIME.java b/app/src/main/java/helium314/keyboard/latin/LatinIME.java
 index 61a1805..f10b99a 100644
 --- a/app/src/main/java/helium314/keyboard/latin/LatinIME.java
@@ -269,7 +394,7 @@ index 8235e1f..fc9d039 100644
          // what user typed. Note: currently this is done much later in
          // LastComposedWord#didCommitTypedWord by string equality of the remembered
 diff --git a/app/src/main/java/helium314/keyboard/latin/settings/Defaults.kt b/app/src/main/java/helium314/keyboard/latin/settings/Defaults.kt
-index ae25420..71a6f57 100644
+index ae25420..24ea425 100644
 --- a/app/src/main/java/helium314/keyboard/latin/settings/Defaults.kt
 +++ b/app/src/main/java/helium314/keyboard/latin/settings/Defaults.kt
 @@ -47,9 +47,9 @@ object Defaults {
@@ -304,7 +429,15 @@ index ae25420..71a6f57 100644
      @JvmField
      val PREF_BOTTOM_ROW_SCALE = Array(4) { DEFAULT_SIZE_SCALE }
      @JvmField
-@@ -145,7 +148,7 @@ object Defaults {
+@@ -105,6 +108,7 @@ object Defaults {
+     const val PREF_EMOJI_SKIN_TONE = ""
+     @JvmField
+     val PREF_SPACE_HORIZONTAL_SWIPE = KeyboardActionListener.SwipeAction.MOVE_CURSOR.name
++    const val PREF_SPACE_LONG_PRESS_CURSOR = true
+     @JvmField
+     val PREF_SPACE_VERTICAL_SWIPE = KeyboardActionListener.SwipeAction.NONE.name
+     const val PREF_DELETE_SWIPE = 1
+@@ -145,7 +149,7 @@ object Defaults {
      @SuppressLint("RtlHardcoded")
      const val PREF_ONE_HANDED_GRAVITY = Gravity.LEFT
      const val PREF_ONE_HANDED_SCALE = 1f
@@ -314,7 +447,7 @@ index ae25420..71a6f57 100644
      const val PREF_LOCALIZED_NUMBER_ROW = true
      const val PREF_SHOW_NUMBER_ROW_HINTS = false
 diff --git a/app/src/main/java/helium314/keyboard/latin/settings/Settings.java b/app/src/main/java/helium314/keyboard/latin/settings/Settings.java
-index eb333f4..20599ef 100644
+index eb333f4..1551516 100644
 --- a/app/src/main/java/helium314/keyboard/latin/settings/Settings.java
 +++ b/app/src/main/java/helium314/keyboard/latin/settings/Settings.java
 @@ -78,6 +78,8 @@ public final class Settings implements SharedPreferences.OnSharedPreferenceChang
@@ -326,11 +459,27 @@ index eb333f4..20599ef 100644
      public static final String PREF_MORE_AUTO_CORRECTION = "more_auto_correction";
      public static final String PREF_AUTO_CORRECT_CONFIDENCE = "auto_correct_confidence";
      public static final String PREF_AUTOCORRECT_SHORTCUTS = "autocorrect_shortcuts";
+@@ -117,6 +119,7 @@ public final class Settings implements SharedPreferences.OnSharedPreferenceChang
+     public static final String PREF_EMOJI_KEY_FIT = "emoji_key_fit";
+     public static final String PREF_EMOJI_SKIN_TONE = "emoji_skin_tone";
+     public static final String PREF_SPACE_HORIZONTAL_SWIPE = "horizontal_space_swipe";
++    public static final String PREF_SPACE_LONG_PRESS_CURSOR = "space_long_press_cursor";
+     public static final String PREF_SPACE_VERTICAL_SWIPE = "vertical_space_swipe";
+     public static final String PREF_DELETE_SWIPE = "delete_swipe_type";
+     public static final String PREF_AUTOSPACE_AFTER_PUNCTUATION = "autospace_after_punctuation";
 diff --git a/app/src/main/java/helium314/keyboard/latin/settings/SettingsValues.java b/app/src/main/java/helium314/keyboard/latin/settings/SettingsValues.java
-index d2c7180..16e82e8 100644
+index d2c7180..b3b265b 100644
 --- a/app/src/main/java/helium314/keyboard/latin/settings/SettingsValues.java
 +++ b/app/src/main/java/helium314/keyboard/latin/settings/SettingsValues.java
-@@ -166,6 +166,8 @@ public class SettingsValues {
+@@ -76,6 +76,7 @@ public class SettingsValues {
+     public final boolean mShowsPopupHints;
+     public final boolean mShowTldPopupKeys;
+     public final boolean mSpaceForLangChange;
++    public final boolean mSpaceLongPressCursor;
+     public final boolean mShowsEmojiKey;
+     public final boolean mShowsDpadKey;
+     public final boolean mVarToolbarDirection;
+@@ -166,6 +167,8 @@ public class SettingsValues {
      // Deduced settings
      public final boolean mSuggestionStripHiddenPerUserSettings;
      public final boolean mAutoCorrectEnabled;
@@ -339,7 +488,15 @@ index d2c7180..16e82e8 100644
      public final float mAutoCorrectionThreshold;
      public final int mScoreLimitForAutocorrect;
      public final SettingsValuesForSuggestion mSettingsValuesForSuggestion;
-@@ -225,6 +227,8 @@ public class SettingsValues {
+@@ -213,6 +216,7 @@ public class SettingsValues {
+         mShowsPopupHints = prefs.getBoolean(Settings.PREF_SHOW_POPUP_HINTS, Defaults.PREF_SHOW_POPUP_HINTS);
+         mShowTldPopupKeys = prefs.getBoolean(Settings.PREF_SHOW_TLD_POPUP_KEYS, Defaults.PREF_SHOW_TLD_POPUP_KEYS);
+         mSpaceForLangChange = prefs.getBoolean(Settings.PREF_SPACE_TO_CHANGE_LANG, Defaults.PREF_SPACE_TO_CHANGE_LANG);
++        mSpaceLongPressCursor = prefs.getBoolean(Settings.PREF_SPACE_LONG_PRESS_CURSOR, Defaults.PREF_SPACE_LONG_PRESS_CURSOR);
+         mShowsEmojiKey = prefs.getBoolean(Settings.PREF_SHOW_EMOJI_KEY, Defaults.PREF_SHOW_EMOJI_KEY);
+         mShowsDpadKey = prefs.getBoolean(Settings.PREF_SHOW_DPAD_KEY, Defaults.PREF_SHOW_DPAD_KEY);
+         mVarToolbarDirection = mToolbarMode != ToolbarMode.HIDDEN && prefs.getBoolean(Settings.PREF_VARIABLE_TOOLBAR_DIRECTION, Defaults.PREF_VARIABLE_TOOLBAR_DIRECTION);
+@@ -225,6 +229,8 @@ public class SettingsValues {
          mAutoCorrectEnabled = mAutoCorrectionEnabledPerUserSettings
                  && (mInputAttributes.mInputTypeShouldAutoCorrect || prefs.getBoolean(Settings.PREF_MORE_AUTO_CORRECTION, Defaults.PREF_MORE_AUTO_CORRECTION))
                  && (mUrlDetectionEnabled || !InputTypeUtils.isUriOrEmailType(mInputAttributes.mInputType));
@@ -348,6 +505,40 @@ index d2c7180..16e82e8 100644
          mCenterSuggestionTextToEnter = prefs.getBoolean(Settings.PREF_CENTER_SUGGESTION_TEXT_TO_ENTER, Defaults.PREF_CENTER_SUGGESTION_TEXT_TO_ENTER);
          float autoCorrectConfidence = prefs.getFloat(Settings.PREF_AUTO_CORRECT_CONFIDENCE, Defaults.PREF_AUTO_CORRECT_CONFIDENCE);
          // confidence -> threshold and score limit are just some formulas that give something similar to the old values, so that confidence can be in a nice 0-1 range
+diff --git a/app/src/main/java/helium314/keyboard/settings/screens/AdvancedScreen.kt b/app/src/main/java/helium314/keyboard/settings/screens/AdvancedScreen.kt
+index 19a1b58..3de2b49 100644
+--- a/app/src/main/java/helium314/keyboard/settings/screens/AdvancedScreen.kt
++++ b/app/src/main/java/helium314/keyboard/settings/screens/AdvancedScreen.kt
+@@ -63,12 +63,15 @@ fun AdvancedSettingsScreen(
+         Settings.PREF_KEY_LONGPRESS_TIMEOUT,
+         Settings.PREF_SPACE_HORIZONTAL_SWIPE,
+         Settings.PREF_SPACE_VERTICAL_SWIPE,
++        Settings.PREF_SPACE_LONG_PRESS_CURSOR,
+         if (Settings.readHorizontalSpaceSwipe(prefs) == KeyboardActionListener.SwipeAction.SWITCH_LANGUAGE
+             || Settings.readVerticalSpaceSwipe(prefs) == KeyboardActionListener.SwipeAction.SWITCH_LANGUAGE)
+             Settings.PREF_LANGUAGE_SWIPE_DISTANCE else null,
+-        if (Settings.readVerticalSpaceSwipe(prefs) == KeyboardActionListener.SwipeAction.TOUCHPAD_MODE)
++        if (Settings.readVerticalSpaceSwipe(prefs) == KeyboardActionListener.SwipeAction.TOUCHPAD_MODE
++            || prefs.getBoolean(Settings.PREF_SPACE_LONG_PRESS_CURSOR, Defaults.PREF_SPACE_LONG_PRESS_CURSOR))
+             Settings.PREF_TOUCHPAD_SENSITIVITY else null,
+-        if (Settings.readVerticalSpaceSwipe(prefs) == KeyboardActionListener.SwipeAction.TOUCHPAD_MODE)
++        if (Settings.readVerticalSpaceSwipe(prefs) == KeyboardActionListener.SwipeAction.TOUCHPAD_MODE
++            || prefs.getBoolean(Settings.PREF_SPACE_LONG_PRESS_CURSOR, Defaults.PREF_SPACE_LONG_PRESS_CURSOR))
+             Settings.PREF_TOUCHPAD_EDGE_SCROLL else null,
+         Settings.PREF_DELETE_SWIPE,
+         Settings.PREF_SPACE_TO_CHANGE_LANG,
+@@ -136,6 +139,11 @@ fun createAdvancedSettings(context: Context) = listOf(
+         )
+         ListPreference(it, items, Defaults.PREF_SPACE_VERTICAL_SWIPE)
+     },
++    Setting(context, Settings.PREF_SPACE_LONG_PRESS_CURSOR,
++        R.string.space_long_press_cursor, R.string.space_long_press_cursor_summary)
++    {
++        SwitchPreference(it, Defaults.PREF_SPACE_LONG_PRESS_CURSOR)
++    },
+     Setting(context, Settings.PREF_LANGUAGE_SWIPE_DISTANCE, R.string.prefs_language_swipe_distance) { setting ->
+         SliderPreference(
+             name = setting.title,
 diff --git a/app/src/main/java/helium314/keyboard/settings/screens/TextCorrectionScreen.kt b/app/src/main/java/helium314/keyboard/settings/screens/TextCorrectionScreen.kt
 index 2353362..fa44c08 100644
 --- a/app/src/main/java/helium314/keyboard/settings/screens/TextCorrectionScreen.kt
@@ -391,10 +582,10 @@ index 5a7f4e5..f5822cf 100644
      <string name="app_slogan" translatable="false">100% FOSS keyboard, based on AOSP.</string>
  
 diff --git a/app/src/main/res/values/strings.xml b/app/src/main/res/values/strings.xml
-index 41445eb..c215438 100644
+index 41445eb..3784063 100644
 --- a/app/src/main/res/values/strings.xml
 +++ b/app/src/main/res/values/strings.xml
-@@ -137,6 +137,11 @@
+@@ -137,6 +137,13 @@
      <!-- Option to enable auto correction -->
      <string name="autocorrect">Auto-correction</string>
      <!-- Description for auto correction -->
@@ -403,10 +594,12 @@ index 41445eb..c215438 100644
 +    <string name="correcteur_reel_summary" translatable="false">Accents, fautes de frappe et apprentissage de vos mots, sans jamais apprendre une faute (« reel » reste corrigé en « réel »)</string>
 +    <string name="correcteur_reel_grammaire" translatable="false">Grammaire pendant la frappe</string>
 +    <string name="correcteur_reel_grammaire_summary" translatable="false">a/à, ou/où, la/là, accords du verbe, participe ou infinitif. Retour arrière juste après pour annuler.</string>
++    <string name="space_long_press_cursor" translatable="false">Appui long sur espace : déplacer le curseur</string>
++    <string name="space_long_press_cursor_summary" translatable="false">Maintenez la barre d\'espace, puis glissez sur le clavier pour déplacer le curseur, comme sur un clavier Samsung</string>
      <string name="auto_correction_summary">Spacebar and punctuation automatically correct mistyped words</string>
      <!-- Option to enable auto correction for many fields that do not request auto correction -->
      <string name="more_autocorrect">More auto-correction</string>
-@@ -727,6 +732,8 @@ New dictionary:
+@@ -727,6 +734,8 @@ New dictionary:
      <string name="day_night_mode_summary">Appearance will follow system settings</string>
      <!-- Option for setting navbar to follow keyboard color -->
      <string name="theme_navbar">Color navigation bar</string>

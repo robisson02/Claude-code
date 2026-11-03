@@ -28,6 +28,14 @@ la correction d'un mot inconnu (`mdr`) le fait apprendre ; annuler celle de `ree
 5. Les réglages du correcteur sont dans **Correction du texte** : « Correcteur Réel (français) » et
    « Grammaire pendant la frappe ». La correction automatique de HeliBoard doit rester activée.
 
+**Déplacer le curseur, comme sur un clavier Samsung** : maintenez la barre d'espace un instant (le
+téléphone vibre et le clavier s'estompe), puis, sans lever le doigt, glissez n'importe où sur le clavier :
+le curseur suit, de gauche à droite et d'une ligne à l'autre. Levez le doigt pour reprendre la frappe.
+Glisser directement sur la barre d'espace, sans attendre, déplace aussi le curseur de gauche à droite.
+L'appui long sur espace n'ouvre donc plus le choix du clavier : passez par l'icône de clavier de la
+barre de navigation. Réglages : **Paramètres avancés › Appui long sur espace : déplacer le curseur**, et
+juste en dessous **Sensibilité du pavé tactile** pour la vitesse du curseur.
+
 Par défaut, le clavier affiche une rangée de chiffres en haut, et ses touches font 90 % de la hauteur
 habituelle de HeliBoard. Pour ajuster : dans l'application, **Apparence › Hauteur du clavier**, et
 **Préférences › Rangée de chiffres**.
@@ -93,6 +101,7 @@ cd clavier/moteur && gradle test          # tests du moteur
 | `InputLogic.java`, `commitChosenWord` et `revertCommit` | Apprentissage, et mémorisation des corrections annulées. |
 | `LatinIME.java` | Chargement du dictionnaire au démarrage, sauvegarde de ce qui a été appris. |
 | `Settings`, `TextCorrectionScreen.kt` | Les deux réglages. |
+| `PointerTracker.java`, `TouchpadHandler.java`, `AdvancedScreen.kt` | Appui long sur espace : le clavier devient un pavé tactile pour le curseur. |
 | `KeyboardTheme.kt`, `Colors.kt`, `MainKeyboardView.java`, `Defaults.kt` | Thème « La Place des Artisans » par défaut (jour et nuit, touches avec bordures), village dessiné dans la barre d'espace. |
 
 ### Limites
