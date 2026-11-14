@@ -1,0 +1,1672 @@
+[
+ {
+  "base": {
+   "id": "patissorcier.chou-chou",
+   "classe": "patissorcier",
+   "emplacement": 1,
+   "declinaisonDe": null,
+   "niveau": 1,
+   "nom": "Chou-chou",
+   "element": "F",
+   "cm": 2,
+   "rayon": {
+    "min": 2,
+    "max": 6,
+    "modifiable": false
+   },
+   "lancer": "libre",
+   "vue": false,
+   "cible": "ennemi",
+   "parTour": 3,
+   "parCible": 2,
+   "relance": 0,
+   "relanceInitiale": 0,
+   "plafondPose": 0,
+   "maitre": 15,
+   "zone": {
+    "forme": "case",
+    "taille": 0,
+    "tailleMin": 0,
+    "baisse": true
+   },
+   "touche": "ennemis",
+   "effets": [
+    {
+     "type": "degats",
+     "element": "F",
+     "min": 7,
+     "max": 8,
+     "maitre": [
+      9,
+      10
+     ]
+    }
+   ],
+   "texte": "Un chou tout chaud, lancé en cloche par-dessus les obstacles : pas besoin de voir la cible. Le tir en cloche se paie : un peu moins de dégâts, et le Rayon ne s'allonge pas.",
+   "change": ""
+  },
+  "declinaison": {
+   "id": "patissorcier.chouquettes",
+   "classe": "patissorcier",
+   "emplacement": 1,
+   "declinaisonDe": "patissorcier.chou-chou",
+   "niveau": 3,
+   "nom": "Chouquettes",
+   "element": "S",
+   "cm": 2,
+   "rayon": {
+    "min": 2,
+    "max": 5,
+    "modifiable": true
+   },
+   "lancer": "libre",
+   "vue": true,
+   "cible": "case",
+   "parTour": 2,
+   "parCible": 1,
+   "relance": 0,
+   "relanceInitiale": 0,
+   "plafondPose": 0,
+   "maitre": 5,
+   "zone": {
+    "forme": "rond",
+    "taille": 1,
+    "tailleMin": 0,
+    "baisse": true
+   },
+   "touche": "ennemis",
+   "effets": [
+    {
+     "type": "degats",
+     "element": "S",
+     "min": 6,
+     "max": 9,
+     "maitre": [
+      8,
+      11
+     ]
+    }
+   ],
+   "texte": "Une poignée de chouquettes emportées par le vent, qui retombent en pluie sucrée.",
+   "change": "Le chou lancé en cloche sur une seule cible devient une poignée de chouquettes qui retombent en zone, en Soufflé : il faut voir la case visée, mais les ennemis à côté sont touchés aussi."
+  }
+ },
+ {
+  "base": {
+   "id": "patissorcier.glacage",
+   "classe": "patissorcier",
+   "emplacement": 2,
+   "declinaisonDe": null,
+   "niveau": 1,
+   "nom": "Glaçage",
+   "element": "N",
+   "cm": 2,
+   "rayon": {
+    "min": 0,
+    "max": 4,
+    "modifiable": true
+   },
+   "lancer": "libre",
+   "vue": true,
+   "cible": "allie",
+   "parTour": 2,
+   "parCible": 1,
+   "relance": 0,
+   "relanceInitiale": 0,
+   "plafondPose": 0,
+   "maitre": 0,
+   "zone": {
+    "forme": "case",
+    "taille": 0,
+    "tailleMin": 0,
+    "baisse": true
+   },
+   "touche": "allies",
+   "effets": [
+    {
+     "type": "bouclier",
+     "valeur": 12,
+     "tours": 3,
+     "couchesMax": 3
+    },
+    {
+     "type": "etat",
+     "etat": "nappe",
+     "tours": 3,
+     "couches": 1
+    }
+   ],
+   "texte": "Une couche de sucre glace qui durcit sur un allié, ou sur soi, et tient 3 tours. Le Glaçage se pose couche par couche : deux lancers par tour, une couche par allié et par tour, sans relance. Un allié glacé trois tours de suite porte trois couches.",
+   "change": ""
+  },
+  "declinaison": {
+   "id": "patissorcier.glacage-a-la-louche",
+   "classe": "patissorcier",
+   "emplacement": 2,
+   "declinaisonDe": "patissorcier.glacage",
+   "niveau": 5,
+   "nom": "Glaçage à la louche",
+   "element": "N",
+   "cm": 3,
+   "rayon": {
+    "min": 0,
+    "max": 4,
+    "modifiable": true
+   },
+   "lancer": "libre",
+   "vue": true,
+   "cible": "case",
+   "parTour": 1,
+   "parCible": 0,
+   "relance": 0,
+   "relanceInitiale": 0,
+   "plafondPose": 0,
+   "maitre": 0,
+   "zone": {
+    "forme": "croix",
+    "taille": 1,
+    "tailleMin": 0,
+    "baisse": false
+   },
+   "touche": "allies",
+   "effets": [
+    {
+     "type": "bouclier",
+     "valeur": 8,
+     "tours": 3,
+     "couchesMax": 3
+    },
+    {
+     "type": "etat",
+     "etat": "nappe",
+     "tours": 3,
+     "couches": 1
+    }
+   ],
+   "texte": "On ne lisse plus au couteau : on verse à la louche sur tout le monde, et tant pis pour les finitions.",
+   "change": "Le glaçage versé à la louche couvre une croix d'alliés d'une couche plus fine (8 au lieu de 12), une fois par tour et sans relance, pour la reverser à chaque tour. Seul, c'est moins bien ; dès que trois alliés se serrent, c'est mieux."
+  }
+ },
+ {
+  "base": {
+   "id": "patissorcier.crepe-volante",
+   "classe": "patissorcier",
+   "emplacement": 3,
+   "declinaisonDe": null,
+   "niveau": 1,
+   "nom": "Crêpe volante",
+   "element": "N",
+   "cm": 2,
+   "rayon": {
+    "min": 0,
+    "max": 3,
+    "modifiable": false
+   },
+   "lancer": "libre",
+   "vue": true,
+   "cible": "allie",
+   "parTour": 1,
+   "parCible": 0,
+   "relance": 2,
+   "relanceInitiale": 0,
+   "plafondPose": 0,
+   "maitre": 0,
+   "zone": {
+    "forme": "case",
+    "taille": 0,
+    "tailleMin": 0,
+    "baisse": true
+   },
+   "touche": "allies",
+   "effets": [
+    {
+     "type": "bonus",
+     "carac": "pas",
+     "valeur": 2,
+     "tours": 1,
+     "qui": "cible"
+    },
+    {
+     "type": "etat",
+     "etat": "glissant",
+     "tours": 1,
+     "couches": 1
+    }
+   ],
+   "texte": "Il glisse une crêpe volante sous les pieds d'un allié, ou sous les siens : +2 Pas et Glissant, on file au ras du sol sans se laisser retenir. C'est le déplacement de la classe : relance de 2 tours, comme un bond.",
+   "change": ""
+  },
+  "declinaison": {
+   "id": "patissorcier.crepe-suzette",
+   "classe": "patissorcier",
+   "emplacement": 3,
+   "declinaisonDe": "patissorcier.crepe-volante",
+   "niveau": 7,
+   "nom": "Crêpe Suzette",
+   "element": "F",
+   "cm": 2,
+   "rayon": {
+    "min": 1,
+    "max": 3,
+    "modifiable": false
+   },
+   "lancer": "libre",
+   "vue": true,
+   "cible": "ennemi",
+   "parTour": 3,
+   "parCible": 2,
+   "relance": 0,
+   "relanceInitiale": 0,
+   "plafondPose": 0,
+   "maitre": 10,
+   "zone": {
+    "forme": "case",
+    "taille": 0,
+    "tailleMin": 0,
+    "baisse": true
+   },
+   "touche": "ennemis",
+   "effets": [
+    {
+     "type": "degats",
+     "element": "F",
+     "min": 9,
+     "max": 12,
+     "maitre": [
+      11,
+      15
+     ]
+    },
+    {
+     "type": "etat",
+     "etat": "brule",
+     "tours": 2,
+     "couches": 1
+    }
+   ],
+   "texte": "La crêpe saute, flambe à l'orange et retombe sur la tête de l'ennemi : ça brûle encore au tour suivant.",
+   "change": "La crêpe ne porte plus personne : flambée, elle retombe sur un ennemi proche et le laisse Brûlé, en Flambée. Le déplacement devient des dégâts qui durent."
+  }
+ },
+ {
+  "base": {
+   "id": "patissorcier.douceur",
+   "classe": "patissorcier",
+   "emplacement": 4,
+   "declinaisonDe": null,
+   "niveau": 10,
+   "nom": "Douceur",
+   "element": "N",
+   "cm": 3,
+   "rayon": {
+    "min": 0,
+    "max": 3,
+    "modifiable": false
+   },
+   "lancer": "libre",
+   "vue": true,
+   "cible": "allie",
+   "parTour": 1,
+   "parCible": 1,
+   "relance": 0,
+   "relanceInitiale": 0,
+   "plafondPose": 0,
+   "maitre": 5,
+   "zone": {
+    "forme": "case",
+    "taille": 0,
+    "tailleMin": 0,
+    "baisse": true
+   },
+   "touche": "allies",
+   "effets": [
+    {
+     "type": "soin",
+     "min": 15,
+     "max": 19,
+     "maitre": [
+      19,
+      24
+     ]
+    }
+   ],
+   "texte": "Une petite douceur, et ça va tout de suite mieux. Soigner, c'est son métier : une Douceur par tour, sans relance, là où les autres soins attendent 2 tours.",
+   "change": ""
+  },
+  "declinaison": {
+   "id": "patissorcier.eau-douce",
+   "classe": "patissorcier",
+   "emplacement": 4,
+   "declinaisonDe": "patissorcier.douceur",
+   "niveau": 18,
+   "nom": "Eau douce",
+   "element": "E",
+   "cm": 3,
+   "rayon": {
+    "min": 2,
+    "max": 6,
+    "modifiable": true
+   },
+   "lancer": "ligne",
+   "vue": true,
+   "cible": "ennemi",
+   "parTour": 2,
+   "parCible": 1,
+   "relance": 0,
+   "relanceInitiale": 0,
+   "plafondPose": 0,
+   "maitre": 5,
+   "zone": {
+    "forme": "case",
+    "taille": 0,
+    "tailleMin": 0,
+    "baisse": true
+   },
+   "touche": "ennemis",
+   "effets": [
+    {
+     "type": "degats",
+     "element": "E",
+     "min": 14,
+     "max": 17,
+     "maitre": [
+      18,
+      21
+     ]
+    },
+    {
+     "type": "retire",
+     "quoi": "pas",
+     "n": 1
+    }
+   ],
+   "texte": "Un jet d'eau sucrée en pleine figure : ça colle, et on avance moins vite.",
+   "change": "La douceur qui soigne un allié devient un jet d'eau sucrée tiré en ligne et de loin : le soin laisse place à des dégâts Eaudace qui retirent 1 Pas."
+  }
+ },
+ {
+  "base": {
+   "id": "patissorcier.coup-de-fouet",
+   "classe": "patissorcier",
+   "emplacement": 5,
+   "declinaisonDe": null,
+   "niveau": 26,
+   "nom": "Coup de fouet",
+   "element": "T",
+   "cm": 3,
+   "rayon": {
+    "min": 1,
+    "max": 3,
+    "modifiable": false
+   },
+   "lancer": "ligne",
+   "vue": true,
+   "cible": "ennemi",
+   "parTour": 2,
+   "parCible": 1,
+   "relance": 0,
+   "relanceInitiale": 0,
+   "plafondPose": 0,
+   "maitre": 10,
+   "zone": {
+    "forme": "case",
+    "taille": 0,
+    "tailleMin": 0,
+    "baisse": true
+   },
+   "touche": "ennemis",
+   "effets": [
+    {
+     "type": "degats",
+     "element": "T",
+     "min": 15,
+     "max": 19,
+     "maitre": [
+      19,
+      24
+     ]
+    },
+    {
+     "type": "pousse",
+     "cases": 2
+    }
+   ],
+   "texte": "Un coup de fouet qui claque au ras du sol : l'ennemi recule de 2 cases. Gare au mur derrière lui.",
+   "change": ""
+  },
+  "declinaison": {
+   "id": "patissorcier.fouet-survolte",
+   "classe": "patissorcier",
+   "emplacement": 5,
+   "declinaisonDe": "patissorcier.coup-de-fouet",
+   "niveau": 34,
+   "nom": "Fouet survolté",
+   "element": "C",
+   "cm": 3,
+   "rayon": {
+    "min": 1,
+    "max": 4,
+    "modifiable": false
+   },
+   "lancer": "ligne",
+   "vue": true,
+   "cible": "ennemi",
+   "parTour": 2,
+   "parCible": 1,
+   "relance": 0,
+   "relanceInitiale": 0,
+   "plafondPose": 0,
+   "maitre": 10,
+   "zone": {
+    "forme": "case",
+    "taille": 0,
+    "tailleMin": 0,
+    "baisse": true
+   },
+   "touche": "ennemis",
+   "effets": [
+    {
+     "type": "degats",
+     "element": "C",
+     "min": 14,
+     "max": 18,
+     "maitre": [
+      18,
+      23
+     ]
+    },
+    {
+     "type": "rebond",
+     "fois": 1,
+     "rayon": 3,
+     "part": 50
+    }
+   ],
+   "texte": "Le fouet claque si vite qu'il crépite : l'étincelle saute jusqu'à 3 cases, sur un deuxième ennemi.",
+   "change": "Le coup de fouet ne repousse plus : la mèche chargée d'électricité porte un peu plus loin en ligne (1 à 4 cases), en Éclair, et l'étincelle saute sur un deuxième ennemi jusqu'à 3 cases."
+  }
+ },
+ {
+  "base": {
+   "id": "patissorcier.tourbillon-de-meringue",
+   "classe": "patissorcier",
+   "emplacement": 6,
+   "declinaisonDe": null,
+   "niveau": 41,
+   "nom": "Tourbillon de meringue",
+   "element": "S",
+   "cm": 4,
+   "rayon": {
+    "min": 2,
+    "max": 5,
+    "modifiable": true
+   },
+   "lancer": "libre",
+   "vue": true,
+   "cible": "case",
+   "parTour": 2,
+   "parCible": 1,
+   "relance": 0,
+   "relanceInitiale": 0,
+   "plafondPose": 0,
+   "maitre": 5,
+   "zone": {
+    "forme": "rond",
+    "taille": 2,
+    "tailleMin": 0,
+    "baisse": true
+   },
+   "touche": "ennemis",
+   "effets": [
+    {
+     "type": "degats",
+     "element": "S",
+     "min": 13,
+     "max": 17,
+     "maitre": [
+      16,
+      21
+     ]
+    }
+   ],
+   "texte": "La meringue part en tourbillon : un grand nuage sucré qui fouette tous les ennemis alentour.",
+   "change": ""
+  },
+  "declinaison": {
+   "id": "patissorcier.blancs-en-neige",
+   "classe": "patissorcier",
+   "emplacement": 6,
+   "declinaisonDe": "patissorcier.tourbillon-de-meringue",
+   "niveau": 49,
+   "nom": "Blancs en neige",
+   "element": "E",
+   "cm": 3,
+   "rayon": {
+    "min": 1,
+    "max": 4,
+    "modifiable": true
+   },
+   "lancer": "libre",
+   "vue": true,
+   "cible": "ennemi",
+   "parTour": 2,
+   "parCible": 1,
+   "relance": 0,
+   "relanceInitiale": 0,
+   "plafondPose": 0,
+   "maitre": 5,
+   "zone": {
+    "forme": "case",
+    "taille": 0,
+    "tailleMin": 0,
+    "baisse": true
+   },
+   "touche": "ennemis",
+   "effets": [
+    {
+     "type": "degats",
+     "element": "E",
+     "min": 14,
+     "max": 17,
+     "maitre": [
+      18,
+      21
+     ]
+    },
+    {
+     "type": "etat",
+     "etat": "ramolli",
+     "tours": 1,
+     "couches": 1
+    }
+   ],
+   "texte": "Des blancs montés en neige et tassés en boule : la neige colle aux bottes.",
+   "change": "Les mêmes blancs d'œufs, tassés en boule : une seule cible au lieu d'un grand tourbillon, plus fort, en Eaudace, et la cible Ramollie perd 1 Pas."
+  }
+ },
+ {
+  "base": {
+   "id": "patissorcier.flan-be",
+   "classe": "patissorcier",
+   "emplacement": 7,
+   "declinaisonDe": null,
+   "niveau": 57,
+   "nom": "Flan-bé",
+   "element": "F",
+   "cm": 3,
+   "rayon": {
+    "min": 1,
+    "max": 5,
+    "modifiable": true
+   },
+   "lancer": "libre",
+   "vue": true,
+   "cible": "ennemi",
+   "parTour": 2,
+   "parCible": 1,
+   "relance": 0,
+   "relanceInitiale": 0,
+   "plafondPose": 0,
+   "maitre": 15,
+   "zone": {
+    "forme": "case",
+    "taille": 0,
+    "tailleMin": 0,
+    "baisse": true
+   },
+   "touche": "ennemis",
+   "effets": [
+    {
+     "type": "degats",
+     "element": "F",
+     "min": 15,
+     "max": 19,
+     "maitre": [
+      19,
+      24
+     ]
+    },
+    {
+     "type": "etat",
+     "etat": "brule",
+     "tours": 2,
+     "couches": 1
+    }
+   ],
+   "texte": "Un flan flambé au rhum : il brûle encore au tour suivant.",
+   "change": ""
+  },
+  "declinaison": {
+   "id": "patissorcier.tremblement-de-flan",
+   "classe": "patissorcier",
+   "emplacement": 7,
+   "declinaisonDe": "patissorcier.flan-be",
+   "niveau": 65,
+   "nom": "Tremblement de flan",
+   "element": "T",
+   "cm": 3,
+   "rayon": {
+    "min": 2,
+    "max": 5,
+    "modifiable": false
+   },
+   "lancer": "libre",
+   "vue": false,
+   "cible": "case",
+   "parTour": 2,
+   "parCible": 1,
+   "relance": 0,
+   "relanceInitiale": 0,
+   "plafondPose": 0,
+   "maitre": 5,
+   "zone": {
+    "forme": "croix",
+    "taille": 2,
+    "tailleMin": 0,
+    "baisse": true
+   },
+   "touche": "ennemis",
+   "effets": [
+    {
+     "type": "degats",
+     "element": "T",
+     "min": 11,
+     "max": 14,
+     "maitre": [
+      14,
+      18
+     ]
+    }
+   ],
+   "texte": "Le sol tremble comme un flan qu'on démoule : la secousse passe sous terre.",
+   "change": "Le flan ne brûle plus une seule cible : il fait trembler le sol en grande croix, sans ligne de vue, en Terroir."
+  }
+ },
+ {
+  "base": {
+   "id": "patissorcier.eclair-au-chocolat",
+   "classe": "patissorcier",
+   "emplacement": 8,
+   "declinaisonDe": null,
+   "niveau": 73,
+   "nom": "Éclair au chocolat",
+   "element": "C",
+   "cm": 2,
+   "rayon": {
+    "min": 2,
+    "max": 6,
+    "modifiable": true
+   },
+   "lancer": "libre",
+   "vue": true,
+   "cible": "ennemi",
+   "parTour": 3,
+   "parCible": 2,
+   "relance": 0,
+   "relanceInitiale": 0,
+   "plafondPose": 0,
+   "maitre": 10,
+   "zone": {
+    "forme": "case",
+    "taille": 0,
+    "tailleMin": 0,
+    "baisse": true
+   },
+   "touche": "ennemis",
+   "effets": [
+    {
+     "type": "degats",
+     "element": "C",
+     "min": 10,
+     "max": 13,
+     "maitre": [
+      13,
+      16
+     ]
+    },
+    {
+     "type": "si",
+     "condition": "cibleTombe",
+     "effets": [
+      {
+       "type": "gainCM",
+       "n": 1,
+       "qui": "soi"
+      }
+     ]
+    }
+   ],
+   "texte": "Vite fait, vite avalé : si l'éclair fait tomber la cible, le Pâtissorcier regagne 1 CM.",
+   "change": ""
+  },
+  "declinaison": {
+   "id": "patissorcier.fondant-au-chocolat",
+   "classe": "patissorcier",
+   "emplacement": 8,
+   "declinaisonDe": "patissorcier.eclair-au-chocolat",
+   "niveau": 81,
+   "nom": "Fondant au chocolat",
+   "element": "F",
+   "cm": 4,
+   "rayon": {
+    "min": 1,
+    "max": 3,
+    "modifiable": false
+   },
+   "lancer": "libre",
+   "vue": true,
+   "cible": "ennemi",
+   "parTour": 1,
+   "parCible": 1,
+   "relance": 0,
+   "relanceInitiale": 0,
+   "plafondPose": 0,
+   "maitre": 20,
+   "zone": {
+    "forme": "rond",
+    "taille": 1,
+    "tailleMin": 0,
+    "baisse": true
+   },
+   "touche": "ennemis",
+   "effets": [
+    {
+     "type": "degats",
+     "element": "F",
+     "min": 18,
+     "max": 22,
+     "maitre": [
+      22,
+      27
+     ]
+    }
+   ],
+   "texte": "Le chocolat fond sur la cible, et le cœur coulant déborde sur les ennemis à côté.",
+   "change": "Le chocolat ne file plus comme un éclair : il fond de près, plus fort, avec plus de coups de maître, et le cœur coulant éclabousse les ennemis collés à la cible, en Flambée."
+  }
+ },
+ {
+  "base": {
+   "id": "patissorcier.ile-flottante",
+   "classe": "patissorcier",
+   "emplacement": 9,
+   "declinaisonDe": null,
+   "niveau": 88,
+   "nom": "Île flottante",
+   "element": "E",
+   "cm": 4,
+   "rayon": {
+    "min": 1,
+    "max": 4,
+    "modifiable": true
+   },
+   "lancer": "libre",
+   "vue": true,
+   "cible": "case",
+   "parTour": 2,
+   "parCible": 1,
+   "relance": 0,
+   "relanceInitiale": 0,
+   "plafondPose": 0,
+   "maitre": 5,
+   "zone": {
+    "forme": "rond",
+    "taille": 1,
+    "tailleMin": 0,
+    "baisse": true
+   },
+   "touche": "ennemis",
+   "effets": [
+    {
+     "type": "degats",
+     "element": "E",
+     "min": 15,
+     "max": 19,
+     "maitre": [
+      19,
+      24
+     ]
+    },
+    {
+     "type": "etat",
+     "etat": "ramolli",
+     "tours": 1,
+     "couches": 1
+    }
+   ],
+   "texte": "Une île de blancs qui flotte sur la crème anglaise : les ennemis y pataugent et perdent 1 Pas.",
+   "change": ""
+  },
+  "declinaison": {
+   "id": "patissorcier.ile-deserte",
+   "classe": "patissorcier",
+   "emplacement": 9,
+   "declinaisonDe": "patissorcier.ile-flottante",
+   "niveau": 96,
+   "nom": "Île déserte",
+   "element": "T",
+   "cm": 3,
+   "rayon": {
+    "min": 1,
+    "max": 4,
+    "modifiable": false
+   },
+   "lancer": "libre",
+   "vue": true,
+   "cible": "combattant",
+   "parTour": 2,
+   "parCible": 1,
+   "relance": 0,
+   "relanceInitiale": 0,
+   "plafondPose": 0,
+   "maitre": 5,
+   "zone": {
+    "forme": "anneau",
+    "taille": 1,
+    "tailleMin": 0,
+    "baisse": false
+   },
+   "touche": "ennemis",
+   "effets": [
+    {
+     "type": "degats",
+     "element": "T",
+     "min": 12,
+     "max": 15,
+     "maitre": [
+      15,
+      19
+     ]
+    },
+    {
+     "type": "pousse",
+     "cases": 2
+    }
+   ],
+   "texte": "Seul sur son île : les ennemis collés au combattant visé sont chassés. Lancée sur un allié encerclé, elle fait le vide autour de lui.",
+   "change": "L'île ne fait plus patauger une zone : elle frappe et chasse de 2 cases les ennemis collés à un combattant, allié ou ennemi, en Terroir. Le combattant visé n'est pas touché."
+  }
+ },
+ {
+  "base": {
+   "id": "patissorcier.mille-feuille",
+   "classe": "patissorcier",
+   "emplacement": 10,
+   "declinaisonDe": null,
+   "niveau": 104,
+   "nom": "Mille-feuille",
+   "element": "S",
+   "cm": 3,
+   "rayon": {
+    "min": 2,
+    "max": 5,
+    "modifiable": true
+   },
+   "lancer": "libre",
+   "vue": true,
+   "cible": "case",
+   "parTour": 2,
+   "parCible": 1,
+   "relance": 0,
+   "relanceInitiale": 0,
+   "plafondPose": 0,
+   "maitre": 5,
+   "zone": {
+    "forme": "travers",
+    "taille": 2,
+    "tailleMin": 0,
+    "baisse": true
+   },
+   "touche": "ennemis",
+   "effets": [
+    {
+     "type": "degats",
+     "element": "S",
+     "min": 12,
+     "max": 16,
+     "maitre": [
+      15,
+      20
+     ]
+    }
+   ],
+   "texte": "Cinq feuilles tranchantes qui volent côte à côte : une belle part de mille-feuille, servie en travers.",
+   "change": ""
+  },
+  "declinaison": {
+   "id": "patissorcier.mille-volts",
+   "classe": "patissorcier",
+   "emplacement": 10,
+   "declinaisonDe": "patissorcier.mille-feuille",
+   "niveau": 112,
+   "nom": "Mille-volts",
+   "element": "C",
+   "cm": 4,
+   "rayon": {
+    "min": 1,
+    "max": 5,
+    "modifiable": true
+   },
+   "lancer": "libre",
+   "vue": true,
+   "cible": "ennemi",
+   "parTour": 1,
+   "parCible": 1,
+   "relance": 0,
+   "relanceInitiale": 0,
+   "plafondPose": 0,
+   "maitre": 10,
+   "zone": {
+    "forme": "case",
+    "taille": 0,
+    "tailleMin": 0,
+    "baisse": true
+   },
+   "touche": "ennemis",
+   "effets": [
+    {
+     "type": "degats",
+     "element": "C",
+     "min": 19,
+     "max": 23,
+     "maitre": [
+      24,
+      29
+     ]
+    },
+    {
+     "type": "rebond",
+     "fois": 2,
+     "rayon": 3,
+     "part": 50
+    }
+   ],
+   "texte": "Mille feuilles, mille volts : le courant saute d'ennemi en ennemi.",
+   "change": "Les feuilles ne volent plus en travers : une seule décharge, qui rebondit deux fois sur les ennemis proches à moitié de sa force, en Éclair, pour un coup de main de plus."
+  }
+ },
+ {
+  "base": {
+   "id": "patissorcier.piece-montee",
+   "classe": "patissorcier",
+   "emplacement": 11,
+   "declinaisonDe": null,
+   "niveau": 120,
+   "nom": "Pièce montée",
+   "element": "N",
+   "cm": 4,
+   "rayon": {
+    "min": 1,
+    "max": 2,
+    "modifiable": false
+   },
+   "lancer": "libre",
+   "vue": true,
+   "cible": "caseLibre",
+   "parTour": 1,
+   "parCible": 0,
+   "relance": 4,
+   "relanceInitiale": 1,
+   "plafondPose": 1,
+   "maitre": 0,
+   "zone": {
+    "forme": "case",
+    "taille": 0,
+    "tailleMin": 0,
+    "baisse": true
+   },
+   "touche": "allies",
+   "effets": [
+    {
+     "type": "pose",
+     "quoi": "ustensile",
+     "nom": "Pièce montée",
+     "victuailles": 120,
+     "tours": 3,
+     "zone": {
+      "forme": "rond",
+      "taille": 1,
+      "tailleMin": 1,
+      "baisse": false
+     },
+     "touche": "allies",
+     "maitre": 0,
+     "effets": [
+      {
+       "type": "bouclier",
+       "valeur": 16,
+       "tours": 2,
+       "couchesMax": 3
+      },
+      {
+       "type": "etat",
+       "etat": "nappe",
+       "tours": 2,
+       "couches": 1
+      }
+     ]
+    }
+   ],
+   "texte": "Une pièce montée de choux et de nougatine monte la garde pendant 3 tours. Elle ne bouge pas, bloque le passage et la vue, et au début de chaque tour du Pâtissorcier elle glace les alliés collés à elle. Le Chou-chou, lancé en cloche, passe par-dessus. Une seule à la fois.",
+   "change": ""
+  },
+  "declinaison": {
+   "id": "patissorcier.piece-demontee",
+   "classe": "patissorcier",
+   "emplacement": 11,
+   "declinaisonDe": "patissorcier.piece-montee",
+   "niveau": 128,
+   "nom": "Pièce démontée",
+   "element": "T",
+   "cm": 4,
+   "rayon": {
+    "min": 2,
+    "max": 5,
+    "modifiable": false
+   },
+   "lancer": "libre",
+   "vue": true,
+   "cible": "case",
+   "parTour": 1,
+   "parCible": 1,
+   "relance": 0,
+   "relanceInitiale": 0,
+   "plafondPose": 2,
+   "maitre": 5,
+   "zone": {
+    "forme": "croix",
+    "taille": 1,
+    "tailleMin": 0,
+    "baisse": true
+   },
+   "touche": "ennemis",
+   "effets": [
+    {
+     "type": "degats",
+     "element": "T",
+     "min": 15,
+     "max": 19,
+     "maitre": [
+      19,
+      24
+     ]
+    },
+    {
+     "type": "pose",
+     "quoi": "nappe",
+     "tours": 2,
+     "declenche": "entree",
+     "zone": {
+      "forme": "croix",
+      "taille": 1,
+      "tailleMin": 0,
+      "baisse": false
+     },
+     "touche": "ennemis",
+     "maitre": 5,
+     "effets": [
+      {
+       "type": "degats",
+       "element": "T",
+       "min": 8,
+       "max": 10,
+       "maitre": [
+        10,
+        13
+       ]
+      }
+     ]
+    }
+   ],
+   "texte": "La pièce montée s'écroule sur les ennemis. Les éclats de nougatine restent au sol : qui marche dessus se blesse.",
+   "change": "La pièce montée ne garde plus personne : elle s'écroule en croix sur les ennemis, et ses éclats restent au sol 2 tours, en Terroir. Une fois par tour et deux tas d'éclats au plus, car chaque lancer frappe et laisse en plus une nappe qui blesse."
+  }
+ },
+ {
+  "base": {
+   "id": "patissorcier.paris-brest",
+   "classe": "patissorcier",
+   "emplacement": 12,
+   "declinaisonDe": null,
+   "niveau": 135,
+   "nom": "Paris-Brest",
+   "element": "N",
+   "cm": 3,
+   "rayon": {
+    "min": 2,
+    "max": 8,
+    "modifiable": false
+   },
+   "lancer": "libre",
+   "vue": true,
+   "cible": "allie",
+   "parTour": 1,
+   "parCible": 0,
+   "relance": 2,
+   "relanceInitiale": 0,
+   "plafondPose": 0,
+   "maitre": 0,
+   "zone": {
+    "forme": "case",
+    "taille": 0,
+    "tailleMin": 0,
+    "baisse": true
+   },
+   "touche": "allies",
+   "effets": [
+    {
+     "type": "ramene",
+     "cases": 8
+    }
+   ],
+   "texte": "En selle sur la roue de pâte à choux : l'allié lointain revient à toute allure, jusqu'au contact du Pâtissorcier.",
+   "change": ""
+  },
+  "declinaison": {
+   "id": "patissorcier.brest-paris",
+   "classe": "patissorcier",
+   "emplacement": 12,
+   "declinaisonDe": "patissorcier.paris-brest",
+   "niveau": 143,
+   "nom": "Brest-Paris",
+   "element": "T",
+   "cm": 3,
+   "rayon": {
+    "min": 1,
+    "max": 3,
+    "modifiable": false
+   },
+   "lancer": "libre",
+   "vue": true,
+   "cible": "ennemi",
+   "parTour": 2,
+   "parCible": 1,
+   "relance": 0,
+   "relanceInitiale": 0,
+   "plafondPose": 0,
+   "maitre": 10,
+   "zone": {
+    "forme": "case",
+    "taille": 0,
+    "tailleMin": 0,
+    "baisse": true
+   },
+   "touche": "ennemis",
+   "effets": [
+    {
+     "type": "degats",
+     "element": "T",
+     "min": 12,
+     "max": 15,
+     "maitre": [
+      15,
+      19
+     ]
+    },
+    {
+     "type": "pousse",
+     "cases": 4
+    }
+   ],
+   "texte": "Le retour se fait à toute allure : l'ennemi repart 4 cases plus loin, et s'écrase s'il heurte quelque chose.",
+   "change": "Le même trajet à l'envers : au lieu de ramener un allié, on renvoie un ennemi proche 4 cases plus loin, en Terroir. Moins de dégâts directs, mais l'Écrasement fait mal s'il heurte un obstacle."
+  }
+ },
+ {
+  "base": {
+   "id": "patissorcier.opera",
+   "classe": "patissorcier",
+   "emplacement": 13,
+   "declinaisonDe": null,
+   "niveau": 151,
+   "nom": "Opéra",
+   "element": "N",
+   "cm": 4,
+   "rayon": {
+    "min": 0,
+    "max": 0,
+    "modifiable": false
+   },
+   "lancer": "libre",
+   "vue": false,
+   "cible": "soi",
+   "parTour": 1,
+   "parCible": 0,
+   "relance": 3,
+   "relanceInitiale": 0,
+   "plafondPose": 0,
+   "maitre": 0,
+   "zone": {
+    "forme": "rond",
+    "taille": 3,
+    "tailleMin": 0,
+    "baisse": false
+   },
+   "touche": "allies",
+   "effets": [
+    {
+     "type": "bonus",
+     "carac": "cm",
+     "valeur": 1,
+     "tours": 1,
+     "qui": "cible"
+    }
+   ],
+   "texte": "Un opéra en trois couches et trois actes : portés par la musique, les alliés proches gagnent 1 coup de main.",
+   "change": ""
+  },
+  "declinaison": {
+   "id": "patissorcier.opera-rock",
+   "classe": "patissorcier",
+   "emplacement": 13,
+   "declinaisonDe": "patissorcier.opera",
+   "niveau": 159,
+   "nom": "Opéra rock",
+   "element": "F",
+   "cm": 4,
+   "rayon": {
+    "min": 0,
+    "max": 0,
+    "modifiable": false
+   },
+   "lancer": "libre",
+   "vue": false,
+   "cible": "soi",
+   "parTour": 1,
+   "parCible": 0,
+   "relance": 0,
+   "relanceInitiale": 0,
+   "plafondPose": 0,
+   "maitre": 15,
+   "zone": {
+    "forme": "rond",
+    "taille": 2,
+    "tailleMin": 0,
+    "baisse": true
+   },
+   "touche": "ennemis",
+   "effets": [
+    {
+     "type": "degats",
+     "element": "F",
+     "min": 16,
+     "max": 20,
+     "maitre": [
+      20,
+      25
+     ]
+    },
+    {
+     "type": "etat",
+     "etat": "brule",
+     "tours": 2,
+     "couches": 1
+    }
+   ],
+   "texte": "La salle s'enflamme : les ennemis autour du Pâtissorcier brûlent encore après le dernier accord.",
+   "change": "Même scène, autre musique : au lieu de donner un coup de main aux alliés proches, le concert brûle les ennemis autour du Pâtissorcier, en Flambée."
+  }
+ },
+ {
+  "base": {
+   "id": "patissorcier.charlotte",
+   "classe": "patissorcier",
+   "emplacement": 14,
+   "declinaisonDe": null,
+   "niveau": 167,
+   "nom": "Charlotte",
+   "element": "E",
+   "cm": 4,
+   "rayon": {
+    "min": 1,
+    "max": 4,
+    "modifiable": true
+   },
+   "lancer": "libre",
+   "vue": true,
+   "cible": "ennemi",
+   "parTour": 1,
+   "parCible": 1,
+   "relance": 0,
+   "relanceInitiale": 0,
+   "plafondPose": 0,
+   "maitre": 5,
+   "zone": {
+    "forme": "case",
+    "taille": 0,
+    "tailleMin": 0,
+    "baisse": true
+   },
+   "touche": "ennemis",
+   "effets": [
+    {
+     "type": "degats",
+     "element": "E",
+     "min": 21,
+     "max": 25,
+     "maitre": [
+      26,
+      31
+     ]
+    },
+    {
+     "type": "etat",
+     "etat": "enracine",
+     "tours": 1,
+     "couches": 1
+    }
+   ],
+   "texte": "La cible est enfermée dans une charlotte de biscuits : impossible de faire un pas pendant 1 tour.",
+   "change": ""
+  },
+  "declinaison": {
+   "id": "patissorcier.charlotte-russe",
+   "classe": "patissorcier",
+   "emplacement": 14,
+   "declinaisonDe": "patissorcier.charlotte",
+   "niveau": 175,
+   "nom": "Charlotte russe",
+   "element": "E",
+   "cm": 4,
+   "rayon": {
+    "min": 2,
+    "max": 5,
+    "modifiable": true
+   },
+   "lancer": "libre",
+   "vue": true,
+   "cible": "case",
+   "parTour": 1,
+   "parCible": 1,
+   "relance": 0,
+   "relanceInitiale": 0,
+   "plafondPose": 0,
+   "maitre": 5,
+   "zone": {
+    "forme": "croix",
+    "taille": 1,
+    "tailleMin": 0,
+    "baisse": true
+   },
+   "touche": "ennemis",
+   "effets": [
+    {
+     "type": "degats",
+     "element": "E",
+     "min": 17,
+     "max": 21,
+     "maitre": [
+      21,
+      26
+     ]
+    },
+    {
+     "type": "retire",
+     "quoi": "pas",
+     "n": 2
+    }
+   ],
+   "texte": "Servie glacée, elle gèle les pieds : chaque ennemi de la croix perd 2 Pas.",
+   "change": "La charlotte servie glacée : au lieu d'enfermer une seule cible, elle gèle une croix d'ennemis, qui perdent 2 Pas sans être enfermés, toujours en Eaudace. Une fois par tour, car le retrait touche toute la zone."
+  }
+ },
+ {
+  "base": {
+   "id": "patissorcier.puits-d-amour",
+   "classe": "patissorcier",
+   "emplacement": 15,
+   "declinaisonDe": null,
+   "niveau": 182,
+   "nom": "Puits d'amour",
+   "element": "E",
+   "cm": 4,
+   "rayon": {
+    "min": 1,
+    "max": 5,
+    "modifiable": true
+   },
+   "lancer": "libre",
+   "vue": true,
+   "cible": "case",
+   "parTour": 1,
+   "parCible": 1,
+   "relance": 2,
+   "relanceInitiale": 0,
+   "plafondPose": 1,
+   "maitre": 5,
+   "zone": {
+    "forme": "rond",
+    "taille": 1,
+    "tailleMin": 0,
+    "baisse": true
+   },
+   "touche": "ennemis",
+   "effets": [
+    {
+     "type": "degats",
+     "element": "E",
+     "min": 16,
+     "max": 20,
+     "maitre": [
+      20,
+      25
+     ]
+    },
+    {
+     "type": "etat",
+     "etat": "ramolli",
+     "tours": 1,
+     "couches": 1
+    },
+    {
+     "type": "pose",
+     "quoi": "nappe",
+     "tours": 2,
+     "declenche": "debut",
+     "zone": {
+      "forme": "rond",
+      "taille": 1,
+      "tailleMin": 0,
+      "baisse": false
+     },
+     "touche": "allies",
+     "maitre": 5,
+     "effets": [
+      {
+       "type": "soin",
+       "min": 16,
+       "max": 20,
+       "maitre": [
+        20,
+        25
+       ]
+      }
+     ]
+    }
+   ],
+   "texte": "Le puits d'amour déborde : la crème colle aux pieds des ennemis, et la flaque qui reste soigne les alliés qui y commencent leur tour.",
+   "change": ""
+  },
+  "declinaison": {
+   "id": "patissorcier.coup-de-foudre",
+   "classe": "patissorcier",
+   "emplacement": 15,
+   "declinaisonDe": "patissorcier.puits-d-amour",
+   "niveau": 190,
+   "nom": "Coup de foudre",
+   "element": "C",
+   "cm": 4,
+   "rayon": {
+    "min": 1,
+    "max": 5,
+    "modifiable": true
+   },
+   "lancer": "libre",
+   "vue": true,
+   "cible": "ennemi",
+   "parTour": 1,
+   "parCible": 1,
+   "relance": 0,
+   "relanceInitiale": 0,
+   "plafondPose": 0,
+   "maitre": 10,
+   "zone": {
+    "forme": "case",
+    "taille": 0,
+    "tailleMin": 0,
+    "baisse": true
+   },
+   "touche": "ennemis",
+   "effets": [
+    {
+     "type": "degats",
+     "element": "C",
+     "min": 22,
+     "max": 26,
+     "maitre": [
+      27,
+      33
+     ]
+    },
+    {
+     "type": "retire",
+     "quoi": "cm",
+     "n": 1
+    }
+   ],
+   "texte": "Un coup de foudre, et on en perd ses moyens : la cible perd 1 coup de main.",
+   "change": "L'amour frappe d'un coup : fini la crème et le soin, une seule cible foudroyée qui perd 1 CM, en Éclair."
+  }
+ },
+ {
+  "base": {
+   "id": "patissorcier.chef-d-oeuvre-croquembouche",
+   "classe": "patissorcier",
+   "emplacement": 16,
+   "declinaisonDe": null,
+   "niveau": 200,
+   "nom": "Chef-d'œuvre : Croquembouche",
+   "element": "C",
+   "cm": 7,
+   "rayon": {
+    "min": 2,
+    "max": 6,
+    "modifiable": false
+   },
+   "lancer": "libre",
+   "vue": true,
+   "cible": "case",
+   "parTour": 1,
+   "parCible": 0,
+   "relance": 5,
+   "relanceInitiale": 2,
+   "plafondPose": 0,
+   "maitre": 10,
+   "zone": {
+    "forme": "rond",
+    "taille": 2,
+    "tailleMin": 0,
+    "baisse": true
+   },
+   "touche": "ennemis",
+   "effets": [
+    {
+     "type": "degats",
+     "element": "C",
+     "min": 36,
+     "max": 44,
+     "maitre": [
+      45,
+      55
+     ]
+    },
+    {
+     "type": "si",
+     "condition": "cibleTombe",
+     "effets": [
+      {
+       "type": "gainCM",
+       "n": 2,
+       "qui": "soi"
+      }
+     ]
+    }
+   ],
+   "texte": "La tour de choux s'écroule dans une pluie d'étincelles de caramel. Si un ennemi tombe sous la tour, le Pâtissorcier regagne 2 CM, une seule fois par lancer.",
+   "change": ""
+  },
+  "declinaison": {
+   "id": "patissorcier.chef-d-oeuvre-le-sucre-file",
+   "classe": "patissorcier",
+   "emplacement": 16,
+   "declinaisonDe": "patissorcier.chef-d-oeuvre-croquembouche",
+   "niveau": 200,
+   "nom": "Chef-d'œuvre : le Sucre filé",
+   "element": "S",
+   "cm": 7,
+   "rayon": {
+    "min": 0,
+    "max": 0,
+    "modifiable": false
+   },
+   "lancer": "libre",
+   "vue": false,
+   "cible": "soi",
+   "parTour": 1,
+   "parCible": 0,
+   "relance": 5,
+   "relanceInitiale": 2,
+   "plafondPose": 1,
+   "maitre": 5,
+   "zone": {
+    "forme": "terrain",
+    "taille": 0,
+    "tailleMin": 0,
+    "baisse": false
+   },
+   "touche": "ennemis",
+   "effets": [
+    {
+     "type": "degats",
+     "element": "S",
+     "min": 22,
+     "max": 28,
+     "maitre": [
+      28,
+      35
+     ]
+    },
+    {
+     "type": "pose",
+     "quoi": "nappe",
+     "tours": 1,
+     "declenche": "debut",
+     "zone": {
+      "forme": "terrain",
+      "taille": 0,
+      "tailleMin": 0,
+      "baisse": false
+     },
+     "touche": "allies",
+     "maitre": 0,
+     "effets": [
+      {
+       "type": "bouclier",
+       "valeur": 20,
+       "tours": 2,
+       "couchesMax": 3
+      },
+      {
+       "type": "etat",
+       "etat": "nappe",
+       "tours": 2,
+       "couches": 1
+      }
+     ]
+    }
+   ],
+   "texte": "Un voile de sucre filé balaie tout le terrain : il cingle chaque ennemi, puis retombe en couche de Glaçage sur les alliés du Pâtissorcier, au début de leur tour.",
+   "change": "Le Croquembouche s'abat sur une zone, en Éclair ; le Sucre filé couvre tout le terrain, moins fort par ennemi, en Soufflé, et ses alliés (pas lui) reçoivent une couche de Glaçage au début de leur tour."
+  }
+ }
+]

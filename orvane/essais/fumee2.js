@@ -1,0 +1,30 @@
+const { ouvrir } = require('./outils.js');
+const { outils } = require('./voyages-outils.js');
+(async () => {
+  const o = await ouvrir({ w: +(process.env.W || 390), h: +(process.env.H || 844), tel: process.env.ORDI ? false : true });
+  const { p, pause, log, cap, msgs } = o;
+  const V = outils(o);
+  await p.evaluate(() => window.__orvane.creer({ classe: 'levainqueur', niveau: 1 }));
+  await pause(800);
+  await cap('f2-01-fourneau');
+  // le Four banal du Fourneau : on y va, il s'allume, son panneau s'ouvre
+  await V.toucher('fourneau-four', 2); await pause(300); await V.calme(); await pause(600);
+  log('fenêtre : ' + await p.evaluate(() => [...document.querySelectorAll('dialog')].filter(d => d.open).map(d => d.id + ' ' + d.querySelector('h2').textContent).join()));
+  await cap('f2-02-four');
+  await p.click('#d-fiche footer [data-fermer]'); await pause(300);
+  await V.prendre('fourneau-bord'); await cap('f2-03-vl');
+  await V.prendre('vl-haut'); await cap('f2-04-halle');
+  await V.toucher('halle-etal-pain', 2); await pause(500); await cap('f2-05-etal');
+  await V.prendre('halle-passe-plat'); await cap('f2-06-penderie');
+  await V.toucher('penderie-donjon', 2); await pause(500); await cap('f2-07-donjon');
+  await V.prendre('penderie-monte-plats'); await cap('f2-08-fourneau-monte');
+  await V.prendre('fourneau-monte-plats'); await cap('f2-09-penderie');
+  await V.prendre('penderie-toboggan'); await cap('f2-10-moule');
+  await V.toucher('moule-pelle', 1); await pause(300); await cap('f2-11-pelle-fermee');
+  await V.toucher('moule-four', 2); await pause(300); await V.calme(); await pause(500); await cap('f2-12-four-moule');
+  await p.click('#d-fiche footer [data-fermer]'); await pause(300);
+  await p.click('#b-carte'); await pause(500); await cap('f2-13-carte');
+  log('lieu : ' + JSON.stringify(await p.evaluate(() => window.__orvane.lieu())));
+  log('console : ' + JSON.stringify(msgs));
+  await o.b.close();
+})().catch(e => { console.error(e); process.exit(1); });

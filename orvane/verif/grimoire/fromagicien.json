@@ -1,0 +1,2009 @@
+[
+ {
+  "base": {
+   "id": "fromagicien.bleu-d-orage",
+   "classe": "fromagicien",
+   "emplacement": 1,
+   "declinaisonDe": null,
+   "niveau": 1,
+   "nom": "Bleu d'orage",
+   "element": "C",
+   "cm": 2,
+   "rayon": {
+    "min": 2,
+    "max": 4,
+    "modifiable": true
+   },
+   "lancer": "libre",
+   "vue": true,
+   "cible": "ennemi",
+   "parTour": 3,
+   "parCible": 1,
+   "relance": 0,
+   "relanceInitiale": 0,
+   "plafondPose": 0,
+   "maitre": 10,
+   "zone": {
+    "forme": "case",
+    "taille": 0,
+    "tailleMin": 0,
+    "baisse": true
+   },
+   "touche": "ennemis",
+   "effets": [
+    {
+     "type": "degats",
+     "element": "C",
+     "min": 5,
+     "max": 7,
+     "maitre": [
+      6,
+      9
+     ]
+    },
+    {
+     "type": "rebond",
+     "fois": 1,
+     "rayon": 2,
+     "part": 50
+    },
+    {
+     "type": "etat",
+     "etat": "affine",
+     "tours": 4,
+     "couches": 0
+    }
+   ],
+   "texte": "Les veines du bleu sont des éclairs qui dorment. La foudre saute sur un voisin, et la cible part en affinage. Mais la foudre ne tombe jamais deux fois au même endroit : une seule fois par cible et par tour.",
+   "change": ""
+  },
+  "declinaison": {
+   "id": "fromagicien.bleu-marine",
+   "classe": "fromagicien",
+   "emplacement": 1,
+   "declinaisonDe": "fromagicien.bleu-d-orage",
+   "niveau": 3,
+   "nom": "Bleu marine",
+   "element": "E",
+   "cm": 3,
+   "rayon": {
+    "min": 1,
+    "max": 4,
+    "modifiable": false
+   },
+   "lancer": "ligne",
+   "vue": true,
+   "cible": "case",
+   "parTour": 2,
+   "parCible": 1,
+   "relance": 0,
+   "relanceInitiale": 0,
+   "plafondPose": 0,
+   "maitre": 5,
+   "zone": {
+    "forme": "ligne",
+    "taille": 2,
+    "tailleMin": 0,
+    "baisse": true
+   },
+   "touche": "ennemis",
+   "effets": [
+    {
+     "type": "degats",
+     "element": "E",
+     "min": 6,
+     "max": 8,
+     "maitre": [
+      8,
+      10
+     ]
+    },
+    {
+     "type": "etat",
+     "etat": "ramolli",
+     "tours": 1,
+     "couches": 1
+    },
+    {
+     "type": "etat",
+     "etat": "affine",
+     "tours": 4,
+     "couches": 0
+    }
+   ],
+   "texte": "Le bleu passe de l'orage à la mer : une vague déferle, mouille les pieds et met tout le monde en cave.",
+   "change": "L'éclair sur une cible devient une vague lancée en ligne (1 à 4 cases, 3 CM) qui touche 3 cases, ramollit (−1 Pas) et affine tous ceux qu'elle mouille, en Eaudace, sans rebond."
+  }
+ },
+ {
+  "base": {
+   "id": "fromagicien.coup-de-meule",
+   "classe": "fromagicien",
+   "emplacement": 2,
+   "declinaisonDe": null,
+   "niveau": 1,
+   "nom": "Coup de meule",
+   "element": "T",
+   "cm": 3,
+   "rayon": {
+    "min": 1,
+    "max": 3,
+    "modifiable": false
+   },
+   "lancer": "libre",
+   "vue": true,
+   "cible": "ennemi",
+   "parTour": 2,
+   "parCible": 1,
+   "relance": 0,
+   "relanceInitiale": 0,
+   "plafondPose": 0,
+   "maitre": 10,
+   "zone": {
+    "forme": "case",
+    "taille": 0,
+    "tailleMin": 0,
+    "baisse": true
+   },
+   "touche": "ennemis",
+   "effets": [
+    {
+     "type": "degats",
+     "element": "T",
+     "min": 10,
+     "max": 13,
+     "maitre": [
+      13,
+      16
+     ]
+    },
+    {
+     "type": "si",
+     "condition": "cibleAffinee",
+     "n": 1,
+     "effets": [
+      {
+       "type": "degats",
+       "element": "T",
+       "min": 2,
+       "max": 3,
+       "maitre": [
+        3,
+        4
+       ]
+      }
+     ]
+    },
+    {
+     "type": "si",
+     "condition": "cibleAffinee",
+     "n": 2,
+     "effets": [
+      {
+       "type": "degats",
+       "element": "T",
+       "min": 2,
+       "max": 3,
+       "maitre": [
+        3,
+        4
+       ]
+      }
+     ]
+    },
+    {
+     "type": "si",
+     "condition": "cibleAffinee",
+     "n": 3,
+     "effets": [
+      {
+       "type": "degats",
+       "element": "T",
+       "min": 2,
+       "max": 3,
+       "maitre": [
+        3,
+        4
+       ]
+      }
+     ]
+    },
+    {
+     "type": "pousse",
+     "cases": 1
+    }
+   ],
+   "texte": "Une meule entière roule sur la cible et la fait reculer d'une case. Plus le fromage est fait, plus il pèse : un peu plus fort à chaque tour d'affinage, jusqu'à 3.",
+   "change": ""
+  },
+  "declinaison": {
+   "id": "fromagicien.palet-de-chevre",
+   "classe": "fromagicien",
+   "emplacement": 2,
+   "declinaisonDe": "fromagicien.coup-de-meule",
+   "niveau": 5,
+   "nom": "Palet de chèvre",
+   "element": "T",
+   "cm": 3,
+   "rayon": {
+    "min": 2,
+    "max": 5,
+    "modifiable": false
+   },
+   "lancer": "ligne",
+   "vue": true,
+   "cible": "ennemi",
+   "parTour": 2,
+   "parCible": 1,
+   "relance": 0,
+   "relanceInitiale": 0,
+   "plafondPose": 0,
+   "maitre": 5,
+   "zone": {
+    "forme": "case",
+    "taille": 0,
+    "tailleMin": 0,
+    "baisse": true
+   },
+   "touche": "ennemis",
+   "effets": [
+    {
+     "type": "degats",
+     "element": "T",
+     "min": 8,
+     "max": 10,
+     "maitre": [
+      10,
+      13
+     ]
+    },
+    {
+     "type": "pousse",
+     "cases": 2
+    },
+    {
+     "type": "si",
+     "condition": "cibleAffinee",
+     "n": 2,
+     "effets": [
+      {
+       "type": "pousse",
+       "cases": 1
+      }
+     ]
+    }
+   ],
+   "texte": "Un palet de chèvre lancé à plat, comme au jeu de palets : il file et emporte la cible. Bien sec, il va plus loin.",
+   "change": "On ne frappe plus de près avec la meule : on lance un palet en ligne, de 2 à 5 cases, moins fort et sans dégâts en plus sur une cible affinée, mais il repousse de 2 cases (3 si la cible est affinée depuis 2 tours)."
+  }
+ },
+ {
+  "base": {
+   "id": "fromagicien.glissade-a-raclette",
+   "classe": "fromagicien",
+   "emplacement": 3,
+   "declinaisonDe": null,
+   "niveau": 1,
+   "nom": "Glissade à raclette",
+   "element": "N",
+   "cm": 2,
+   "rayon": {
+    "min": 2,
+    "max": 4,
+    "modifiable": false
+   },
+   "lancer": "ligne",
+   "vue": true,
+   "cible": "caseLibre",
+   "parTour": 1,
+   "parCible": 0,
+   "relance": 2,
+   "relanceInitiale": 0,
+   "plafondPose": 0,
+   "maitre": 0,
+   "zone": {
+    "forme": "case",
+    "taille": 0,
+    "tailleMin": 0,
+    "baisse": true
+   },
+   "touche": "allies",
+   "effets": [
+    {
+     "type": "bond"
+    }
+   ],
+   "texte": "Un filet de raclette fondue sous les semelles, et tu files tout droit, de 2 à 4 cases, si la voie est libre.",
+   "change": ""
+  },
+  "declinaison": {
+   "id": "fromagicien.coulee-de-raclette",
+   "classe": "fromagicien",
+   "emplacement": 3,
+   "declinaisonDe": "fromagicien.glissade-a-raclette",
+   "niveau": 7,
+   "nom": "Coulée de raclette",
+   "element": "T",
+   "cm": 3,
+   "rayon": {
+    "min": 1,
+    "max": 4,
+    "modifiable": false
+   },
+   "lancer": "libre",
+   "vue": false,
+   "cible": "case",
+   "parTour": 2,
+   "parCible": 0,
+   "relance": 0,
+   "relanceInitiale": 0,
+   "plafondPose": 3,
+   "maitre": 0,
+   "zone": {
+    "forme": "case",
+    "taille": 0,
+    "tailleMin": 0,
+    "baisse": true
+   },
+   "touche": "ennemis",
+   "effets": [
+    {
+     "type": "pose",
+     "quoi": "nappe",
+     "tours": 2,
+     "declenche": "debut",
+     "zone": {
+      "forme": "croix",
+      "taille": 1,
+      "tailleMin": 0,
+      "baisse": true
+     },
+     "touche": "ennemis",
+     "maitre": 5,
+     "effets": [
+      {
+       "type": "degats",
+       "element": "T",
+       "min": 11,
+       "max": 13,
+       "maitre": [
+        14,
+        16
+       ]
+      },
+      {
+       "type": "si",
+       "condition": "cibleAffinee",
+       "n": 1,
+       "effets": [
+        {
+         "type": "degats",
+         "element": "T",
+         "min": 3,
+         "max": 4,
+         "maitre": [
+          4,
+          5
+         ]
+        }
+       ]
+      }
+     ]
+    }
+   ],
+   "texte": "La raclette fondue nappe le sol en croix pendant 2 tours. Qui commence son tour dedans y laisse des plumes, et un peu plus s'il est déjà affiné.",
+   "change": "On ne glisse plus soi-même : la raclette coule au sol en croix pendant 2 tours et frappe en Terroir chaque ennemi qui commence son tour dedans, un peu plus fort s'il est affiné."
+  }
+ },
+ {
+  "base": {
+   "id": "fromagicien.fondue",
+   "classe": "fromagicien",
+   "emplacement": 4,
+   "declinaisonDe": null,
+   "niveau": 10,
+   "nom": "Fondue",
+   "element": "F",
+   "cm": 4,
+   "rayon": {
+    "min": 1,
+    "max": 4,
+    "modifiable": false
+   },
+   "lancer": "libre",
+   "vue": true,
+   "cible": "ennemi",
+   "parTour": 1,
+   "parCible": 1,
+   "relance": 0,
+   "relanceInitiale": 0,
+   "plafondPose": 0,
+   "maitre": 15,
+   "zone": {
+    "forme": "case",
+    "taille": 0,
+    "tailleMin": 0,
+    "baisse": true
+   },
+   "touche": "ennemis",
+   "effets": [
+    {
+     "type": "degats",
+     "element": "F",
+     "min": 15,
+     "max": 19,
+     "maitre": [
+      19,
+      24
+     ]
+    },
+    {
+     "type": "etat",
+     "etat": "brule",
+     "tours": 2,
+     "couches": 1
+    },
+    {
+     "type": "si",
+     "condition": "cibleAffinee",
+     "n": 2,
+     "effets": [
+      {
+       "type": "etat",
+       "etat": "brule",
+       "tours": 2,
+       "couches": 2
+      }
+     ]
+    }
+   ],
+   "texte": "On trempe la cible dans le caquelon : elle en ressort brûlante. Affinée depuis 2 tours, elle brûle deux fois plus (2 couches de Brûlé).",
+   "change": ""
+  },
+  "declinaison": {
+   "id": "fromagicien.souffle-au-fromage",
+   "classe": "fromagicien",
+   "emplacement": 4,
+   "declinaisonDe": "fromagicien.fondue",
+   "niveau": 18,
+   "nom": "Soufflé au fromage",
+   "element": "S",
+   "cm": 3,
+   "rayon": {
+    "min": 2,
+    "max": 5,
+    "modifiable": true
+   },
+   "lancer": "libre",
+   "vue": false,
+   "cible": "case",
+   "parTour": 2,
+   "parCible": 1,
+   "relance": 0,
+   "relanceInitiale": 0,
+   "plafondPose": 0,
+   "maitre": 5,
+   "zone": {
+    "forme": "rond",
+    "taille": 2,
+    "tailleMin": 0,
+    "baisse": true
+   },
+   "touche": "ennemis",
+   "effets": [
+    {
+     "type": "degats",
+     "element": "S",
+     "min": 10,
+     "max": 13,
+     "maitre": [
+      13,
+      16
+     ]
+    }
+   ],
+   "texte": "Il monte, monte, passe par-dessus les obstacles, puis retombe sur tout le monde.",
+   "change": "Le coup brûlant sur une cible devient une grande zone ronde de 13 cases, lancée sans ligne de vue et sans brûlure, en Soufflé."
+  }
+ },
+ {
+  "base": {
+   "id": "fromagicien.petit-lait",
+   "classe": "fromagicien",
+   "emplacement": 5,
+   "declinaisonDe": null,
+   "niveau": 26,
+   "nom": "Petit-lait",
+   "element": "N",
+   "cm": 2,
+   "rayon": {
+    "min": 0,
+    "max": 0,
+    "modifiable": false
+   },
+   "lancer": "libre",
+   "vue": false,
+   "cible": "soi",
+   "parTour": 1,
+   "parCible": 1,
+   "relance": 2,
+   "relanceInitiale": 0,
+   "plafondPose": 0,
+   "maitre": 0,
+   "zone": {
+    "forme": "case",
+    "taille": 0,
+    "tailleMin": 0,
+    "baisse": true
+   },
+   "touche": "allies",
+   "effets": [
+    {
+     "type": "bouclier",
+     "valeur": 24,
+     "tours": 2,
+     "couchesMax": 1
+    },
+    {
+     "type": "bonus",
+     "carac": "fauxFuyant",
+     "valeur": 10,
+     "tours": 1,
+     "qui": "soi"
+    }
+   ],
+   "texte": "Ça passe comme du petit-lait : les coups glissent dessus, et toi tu glisses hors du contact (+10 Faux-fuyant ce tour).",
+   "change": ""
+  },
+  "declinaison": {
+   "id": "fromagicien.soupe-au-lait",
+   "classe": "fromagicien",
+   "emplacement": 5,
+   "declinaisonDe": "fromagicien.petit-lait",
+   "niveau": 34,
+   "nom": "Soupe au lait",
+   "element": "F",
+   "cm": 3,
+   "rayon": {
+    "min": 1,
+    "max": 4,
+    "modifiable": true
+   },
+   "lancer": "libre",
+   "vue": true,
+   "cible": "ennemi",
+   "parTour": 2,
+   "parCible": 1,
+   "relance": 0,
+   "relanceInitiale": 0,
+   "plafondPose": 0,
+   "maitre": 25,
+   "zone": {
+    "forme": "case",
+    "taille": 0,
+    "tailleMin": 0,
+    "baisse": true
+   },
+   "touche": "ennemis",
+   "effets": [
+    {
+     "type": "degats",
+     "element": "F",
+     "min": 15,
+     "max": 19,
+     "maitre": [
+      19,
+      24
+     ]
+    }
+   ],
+   "texte": "Le lait monte d'un coup et déborde. Comme les gens soupe au lait, il s'emporte souvent : 25 % de coups de maître.",
+   "change": "On ne se protège plus, on s'emporte : une frappe Flambée de 1 à 4 cases, avec le plus haut taux de coup de maître (25 %)."
+  }
+ },
+ {
+  "base": {
+   "id": "fromagicien.affinage",
+   "classe": "fromagicien",
+   "emplacement": 6,
+   "declinaisonDe": null,
+   "niveau": 41,
+   "nom": "Affinage",
+   "element": "N",
+   "cm": 2,
+   "rayon": {
+    "min": 1,
+    "max": 5,
+    "modifiable": true
+   },
+   "lancer": "libre",
+   "vue": true,
+   "cible": "case",
+   "parTour": 1,
+   "parCible": 0,
+   "relance": 0,
+   "relanceInitiale": 0,
+   "plafondPose": 0,
+   "maitre": 0,
+   "zone": {
+    "forme": "rond",
+    "taille": 1,
+    "tailleMin": 0,
+    "baisse": true
+   },
+   "touche": "ennemis",
+   "effets": [
+    {
+     "type": "etat",
+     "etat": "affine",
+     "tours": 4,
+     "couches": 1
+    }
+   ],
+   "texte": "Toute la tablée descend en cave, avec un tour d'affinage d'avance. Sur un ennemi déjà affiné, le compte continue et la marque repart pour 4 tours. Une tablée par tour : la cave n'a qu'une porte.",
+   "change": ""
+  },
+  "declinaison": {
+   "id": "fromagicien.coup-de-frais",
+   "classe": "fromagicien",
+   "emplacement": 6,
+   "declinaisonDe": "fromagicien.affinage",
+   "niveau": 49,
+   "nom": "Coup de frais",
+   "element": "E",
+   "cm": 3,
+   "rayon": {
+    "min": 1,
+    "max": 5,
+    "modifiable": false
+   },
+   "lancer": "libre",
+   "vue": true,
+   "cible": "ennemi",
+   "parTour": 2,
+   "parCible": 1,
+   "relance": 0,
+   "relanceInitiale": 0,
+   "plafondPose": 0,
+   "maitre": 5,
+   "zone": {
+    "forme": "case",
+    "taille": 0,
+    "tailleMin": 0,
+    "baisse": true
+   },
+   "touche": "ennemis",
+   "effets": [
+    {
+     "type": "degats",
+     "element": "E",
+     "min": 13,
+     "max": 16,
+     "maitre": [
+      16,
+      20
+     ]
+    },
+    {
+     "type": "etat",
+     "etat": "ramolli",
+     "tours": 1,
+     "couches": 1
+    },
+    {
+     "type": "etat",
+     "etat": "affine",
+     "tours": 4,
+     "couches": 0
+    }
+   ],
+   "texte": "Un coup de frais, comme en chambre froide : la cible, engourdie par le froid, perd 1 Pas, et elle se garde plus longtemps en cave.",
+   "change": "Au lieu de mettre une tablée en cave, on garde une seule cible au frais : dégâts d'Eaudace, Ramollie (−1 Pas), et sa marque d'affinage dure de nouveau 4 tours."
+  }
+ },
+ {
+  "base": {
+   "id": "fromagicien.croute-fleurie",
+   "classe": "fromagicien",
+   "emplacement": 7,
+   "declinaisonDe": null,
+   "niveau": 57,
+   "nom": "Croûte fleurie",
+   "element": "N",
+   "cm": 2,
+   "rayon": {
+    "min": 0,
+    "max": 4,
+    "modifiable": true
+   },
+   "lancer": "libre",
+   "vue": true,
+   "cible": "allie",
+   "parTour": 1,
+   "parCible": 1,
+   "relance": 2,
+   "relanceInitiale": 0,
+   "plafondPose": 0,
+   "maitre": 0,
+   "zone": {
+    "forme": "case",
+    "taille": 0,
+    "tailleMin": 0,
+    "baisse": true
+   },
+   "touche": "allies",
+   "effets": [
+    {
+     "type": "bouclier",
+     "valeur": 30,
+     "tours": 2,
+     "couchesMax": 1
+    },
+    {
+     "type": "etat",
+     "etat": "affine",
+     "tours": 4,
+     "couches": 0
+    },
+    {
+     "type": "si",
+     "condition": "cibleAffinee",
+     "n": 2,
+     "effets": [
+      {
+       "type": "bonus",
+       "carac": "conservation",
+       "valeur": 10,
+       "tours": 2,
+       "qui": "cible"
+      }
+     ]
+    }
+   ],
+   "texte": "Une croûte qui encaisse à la place d'un allié et le met en cave. Elle fleurit à l'humidité : sur un allié affiné depuis 2 tours, elle durcit (+10 % de Conservation).",
+   "change": ""
+  },
+  "declinaison": {
+   "id": "fromagicien.croute-cendree",
+   "classe": "fromagicien",
+   "emplacement": 7,
+   "declinaisonDe": "fromagicien.croute-fleurie",
+   "niveau": 65,
+   "nom": "Croûte cendrée",
+   "element": "F",
+   "cm": 3,
+   "rayon": {
+    "min": 1,
+    "max": 4,
+    "modifiable": true
+   },
+   "lancer": "libre",
+   "vue": true,
+   "cible": "ennemi",
+   "parTour": 2,
+   "parCible": 1,
+   "relance": 0,
+   "relanceInitiale": 0,
+   "plafondPose": 0,
+   "maitre": 10,
+   "zone": {
+    "forme": "case",
+    "taille": 0,
+    "tailleMin": 0,
+    "baisse": true
+   },
+   "touche": "ennemis",
+   "effets": [
+    {
+     "type": "degats",
+     "element": "F",
+     "min": 8,
+     "max": 10,
+     "maitre": [
+      10,
+      13
+     ]
+    },
+    {
+     "type": "etat",
+     "etat": "brule",
+     "tours": 3,
+     "couches": 1
+    },
+    {
+     "type": "si",
+     "condition": "cibleAffinee",
+     "n": 1,
+     "effets": [
+      {
+       "type": "etat",
+       "etat": "brule",
+       "tours": 3,
+       "couches": 2
+      }
+     ]
+    },
+    {
+     "type": "si",
+     "condition": "cibleAffinee",
+     "n": 3,
+     "effets": [
+      {
+       "type": "etat",
+       "etat": "brule",
+       "tours": 3,
+       "couches": 3
+      }
+     ]
+    },
+    {
+     "type": "etat",
+     "etat": "affine",
+     "tours": 4,
+     "couches": 0
+    }
+   ],
+   "texte": "La croûte est roulée dans la cendre chaude : elle couve et brûle 3 tours. Plus la cible est affinée, plus la braise prend : 2 couches à 1 tour d'affinage, 3 couches à 3 tours.",
+   "change": "La croûte ne protège plus un allié : couverte de cendre, elle brûle un ennemi 3 tours et le met en cave ; la brûlure passe à 2 couches quand il est affiné depuis 1 tour, à 3 couches depuis 3 tours."
+  }
+ },
+ {
+  "base": {
+   "id": "fromagicien.trou-d-emmental",
+   "classe": "fromagicien",
+   "emplacement": 8,
+   "declinaisonDe": null,
+   "niveau": 73,
+   "nom": "Trou d'emmental",
+   "element": "S",
+   "cm": 3,
+   "rayon": {
+    "min": 2,
+    "max": 5,
+    "modifiable": false
+   },
+   "lancer": "ligne",
+   "vue": true,
+   "cible": "ennemi",
+   "parTour": 2,
+   "parCible": 1,
+   "relance": 0,
+   "relanceInitiale": 0,
+   "plafondPose": 0,
+   "maitre": 5,
+   "zone": {
+    "forme": "case",
+    "taille": 0,
+    "tailleMin": 0,
+    "baisse": true
+   },
+   "touche": "ennemis",
+   "effets": [
+    {
+     "type": "degats",
+     "element": "S",
+     "min": 14,
+     "max": 17,
+     "maitre": [
+      18,
+      21
+     ]
+    },
+    {
+     "type": "attire",
+     "cases": 2
+    }
+   ],
+   "texte": "Le trou de l'emmental aspire tout ce qui passe : la cible est tirée de 2 cases vers toi.",
+   "change": ""
+  },
+  "declinaison": {
+   "id": "fromagicien.trou-de-memoire",
+   "classe": "fromagicien",
+   "emplacement": 8,
+   "declinaisonDe": "fromagicien.trou-d-emmental",
+   "niveau": 81,
+   "nom": "Trou de mémoire",
+   "element": "C",
+   "cm": 3,
+   "rayon": {
+    "min": 1,
+    "max": 5,
+    "modifiable": true
+   },
+   "lancer": "libre",
+   "vue": true,
+   "cible": "ennemi",
+   "parTour": 2,
+   "parCible": 1,
+   "relance": 0,
+   "relanceInitiale": 0,
+   "plafondPose": 0,
+   "maitre": 10,
+   "zone": {
+    "forme": "case",
+    "taille": 0,
+    "tailleMin": 0,
+    "baisse": true
+   },
+   "touche": "ennemis",
+   "effets": [
+    {
+     "type": "degats",
+     "element": "C",
+     "min": 12,
+     "max": 15,
+     "maitre": [
+      15,
+      19
+     ]
+    },
+    {
+     "type": "retire",
+     "quoi": "cm",
+     "n": 1
+    },
+    {
+     "type": "si",
+     "condition": "cibleAffinee",
+     "n": 3,
+     "effets": [
+      {
+       "type": "retire",
+       "quoi": "cm",
+       "n": 1
+      }
+     ]
+    }
+   ],
+   "texte": "Un éclair traverse la tête de la cible et y laisse un trou : elle oublie un coup de main, deux si elle est affinée depuis 3 tours.",
+   "change": "Le trou ne déplace plus la cible, il lui vide la tête : en Éclair, sans tir en ligne, un peu moins fort, elle perd 1 coup de main (2 si elle est affinée depuis 3 tours)."
+  }
+ },
+ {
+  "base": {
+   "id": "fromagicien.lait-caille",
+   "classe": "fromagicien",
+   "emplacement": 9,
+   "declinaisonDe": null,
+   "niveau": 88,
+   "nom": "Lait caillé",
+   "element": "E",
+   "cm": 3,
+   "rayon": {
+    "min": 1,
+    "max": 5,
+    "modifiable": true
+   },
+   "lancer": "libre",
+   "vue": true,
+   "cible": "ennemi",
+   "parTour": 2,
+   "parCible": 1,
+   "relance": 0,
+   "relanceInitiale": 0,
+   "plafondPose": 0,
+   "maitre": 5,
+   "zone": {
+    "forme": "case",
+    "taille": 0,
+    "tailleMin": 0,
+    "baisse": true
+   },
+   "touche": "ennemis",
+   "effets": [
+    {
+     "type": "degats",
+     "element": "E",
+     "min": 14,
+     "max": 17,
+     "maitre": [
+      18,
+      21
+     ]
+    },
+    {
+     "type": "retire",
+     "quoi": "pas",
+     "n": 1
+    },
+    {
+     "type": "si",
+     "condition": "cibleAffinee",
+     "n": 2,
+     "effets": [
+      {
+       "type": "retire",
+       "quoi": "pas",
+       "n": 1
+      }
+     ]
+    }
+   ],
+   "texte": "Le lait caille et fige les jambes : −1 Pas, et −2 quand la cible est affinée depuis 2 tours.",
+   "change": ""
+  },
+  "declinaison": {
+   "id": "fromagicien.ca-caille",
+   "classe": "fromagicien",
+   "emplacement": 9,
+   "declinaisonDe": "fromagicien.lait-caille",
+   "niveau": 96,
+   "nom": "Ça caille",
+   "element": "E",
+   "cm": 3,
+   "rayon": {
+    "min": 0,
+    "max": 0,
+    "modifiable": false
+   },
+   "lancer": "libre",
+   "vue": false,
+   "cible": "soi",
+   "parTour": 1,
+   "parCible": 0,
+   "relance": 0,
+   "relanceInitiale": 0,
+   "plafondPose": 0,
+   "maitre": 5,
+   "zone": {
+    "forme": "rond",
+    "taille": 1,
+    "tailleMin": 1,
+    "baisse": true
+   },
+   "touche": "ennemis",
+   "effets": [
+    {
+     "type": "degats",
+     "element": "E",
+     "min": 13,
+     "max": 16,
+     "maitre": [
+      16,
+      20
+     ]
+    },
+    {
+     "type": "retire",
+     "quoi": "pas",
+     "n": 2
+    }
+   ],
+   "texte": "Ça caille ! Une fois par tour, un froid de cave tombe autour de toi : ceux qui te collent perdent 2 Pas.",
+   "change": "Le froid ne vise plus une cible au loin : il tombe sur les 4 cases autour de toi et retire 2 Pas d'un coup aux ennemis au contact, sans besoin d'affinage. Une fois par tour seulement, car il frappe tous ceux qui te collent."
+  }
+ },
+ {
+  "base": {
+   "id": "fromagicien.roquefort",
+   "classe": "fromagicien",
+   "emplacement": 10,
+   "declinaisonDe": null,
+   "niveau": 104,
+   "nom": "Roquefort",
+   "element": "T",
+   "cm": 4,
+   "rayon": {
+    "min": 1,
+    "max": 3,
+    "modifiable": false
+   },
+   "lancer": "libre",
+   "vue": true,
+   "cible": "ennemi",
+   "parTour": 1,
+   "parCible": 1,
+   "relance": 0,
+   "relanceInitiale": 0,
+   "plafondPose": 0,
+   "maitre": 15,
+   "zone": {
+    "forme": "case",
+    "taille": 0,
+    "tailleMin": 0,
+    "baisse": true
+   },
+   "touche": "ennemis",
+   "effets": [
+    {
+     "type": "degats",
+     "element": "T",
+     "min": 21,
+     "max": 25,
+     "maitre": [
+      26,
+      31
+     ]
+    },
+    {
+     "type": "pousse",
+     "cases": 2
+    },
+    {
+     "type": "si",
+     "condition": "cibleAffinee",
+     "n": 2,
+     "effets": [
+      {
+       "type": "degats",
+       "element": "T",
+       "min": 5,
+       "max": 6,
+       "maitre": [
+        6,
+        8
+       ]
+      }
+     ]
+    }
+   ],
+   "texte": "C'est du fort, et ça repousse : rien que l'odeur fait reculer la cible de 2 cases. Sur une cible affinée depuis 2 tours, il cogne plus fort.",
+   "change": ""
+  },
+  "declinaison": {
+   "id": "fromagicien.fort-en-gueule",
+   "classe": "fromagicien",
+   "emplacement": 10,
+   "declinaisonDe": "fromagicien.roquefort",
+   "niveau": 112,
+   "nom": "Fort en gueule",
+   "element": "S",
+   "cm": 4,
+   "rayon": {
+    "min": 2,
+    "max": 7,
+    "modifiable": true
+   },
+   "lancer": "ligne",
+   "vue": true,
+   "cible": "case",
+   "parTour": 2,
+   "parCible": 1,
+   "relance": 0,
+   "relanceInitiale": 0,
+   "plafondPose": 0,
+   "maitre": 10,
+   "zone": {
+    "forme": "ligne",
+    "taille": 3,
+    "tailleMin": 0,
+    "baisse": true
+   },
+   "touche": "ennemis",
+   "effets": [
+    {
+     "type": "degats",
+     "element": "S",
+     "min": 17,
+     "max": 21,
+     "maitre": [
+      21,
+      26
+     ]
+    }
+   ],
+   "texte": "Toujours du fort, mais en paroles : ton haleine de roquefort porte loin et traverse toute la file.",
+   "change": "Le gros coup de près qui repousse devient une haleine en ligne, de 2 à 7 cases, qui touche 4 cases à la file, sans poussée, en Soufflé."
+  }
+ },
+ {
+  "base": {
+   "id": "fromagicien.odeur-persistante",
+   "classe": "fromagicien",
+   "emplacement": 11,
+   "declinaisonDe": null,
+   "niveau": 120,
+   "nom": "Odeur persistante",
+   "element": "S",
+   "cm": 3,
+   "rayon": {
+    "min": 1,
+    "max": 5,
+    "modifiable": false
+   },
+   "lancer": "libre",
+   "vue": false,
+   "cible": "case",
+   "parTour": 1,
+   "parCible": 1,
+   "relance": 0,
+   "relanceInitiale": 0,
+   "plafondPose": 1,
+   "maitre": 5,
+   "zone": {
+    "forme": "rond",
+    "taille": 2,
+    "tailleMin": 0,
+    "baisse": true
+   },
+   "touche": "ennemis",
+   "effets": [
+    {
+     "type": "degats",
+     "element": "S",
+     "min": 10,
+     "max": 13,
+     "maitre": [
+      13,
+      16
+     ]
+    },
+    {
+     "type": "pose",
+     "quoi": "nappe",
+     "tours": 2,
+     "declenche": "debut",
+     "zone": {
+      "forme": "rond",
+      "taille": 2,
+      "tailleMin": 0,
+      "baisse": true
+     },
+     "touche": "ennemis",
+     "maitre": 0,
+     "effets": [
+      {
+       "type": "retire",
+       "quoi": "cm",
+       "n": 1
+      }
+     ]
+    }
+   ],
+   "texte": "L'odeur s'étale en grand et reste 2 tours : qui commence son tour dedans en perd un coup de main. Une seule odeur à la fois, elle suffit.",
+   "change": ""
+  },
+  "declinaison": {
+   "id": "fromagicien.air-charge",
+   "classe": "fromagicien",
+   "emplacement": 11,
+   "declinaisonDe": "fromagicien.odeur-persistante",
+   "niveau": 128,
+   "nom": "Air chargé",
+   "element": "C",
+   "cm": 3,
+   "rayon": {
+    "min": 2,
+    "max": 5,
+    "modifiable": true
+   },
+   "lancer": "libre",
+   "vue": true,
+   "cible": "ennemi",
+   "parTour": 2,
+   "parCible": 1,
+   "relance": 0,
+   "relanceInitiale": 0,
+   "plafondPose": 0,
+   "maitre": 10,
+   "zone": {
+    "forme": "case",
+    "taille": 0,
+    "tailleMin": 0,
+    "baisse": true
+   },
+   "touche": "ennemis",
+   "effets": [
+    {
+     "type": "degats",
+     "element": "C",
+     "min": 16,
+     "max": 19,
+     "maitre": [
+      20,
+      24
+     ]
+    },
+    {
+     "type": "rebond",
+     "fois": 2,
+     "rayon": 2,
+     "part": 50
+    }
+   ],
+   "texte": "L'odeur charge l'air et attire la foudre, qui saute d'ennemi en ennemi.",
+   "change": "L'odeur ne reste plus au sol : l'air chargé attire la foudre sur une seule cible, plus fort, et elle rebondit 2 fois sur des ennemis proches, en Éclair."
+  }
+ },
+ {
+  "base": {
+   "id": "fromagicien.comte-a-rebours",
+   "classe": "fromagicien",
+   "emplacement": 12,
+   "declinaisonDe": null,
+   "niveau": 135,
+   "nom": "Comté à rebours",
+   "element": "C",
+   "cm": 4,
+   "rayon": {
+    "min": 1,
+    "max": 5,
+    "modifiable": false
+   },
+   "lancer": "libre",
+   "vue": true,
+   "cible": "ennemi",
+   "parTour": 1,
+   "parCible": 1,
+   "relance": 3,
+   "relanceInitiale": 0,
+   "plafondPose": 0,
+   "maitre": 10,
+   "zone": {
+    "forme": "case",
+    "taille": 0,
+    "tailleMin": 0,
+    "baisse": true
+   },
+   "touche": "ennemis",
+   "effets": [
+    {
+     "type": "degats",
+     "element": "C",
+     "min": 15,
+     "max": 18,
+     "maitre": [
+      19,
+      23
+     ]
+    },
+    {
+     "type": "si",
+     "condition": "cibleAffinee",
+     "n": 3,
+     "effets": [
+      {
+       "type": "degats",
+       "element": "C",
+       "min": 28,
+       "max": 34,
+       "maitre": [
+        35,
+        43
+       ]
+      },
+      {
+       "type": "rebond",
+       "fois": 1,
+       "rayon": 2,
+       "part": 50
+      }
+     ]
+    },
+    {
+     "type": "etat",
+     "etat": "affine",
+     "tours": 4,
+     "couches": 0
+    }
+   ],
+   "texte": "Le compte à rebours commence : la cible part en cave. Quand elle est affinée depuis 3 tours, le comté est prêt : la foudre tombe, puis rebondit. Un comté tous les 3 tours : c'est le temps du compte à rebours.",
+   "change": ""
+  },
+  "declinaison": {
+   "id": "fromagicien.comte-gouttes",
+   "classe": "fromagicien",
+   "emplacement": 12,
+   "declinaisonDe": "fromagicien.comte-a-rebours",
+   "niveau": 143,
+   "nom": "Comté-gouttes",
+   "element": "E",
+   "cm": 4,
+   "rayon": {
+    "min": 1,
+    "max": 5,
+    "modifiable": true
+   },
+   "lancer": "libre",
+   "vue": true,
+   "cible": "ennemi",
+   "parTour": 1,
+   "parCible": 1,
+   "relance": 0,
+   "relanceInitiale": 0,
+   "plafondPose": 0,
+   "maitre": 5,
+   "zone": {
+    "forme": "case",
+    "taille": 0,
+    "tailleMin": 0,
+    "baisse": true
+   },
+   "touche": "ennemis",
+   "effets": [
+    {
+     "type": "degats",
+     "element": "E",
+     "min": 17,
+     "max": 20,
+     "maitre": [
+      21,
+      25
+     ]
+    },
+    {
+     "type": "etat",
+     "etat": "ramolli",
+     "tours": 1,
+     "couches": 1
+    },
+    {
+     "type": "si",
+     "condition": "cibleAffinee",
+     "n": 1,
+     "effets": [
+      {
+       "type": "degats",
+       "element": "E",
+       "min": 4,
+       "max": 5,
+       "maitre": [
+        5,
+        6
+       ]
+      }
+     ]
+    },
+    {
+     "type": "si",
+     "condition": "cibleAffinee",
+     "n": 2,
+     "effets": [
+      {
+       "type": "degats",
+       "element": "E",
+       "min": 4,
+       "max": 5,
+       "maitre": [
+        5,
+        6
+       ]
+      }
+     ]
+    },
+    {
+     "type": "si",
+     "condition": "cibleAffinee",
+     "n": 3,
+     "effets": [
+      {
+       "type": "degats",
+       "element": "E",
+       "min": 4,
+       "max": 5,
+       "maitre": [
+        5,
+        6
+       ]
+      }
+     ]
+    },
+    {
+     "type": "etat",
+     "etat": "affine",
+     "tours": 4,
+     "couches": 0
+    }
+   ],
+   "texte": "Goutte à goutte : chaque goutte ramollit la cible, et les gouttes grossissent à chaque tour d'affinage.",
+   "change": "Plus d'attente jusqu'au 3e tour d'affinage, ni de relance : les gouttes tombent à chaque tour, ramollissent (−1 Pas) et grossissent un peu à chaque tour d'affinage, en Eaudace, mais sans grosse explosion ni rebond."
+  }
+ },
+ {
+  "base": {
+   "id": "fromagicien.meule-roulante",
+   "classe": "fromagicien",
+   "emplacement": 13,
+   "declinaisonDe": null,
+   "niveau": 151,
+   "nom": "Meule roulante",
+   "element": "T",
+   "cm": 4,
+   "rayon": {
+    "min": 1,
+    "max": 1,
+    "modifiable": false
+   },
+   "lancer": "ligne",
+   "vue": true,
+   "cible": "case",
+   "parTour": 2,
+   "parCible": 1,
+   "relance": 0,
+   "relanceInitiale": 0,
+   "plafondPose": 0,
+   "maitre": 10,
+   "zone": {
+    "forme": "ligne",
+    "taille": 4,
+    "tailleMin": 0,
+    "baisse": false
+   },
+   "touche": "ennemis",
+   "effets": [
+    {
+     "type": "degats",
+     "element": "T",
+     "min": 17,
+     "max": 21,
+     "maitre": [
+      21,
+      26
+     ]
+    },
+    {
+     "type": "pousse",
+     "cases": 1
+    }
+   ],
+   "texte": "La meule part de tes pieds et roule tout droit sur 5 cases, sans ralentir, en bousculant chacun d'une case.",
+   "change": ""
+  },
+  "declinaison": {
+   "id": "fromagicien.meule-a-etincelles",
+   "classe": "fromagicien",
+   "emplacement": 13,
+   "declinaisonDe": "fromagicien.meule-roulante",
+   "niveau": 159,
+   "nom": "Meule à étincelles",
+   "element": "C",
+   "cm": 4,
+   "rayon": {
+    "min": 2,
+    "max": 5,
+    "modifiable": true
+   },
+   "lancer": "libre",
+   "vue": true,
+   "cible": "case",
+   "parTour": 2,
+   "parCible": 1,
+   "relance": 0,
+   "relanceInitiale": 0,
+   "plafondPose": 0,
+   "maitre": 10,
+   "zone": {
+    "forme": "croix",
+    "taille": 1,
+    "tailleMin": 0,
+    "baisse": true
+   },
+   "touche": "ennemis",
+   "effets": [
+    {
+     "type": "degats",
+     "element": "C",
+     "min": 17,
+     "max": 20,
+     "maitre": [
+      21,
+      25
+     ]
+    },
+    {
+     "type": "rebond",
+     "fois": 1,
+     "rayon": 3,
+     "part": 50
+    }
+   ],
+   "texte": "La meule tourne sur place, au loin, comme une meule à aiguiser, et crache des étincelles qui sautent sur les voisins.",
+   "change": "La meule ne roule plus en ligne à partir de toi : elle tourne au loin, frappe une croix, et ses étincelles rebondissent sur un ennemi proche, en Éclair, sans poussée."
+  }
+ },
+ {
+  "base": {
+   "id": "fromagicien.cave-d-affinage",
+   "classe": "fromagicien",
+   "emplacement": 14,
+   "declinaisonDe": null,
+   "niveau": 167,
+   "nom": "Cave d'affinage",
+   "element": "N",
+   "cm": 4,
+   "rayon": {
+    "min": 1,
+    "max": 3,
+    "modifiable": false
+   },
+   "lancer": "libre",
+   "vue": false,
+   "cible": "caseLibre",
+   "parTour": 1,
+   "parCible": 0,
+   "relance": 4,
+   "relanceInitiale": 1,
+   "plafondPose": 1,
+   "maitre": 0,
+   "zone": {
+    "forme": "case",
+    "taille": 0,
+    "tailleMin": 0,
+    "baisse": true
+   },
+   "touche": "ennemis",
+   "effets": [
+    {
+     "type": "pose",
+     "quoi": "ustensile",
+     "nom": "Cave",
+     "victuailles": 120,
+     "tours": 3,
+     "zone": {
+      "forme": "rond",
+      "taille": 2,
+      "tailleMin": 0,
+      "baisse": true
+     },
+     "touche": "ennemis",
+     "maitre": 0,
+     "effets": [
+      {
+       "type": "etat",
+       "etat": "affine",
+       "tours": 4,
+       "couches": 1
+      },
+      {
+       "type": "etat",
+       "etat": "ramolli",
+       "tours": 1,
+       "couches": 1
+      }
+     ]
+    }
+   ],
+   "texte": "Une cave sort de terre et bloque le passage et la vue. Au début de chacun de tes tours, les ennemis à 2 cases autour sont affinés et ramollis. Une seule cave à la fois : on ne la creuse pas dès le premier tour, puis il faut 4 tours pour en creuser une autre.",
+   "change": ""
+  },
+  "declinaison": {
+   "id": "fromagicien.mise-en-cave",
+   "classe": "fromagicien",
+   "emplacement": 14,
+   "declinaisonDe": "fromagicien.cave-d-affinage",
+   "niveau": 175,
+   "nom": "Mise en cave",
+   "element": "N",
+   "cm": 4,
+   "rayon": {
+    "min": 1,
+    "max": 3,
+    "modifiable": false
+   },
+   "lancer": "libre",
+   "vue": true,
+   "cible": "ennemi",
+   "parTour": 1,
+   "parCible": 1,
+   "relance": 3,
+   "relanceInitiale": 0,
+   "plafondPose": 0,
+   "maitre": 0,
+   "zone": {
+    "forme": "case",
+    "taille": 0,
+    "tailleMin": 0,
+    "baisse": true
+   },
+   "touche": "ennemis",
+   "effets": [
+    {
+     "type": "etat",
+     "etat": "enracine",
+     "tours": 1,
+     "couches": 1
+    },
+    {
+     "type": "retire",
+     "quoi": "cm",
+     "n": 2
+    },
+    {
+     "type": "etat",
+     "etat": "affine",
+     "tours": 4,
+     "couches": 2
+    }
+   ],
+   "texte": "On enferme un ennemi en cave : il ne marche plus, perd 2 coups de main et mûrit vite. Il faut du temps pour rouvrir la cave.",
+   "change": "La cave ne se pose plus au sol : on y met un seul ennemi, Enraciné 1 tour, −2 coups de main, et affiné avec 2 tours d'avance."
+  }
+ },
+ {
+  "base": {
+   "id": "fromagicien.mont-d-or-brulant",
+   "classe": "fromagicien",
+   "emplacement": 15,
+   "declinaisonDe": null,
+   "niveau": 182,
+   "nom": "Mont-d'or brûlant",
+   "element": "F",
+   "cm": 4,
+   "rayon": {
+    "min": 1,
+    "max": 4,
+    "modifiable": false
+   },
+   "lancer": "libre",
+   "vue": true,
+   "cible": "ennemi",
+   "parTour": 1,
+   "parCible": 1,
+   "relance": 0,
+   "relanceInitiale": 0,
+   "plafondPose": 0,
+   "maitre": 20,
+   "zone": {
+    "forme": "case",
+    "taille": 0,
+    "tailleMin": 0,
+    "baisse": true
+   },
+   "touche": "ennemis",
+   "effets": [
+    {
+     "type": "degats",
+     "element": "F",
+     "min": 22,
+     "max": 26,
+     "maitre": [
+      28,
+      33
+     ]
+    },
+    {
+     "type": "etat",
+     "etat": "brule",
+     "tours": 2,
+     "couches": 1
+    },
+    {
+     "type": "si",
+     "condition": "cibleAffinee",
+     "n": 3,
+     "effets": [
+      {
+       "type": "degats",
+       "element": "F",
+       "min": 11,
+       "max": 13,
+       "maitre": [
+        14,
+        16
+       ]
+      }
+     ]
+    }
+   ],
+   "texte": "Le mont-d'or se cuit dans sa boîte et se mange brûlant. Sur une cible affinée depuis 3 tours, il est à point : moitié plus de dégâts.",
+   "change": ""
+  },
+  "declinaison": {
+   "id": "fromagicien.vacherie",
+   "classe": "fromagicien",
+   "emplacement": 15,
+   "declinaisonDe": "fromagicien.mont-d-or-brulant",
+   "niveau": 190,
+   "nom": "Vacherie",
+   "element": "S",
+   "cm": 4,
+   "rayon": {
+    "min": 1,
+    "max": 4,
+    "modifiable": false
+   },
+   "lancer": "libre",
+   "vue": true,
+   "cible": "case",
+   "parTour": 2,
+   "parCible": 1,
+   "relance": 0,
+   "relanceInitiale": 0,
+   "plafondPose": 0,
+   "maitre": 10,
+   "zone": {
+    "forme": "croix",
+    "taille": 2,
+    "tailleMin": 0,
+    "baisse": true
+   },
+   "touche": "ennemis",
+   "effets": [
+    {
+     "type": "degats",
+     "element": "S",
+     "min": 18,
+     "max": 22,
+     "maitre": [
+      23,
+      28
+     ]
+    },
+    {
+     "type": "etat",
+     "etat": "affine",
+     "tours": 4,
+     "couches": 1
+    }
+   ],
+   "texte": "Le vacherin, l'autre nom du mont-d'or, fait une vacherie : on ouvre la boîte, l'odeur se répand, et tout le monde passe en cave.",
+   "change": "Le coup de grâce sur une cible affinée devient une grande croix sans condition, en Soufflé, qui affine tous les ennemis touchés avec un tour d'avance."
+  }
+ },
+ {
+  "base": {
+   "id": "fromagicien.chef-d-oeuvre-le-grand-cru",
+   "classe": "fromagicien",
+   "emplacement": 16,
+   "declinaisonDe": null,
+   "niveau": 200,
+   "nom": "Chef-d'œuvre : le Grand Cru",
+   "element": "T",
+   "cm": 7,
+   "rayon": {
+    "min": 0,
+    "max": 0,
+    "modifiable": false
+   },
+   "lancer": "libre",
+   "vue": false,
+   "cible": "soi",
+   "parTour": 1,
+   "parCible": 0,
+   "relance": 5,
+   "relanceInitiale": 2,
+   "plafondPose": 0,
+   "maitre": 15,
+   "zone": {
+    "forme": "terrain",
+    "taille": 0,
+    "tailleMin": 0,
+    "baisse": false
+   },
+   "touche": "ennemis",
+   "effets": [
+    {
+     "type": "degats",
+     "element": "T",
+     "min": 26,
+     "max": 32,
+     "maitre": [
+      33,
+      40
+     ]
+    },
+    {
+     "type": "si",
+     "condition": "cibleAffinee",
+     "n": 1,
+     "effets": [
+      {
+       "type": "degats",
+       "element": "T",
+       "min": 8,
+       "max": 10,
+       "maitre": [
+        10,
+        13
+       ]
+      }
+     ]
+    },
+    {
+     "type": "si",
+     "condition": "cibleAffinee",
+     "n": 3,
+     "effets": [
+      {
+       "type": "degats",
+       "element": "T",
+       "min": 8,
+       "max": 10,
+       "maitre": [
+        10,
+        13
+       ]
+      }
+     ]
+    },
+    {
+     "type": "si",
+     "condition": "cibleAffinee",
+     "n": 5,
+     "effets": [
+      {
+       "type": "degats",
+       "element": "T",
+       "min": 8,
+       "max": 10,
+       "maitre": [
+        10,
+        13
+       ]
+      }
+     ]
+    }
+   ],
+   "texte": "Toute la cave est servie d'un coup, sur tout le terrain. Plus un ennemi a vieilli, plus il prend : à 1, 3 et 5 tours d'affinage (pour 5, il faut relancer sa marque en route).",
+   "change": ""
+  },
+  "declinaison": {
+   "id": "fromagicien.chef-d-oeuvre-la-grande-crue",
+   "classe": "fromagicien",
+   "emplacement": 16,
+   "declinaisonDe": "fromagicien.chef-d-oeuvre-le-grand-cru",
+   "niveau": 200,
+   "nom": "Chef-d'œuvre : la Grande Crue",
+   "element": "E",
+   "cm": 7,
+   "rayon": {
+    "min": 0,
+    "max": 0,
+    "modifiable": false
+   },
+   "lancer": "libre",
+   "vue": false,
+   "cible": "soi",
+   "parTour": 1,
+   "parCible": 0,
+   "relance": 5,
+   "relanceInitiale": 2,
+   "plafondPose": 0,
+   "maitre": 10,
+   "zone": {
+    "forme": "terrain",
+    "taille": 0,
+    "tailleMin": 0,
+    "baisse": false
+   },
+   "touche": "ennemis",
+   "effets": [
+    {
+     "type": "degats",
+     "element": "E",
+     "min": 25,
+     "max": 30,
+     "maitre": [
+      31,
+      38
+     ]
+    },
+    {
+     "type": "etat",
+     "etat": "ramolli",
+     "tours": 3,
+     "couches": 1
+    },
+    {
+     "type": "si",
+     "condition": "cibleAffinee",
+     "n": 2,
+     "effets": [
+      {
+       "type": "etat",
+       "etat": "ramolli",
+       "tours": 3,
+       "couches": 1
+      }
+     ]
+    },
+    {
+     "type": "si",
+     "condition": "cibleAffinee",
+     "n": 4,
+     "effets": [
+      {
+       "type": "etat",
+       "etat": "enracine",
+       "tours": 1,
+       "couches": 1
+      }
+     ]
+    }
+   ],
+   "texte": "La crue monte dans toute la cave : tout le monde a les pieds dans l'eau, et les plus affinés s'y enfoncent.",
+   "change": "Le Grand Cru fait payer l'affinage en dégâts ; la Grande Crue frappe un peu moins, en Eaudace, et noie le terrain : Ramolli 3 tours, une couche de plus à 2 tours d'affinage, et Enraciné à 4 tours d'affinage."
+  }
+ }
+]

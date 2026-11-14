@@ -1,0 +1,8 @@
+# sorties des essais et des simulations
+essais/captures/
+essais/debut/
+essais/tmp-*
+essais/*.log
+essais/*-journal.txt
+proto/captures/
+*.tsv

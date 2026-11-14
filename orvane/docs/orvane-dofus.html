@@ -1,0 +1,1348 @@
+<title>Orvane et Dofus</title>
+<meta name="claude:viewport-fit-sides" content="cover">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Atkinson+Hyperlegible:wght@400;700&family=Bricolage+Grotesque:opsz,wght@12..96,600;12..96,800&display=swap">
+<style>
+/* Une colonne de lecture (environ 68 signes) ; sommaire en pastilles ; tableaux et code défilent dans leur cadre.
+   Mêmes jetons que le plan d'Orvane (DA de La Place des Artisans : crème, encre, vert nuit, or). */
+:root {
+  --fond: #FAF7EF; --surface: #FFFDF7; --creux: #F2EADB; --encre: #1D2725; --doux: #55605C;
+  --trait: #E0D6BF; --vert: #15301F; --or: #C5A572; --ocre: #7A5F2E;
+  --f-titre: "Bricolage Grotesque", "Segoe UI", system-ui, sans-serif;
+  --f-texte: "Atkinson Hyperlegible", system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;
+  --f-code: ui-monospace, Menlo, Consolas, monospace;
+}
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme="light"]) {
+    --fond: #082221; --surface: #14302D; --creux: #0D2D2A; --encre: #F2EDE0; --doux: #B5BFB8;
+    --trait: #2A4743; --vert: #C5A572; --or: #C5A572; --ocre: #D9BD8C; color-scheme: dark;
+  }
+}
+:root[data-theme="dark"] {
+  --fond: #082221; --surface: #14302D; --creux: #0D2D2A; --encre: #F2EDE0; --doux: #B5BFB8;
+  --trait: #2A4743; --vert: #C5A572; --or: #C5A572; --ocre: #D9BD8C; color-scheme: dark;
+}
+* { box-sizing: border-box; }
+body { background: var(--fond); color: var(--encre); font: 16.5px/1.6 var(--f-texte);
+  padding-left: max(16px, env(safe-area-inset-left, 0px)); padding-right: max(16px, env(safe-area-inset-right, 0px)); padding-block: 28px 64px; }
+.page { max-width: 46rem; margin: 0 auto; display: grid; gap: 10px; min-width: 0; }
+.page > * { min-width: 0; }
+header { display: grid; gap: 8px; padding-bottom: 18px; border-bottom: 2px solid var(--trait); }
+.surtitre { font-size: .78rem; letter-spacing: .1em; text-transform: uppercase; color: var(--ocre); font-weight: 700; }
+h1 { font: 800 clamp(2rem, 7vw, 3rem)/1.05 var(--f-titre); margin: 0; text-wrap: balance; }
+header p { margin: 0; color: var(--doux); }
+nav { display: flex; flex-wrap: wrap; gap: 6px; margin-top: 6px; }
+nav a { font-size: .86rem; padding: 4px 11px; border-radius: 99px; border: 1px solid var(--trait); background: var(--surface); color: var(--encre); text-decoration: none; }
+nav a:hover { border-color: var(--or); }
+h2 { font: 700 1.6rem/1.2 var(--f-titre); margin: 34px 0 4px; padding-top: 14px; border-top: 2px solid var(--trait); text-wrap: balance; scroll-margin-top: 12px; }
+h3 { font: 700 1.15rem/1.3 var(--f-titre); margin: 22px 0 0; text-wrap: balance; color: var(--encre); }
+h2:first-of-type { border-top: 0; margin-top: 18px; }
+p, ul, ol { margin: 6px 0; }
+ul, ol { padding-left: 1.3em; display: grid; gap: 5px; }
+li { min-width: 0; }
+code { overflow-wrap: anywhere; }
+pre code { overflow-wrap: normal; }
+li > ul, li > ol { margin-top: 5px; }
+strong { font-weight: 700; }
+a { color: var(--ocre); }
+hr { border: 0; height: 0; margin: 4px 0; }
+code { font: .88em var(--f-code); background: var(--creux); padding: 1px 5px; border-radius: 5px; }
+pre { margin: 8px 0; background: var(--creux); border-radius: 12px; padding: 14px 16px; overflow-x: auto; }
+pre code { background: none; padding: 0; font-size: 13px; line-height: 1.5; }
+.defile { overflow-x: auto; margin: 8px 0; border: 1px solid var(--trait); border-radius: 12px; background: var(--surface); }
+table { border-collapse: collapse; width: 100%; font-size: .9rem; }
+th, td { text-align: left; vertical-align: top; padding: 8px 11px; border-bottom: 1px solid var(--trait); }
+tr:last-child td { border-bottom: 0; }
+thead th { font-family: var(--f-titre); font-weight: 600; color: var(--ocre); white-space: nowrap; }
+td { font-variant-numeric: tabular-nums; }
+#en-bref + ul { background: var(--surface); border: 1px solid var(--trait); border-radius: 14px; padding: 14px 16px 14px 34px; }
+[id="6-ce-que-je-propose-de-faire-maintenant"] ~ ol > li:first-child { background: var(--surface); border: 1px solid var(--or); border-radius: 14px; padding: 12px 14px; }
+:focus-visible { outline: 2px solid var(--or); outline-offset: 2px; }
+</style>
+<div class="page">
+<header>
+  <div class="surtitre">Orvane · document de travail · 13 novembre 2026</div>
+  <h1>Orvane et Dofus</h1>
+  <p>Comment on joue à Dofus, ce qui manque à Orvane pour s'y retrouver, la fiche de règles de combat prête à coder, le nouveau format des sorts et le choix du moteur. Les 10 décisions à prendre sont dans la partie 6.</p>
+  <nav aria-label="Sommaire"><a href="#en-bref">En bref</a><a href="#1-comment-on-joue-a-dofus-lessentiel-en-une-page">1. Comment on joue à Dofus (l'essentiel en une page)</a><a href="#2-ce-qui-manque-a-orvane">2. Ce qui manque à Orvane</a><a href="#3-les-regles-de-combat-dorvane-version-dofus-like">3. Les règles de combat d'Orvane, version Dofus-like</a><a href="#4-le-format-dun-sort">4. Le format d'un sort</a><a href="#5-le-moteur">5. Le moteur</a><a href="#6-ce-que-je-propose-de-faire-maintenant">6. Ce que je propose de faire maintenant</a></nav>
+</header>
+<p>Document de travail, 13 novembre 2026.</p>
+<h2 id="en-bref">En bref</h2>
+<ul>
+<li><strong>Ton impression est juste.</strong> La maquette a la grille en losanges, le déplacement en 4 directions et les 6 CM / 3 Pas de Dofus. Mais il lui manque ce qui fait le jeu : la ligne de vue, le fait d'être retenu au contact (le Rideau), la mise en place avant le combat, l'ordre de jeu alterné, des monstres qui ont des sorts, et des limites sur chaque sort. Résultat : on recule et on tire, sans risque, et on ne peut pas perdre.</li>
+<li><strong>Un moteur graphique n'aurait rien changé à ça.</strong> Ce qui manque, ce sont des règles, pas de l'affichage. Un moteur comme Phaser aidera pour la caméra, le zoom au doigt, les animations et la fluidité sur téléphone. On y passe quand on écrit le vrai combat (partie 5).</li>
+<li><strong>Ma proposition :</strong> écrire d'abord les règles dans un module à part, testé sans écran, le brancher sur la maquette pour juger le plaisir de jeu, puis passer l'affichage à Phaser (partie 6).</li>
+</ul>
+<p>Comment lire ce document : les mots de Dofus n'apparaissent que dans les parties 1 et 2, pour comparer. La partie 3, les règles d'Orvane, n'utilise que le vocabulaire d'Orvane. Un dictionnaire de correspondance termine la partie 1.</p>
+<hr />
+<h2 id="1-comment-on-joue-a-dofus-lessentiel-en-une-page">1. Comment on joue à Dofus (l'essentiel en une page)</h2>
+<p>Versions : Dofus 2 (Flash, 2009-2024), Dofus 3 (moteur Unity, sorti le 3 décembre 2024, mêmes règles que Dofus 2), Dofus Touch (téléphone, depuis 2016, règles proches mais serveurs séparés), Dofus Rétro (l'ancienne version 1.29).</p>
+<h3 id="le-combat">Le combat</h3>
+<ul>
+<li><strong>Il part de la carte.</strong> Des groupes de monstres (un chef et ses suiveurs, de 1 à 8 sur PC, de 1 à 4 sur Touch) se promènent, visibles. En les survolant, on voit leur niveau, leur composition et l'XP prévue. Un clic lance le combat sur place. Il n'y a ni rencontre au hasard ni arène séparée (Dofus 3 bascule sur une petite carte de combat propre à la zone).</li>
+<li><strong>Le placement (environ 45 s).</strong> Chaque camp a ses cases de départ colorées. On choisit sa case, on voit où sont les ennemis, on choisit le défi du combat, puis on clique « Prêt ». Jusqu'à 8 contre 8 sur PC, 4 joueurs sur Touch.</li>
+<li><strong>L'ordre de jeu.</strong> L'équipe dont l'initiative moyenne est la meilleure commence. Ensuite les équipes alternent strictement : 1er de A, 1er de B, 2e de A, 2e de B… L'ordre est fixé au début et affiché dans une frise de portraits. Une invocation joue juste après son invocateur. Un mort est sauté.</li>
+<li><strong>Le tour.</strong> 6 PA (points d'action) et 3 PM (points de mouvement), rendus pleins à chaque tour : il n'y a pas de mana. On mélange librement marche et sorts. Un chrono court : environ 15 s + 1 s par PA et par PM, la moitié du temps non utilisé est reportée au tour suivant, 1 minute au plus (30 s sur Rétro ; +15 s contre les monstres depuis la 3.7).</li>
+<li><strong>La grille.</strong> Isométrique, en losanges. En combat, on se déplace dans 4 directions seulement (les côtés du losange), jamais en diagonale, 1 PM par case. Les cases atteignables s'affichent en vert.</li>
+<li><strong>La ligne de vue.</strong> On trace une ligne du centre de sa case au centre de la case visée. Les obstacles la coupent, et tous les combattants aussi, alliés compris. Les trous et l'eau ne la coupent pas. 71 % des sorts en ont besoin. Se cacher derrière un pilier ou un allié est la base du placement.</li>
+<li><strong>Le tacle et la fuite.</strong> Quitter une case voisine d'un ennemi fait perdre une part de ses PA ET de ses PM. La part gardée vaut (Fuite + 2) / (2 × (Tacle + 2)) : à égalité, on perd la moitié. Avec deux ennemis au contact, les parts se multiplient. La perte s'affiche pendant qu'on trace son chemin. Le corps-à-corps « colle ».</li>
+<li><strong>L'érosion.</strong> 10 % des dégâts reçus réduisent les PV maximum jusqu'à la fin du combat. Les soins ne compensent donc jamais tout.</li>
+<li><strong>La mort et la fin.</strong> À 0 PV, on est retiré de la grille et ses invocations disparaissent. Victoire quand tous les ennemis sont tombés. Un écran donne l'XP, les kamas et les objets (servis dans l'ordre de prospection). Défaite : retour au point de sauvegarde.</li>
+<li><strong>Les défis (challenges).</strong> Un par combat, deux en donjon, choisi entre deux propositions : par exemple « ne jamais finir son tour au contact » ou « tuer dans l'ordre imposé ». Chaque joueur choisit un bonus d'XP ou de butin, d'environ +40 à +147 %.</li>
+</ul>
+<h3 id="les-sorts">Les sorts</h3>
+<ul>
+<li><strong>Une fiche chiffrée, toujours affichée</strong> : coût de 1 à 7 PA (92 % des sorts coûtent 2 à 4 PA), portée minimum et maximum comptée en cases (ce qui donne un losange), portée modifiable ou non (34 % des sorts), lancer en ligne (19 %) ou en diagonale, ligne de vue, case libre ou cible obligatoire, lancers par tour, lancers par cible et par tour, relance en tours (30 % des sorts), délai avant le premier lancer, taux de critique propre au sort (0 à 25 %) avec une fourchette critique plus haute.</li>
+<li><strong>Des zones codées</strong> par forme et par taille : cercle (en losange), croix, ligne, ligne en travers, cône, demi-cercle, carré, anneau. Leurs effets baissent de 10 % par case d'éloignement, 4 fois au plus.</li>
+<li><strong>Des effets variés</strong> : dégâts dans 4 éléments plus le Neutre, soins, boucliers, poussée et attirance (avec des dégâts si la cible heurte un obstacle), téléportations, échanges de place, états (plus de 400 sorts en posent), glyphes au sol, pièges cachés, invocations, retraits de PA et de PM.</li>
+<li><strong>L'affichage</strong> : quand on choisit un sort, la portée s'allume en bleu (foncé = visable, pâle = cachée par un obstacle). Au survol d'une case, la zone s'affiche en rouge. Un aperçu des dégâts minimum et maximum est disponible en option.</li>
+<li><strong>19 classes, 22 paires de sorts chacune</strong> : on équipe le sort de base OU sa variante, et on change gratuitement hors combat. Il n'y a pas de deck : tous les sorts débloqués sont dans la barre, plus l'attaque à l'arme.</li>
+</ul>
+<h3 id="les-caracteristiques">Les caractéristiques</h3>
+<ul>
+<li>4 caractéristiques élémentaires (Force pour la Terre et le Neutre, Intelligence pour le Feu, Chance pour l'Eau, Agilité pour l'Air) : chaque point donne +1 % de dégâts dans son élément, plus un effet secondaire. Plus la Vitalité (PV) et la Sagesse (XP).</li>
+<li>5 points à répartir par niveau. Les coûts montent par paliers (1, puis 2, 3 et 4 points pour +1). La réinitialisation est gratuite.</li>
+<li><strong>Dégâts</strong> = jet × (100 + caractéristique + Puissance) / 100 + dommages fixes, puis moins la résistance fixe, puis × (100 − % de résistance) / 100. La résistance en % des joueurs est plafonnée à 50 % (35 % sur Touch), celle des monstres non : on vise l'élément faible du monstre, visible en le survolant.</li>
+<li><strong>PA et PM</strong> : 6 PA et 3 PM au départ, +1 PA au niveau 100, et c'est tout ce que donne le niveau. Le reste vient de l'équipement, plafonné à 12 PA, 6 PM et +6 de portée. Tout le monde vise « 12/6 ».</li>
+</ul>
+<h3 id="la-progression">La progression</h3>
+<ul>
+<li>Niveau maximum 200. La courbe d'XP est un mur : le passage du 199 au 200 coûte un tiers de toute l'XP. Après 200, des niveaux « Oméga » sans puissance.</li>
+<li>Un sort ou une variante se débloque tous les 5 niveaux, et les sorts montent seuls de grade.</li>
+<li>La puissance vient surtout de l'équipement : panoplies à paliers (souvent +1 PA ou +1 PM à 2 ou 3 pièces), 6 emplacements pour des objets rares, amélioration par runes avec risque de perte.</li>
+</ul>
+<h3 id="le-monde">Le monde</h3>
+<ul>
+<li>Environ 10 000 cartes en écrans fixes, repérées par des coordonnées. On change d'écran par le bord.</li>
+<li>Des bornes de téléportation payantes à découvrir, un point de sauvegarde, des potions de rappel, un espace personnel, un déplacement automatique.</li>
+<li>Les donjons : une suite de salles puis un boss à mécanique, avec une clé fabriquée à partir des ressources du donjon.</li>
+<li>Tous les métiers pour chaque personnage. On récolte d'un clic dans le décor (3 s), on fabrique dans des ateliers en ville. Presque tout l'équipement est fabriqué par les joueurs et vendu dans un marché découpé par corps de métier.</li>
+<li>Un rituel quotidien (une offrande par jour pendant 365 jours, avec un bonus du jour pour tous), des chasses au trésor, des guildes, des alliances et une arène classée.</li>
+</ul>
+<h3 id="sur-telephone-dofus-touch">Sur téléphone (Dofus Touch)</h3>
+<p>Mêmes règles, groupes de 4, pas d'agression par les monstres. L'interface du PC est tassée dans un panneau fixe (environ 27 % de la largeur). C'est le premier reproche des joueurs : « l'interface prend 40 % de l'écran », touches minuscules, chat qui recouvre la grille, caméra fixe en combat. Le client est en JavaScript (carte dessinée sur un canvas, menus en HTML), emballé en application.</p>
+<h3 id="ce-qui-reste-incertain">Ce qui reste incertain</h3>
+<ul>
+<li>Le temps de tour de la 2.29 vient d'un message de forum ; la durée de 45 s du placement vient d'un site de fans.</li>
+<li>La taille d'une carte (560 cases, 14 × 20) n'a été confirmée par aucune source.</li>
+<li>Le site officiel dofus.com n'a pas pu être lu directement : les chiffres viennent de wikis, de guides de fans et des données du jeu extraites par la communauté.</li>
+</ul>
+<h3 id="sources-principales">Sources principales</h3>
+<ul>
+<li>Wiki de fans anglophone : dofuswiki.fandom.com (pages Combat, Characteristic, Dodging, Line of Sight, Spell, Damage, Area of Effect).</li>
+<li>JeuxOnLine : dofus.jeuxonline.info (bases du combat ; devblogs du tacle déterministe en 2011, des variantes et de l'agression en 2017, du mode tactique).</li>
+<li>dofuspourlesnoobs.com (dommages, tacle et fuite, challenges, notes des mises à jour 3.1 à 3.7).</li>
+<li>Données du jeu : api.dofusdb.fr (statistiques calculées sur les 836 sorts de classe).</li>
+<li>Code du serveur 1.29 Araknemu (github.com/Arakne/Araknemu) pour l'ordre de jeu.</li>
+<li>Dofus Touch : fiche et avis de l'App Store, code du client non officiel Lindo.</li>
+<li>Documentation des moteurs : Godot, Unity, Phaser, PixiJS, Colyseus.</li>
+</ul>
+<h3 id="le-dictionnaire-dofus-orvane">Le dictionnaire Dofus → Orvane</h3>
+<div class="defile"><table>
+<thead>
+<tr>
+<th>Dofus</th>
+<th>Orvane</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>PA, PM, portée (PO)</td>
+<td>Coups de main (CM), Pas, Rayon</td>
+</tr>
+<tr>
+<td>PV</td>
+<td>Victuailles</td>
+</tr>
+<tr>
+<td>Initiative</td>
+<td>Ouverture</td>
+</tr>
+<tr>
+<td>Tacle / Fuite</td>
+<td>Rideau / Faux-fuyant</td>
+</tr>
+<tr>
+<td>Résistances</td>
+<td>Conservation</td>
+</tr>
+<tr>
+<td>Puissance</td>
+<td>Levure</td>
+</tr>
+<tr>
+<td>Critique</td>
+<td>Coup de maître</td>
+</tr>
+<tr>
+<td>Invocations</td>
+<td>Commis</td>
+</tr>
+<tr>
+<td>Soins (bonus)</td>
+<td>Remontant</td>
+</tr>
+<tr>
+<td>Prospection</td>
+<td>Ristourne</td>
+</tr>
+<tr>
+<td>Sagesse (bonus d'XP)</td>
+<td>Savoir-faire</td>
+</tr>
+<tr>
+<td>Érosion</td>
+<td>l'Entame (proposé)</td>
+</tr>
+<tr>
+<td>Dommages de poussée</td>
+<td>l'Écrasement (proposé)</td>
+</tr>
+<tr>
+<td>Phase de placement</td>
+<td>la Mise en place (proposé)</td>
+</tr>
+<tr>
+<td>Challenge</td>
+<td>la Commande (proposé)</td>
+</tr>
+<tr>
+<td>Glyphe</td>
+<td>Nappe (proposé)</td>
+</tr>
+<tr>
+<td>Variante, grade</td>
+<td>Déclinaison, rang</td>
+</tr>
+<tr>
+<td>Sorts communs</td>
+<td>Recettes de famille (proposé)</td>
+</tr>
+<tr>
+<td>Kamas</td>
+<td>Blé</td>
+</tr>
+<tr>
+<td>Zaap</td>
+<td>Four banal (proposé)</td>
+</tr>
+<tr>
+<td>Écran de fin de combat</td>
+<td>l'Addition (proposé)</td>
+</tr>
+</tbody>
+</table></div>
+<hr />
+<h2 id="2-ce-qui-manque-a-orvane">2. Ce qui manque à Orvane</h2>
+<h3 id="ce-que-fait-la-maquette-aujourdhui-lu-dans-le-code">Ce que fait la maquette aujourd'hui (lu dans le code)</h3>
+<ul>
+<li><strong>Le terrain</strong> : le Fourneau, 78 cases dont 4 décors (2 billots, 1 caisse, 1 étoile), en losange de 9 × 9. Tu pars toujours de la même case, les 2 Grumeaux à 7 et 8 cases. Le combat se lance par un bouton « Combat » ; il n'y a aucun monstre sur la carte en balade.</li>
+<li><strong>Toi</strong> : 110 / 120 Victuailles, 6 CM, 3 Pas. Tu joues toujours en premier.</li>
+<li><strong>La marche</strong> : 4 directions, 1 Pas par case, on contourne le décor et les Grumeaux. Un seul toucher sur une case verte et tu pars.</li>
+<li><strong>Les sorts</strong> : les 5 premiers de ta classe, réduits à 5 types (frappe sur une cible, frappe en ligne, croix de zone, bond, soin sur soi). La portée se compte en cases, avec un minimum et un maximum, et « en ligne » veut dire sur la même rangée. Un seul toucher sur la cible et le sort part. Il n'y a ni ligne de vue, ni limite par tour, ni relance, ni coup de maître. Les dégâts sont le jet brut : affinités, Levure et Conservation ne servent à rien. La croix touche ses 5 cases à pleine force, et seulement les ennemis. Le soin se lance même quand les Victuailles sont pleines.</li>
+<li><strong>Les Grumeaux</strong> : 48 Victuailles, 3 Pas, aucun CM, aucun sort. Après ton tour, ils jouent l'un après l'autre : ils avancent de 3 cases au plus vers toi, puis frappent de 8 à 12 s'ils sont au contact.</li>
+<li><strong>Pas de Rideau</strong> : quitter le contact d'un Grumeau ne coûte rien.</li>
+<li><strong>La fin</strong> : victoire = toujours +60 XP, 3 Poussières d'étoile et 12 Blé. Défaite = retour à la Halle. Pas de minuteur, pas de mise en place.</li>
+<li><strong>Conséquence</strong> : la meilleure tactique est de reculer puis de tirer (Mie-raille porte de 2 à 6). Et deux soins par tour (30 Victuailles) rendent plus que ce que font les deux Grumeaux (16 à 24) : on ne peut pas perdre.</li>
+<li><strong>Côté données</strong> (sorts.js) : 128 sorts et 128 déclinaisons. 90 % coûtent 2 à 4 CM, comme dans Dofus. Mais le Rayon et l'effet sont des phrases, que le moteur ne sait lire que pour les 5 premiers sorts de chaque classe. Un seul sort parle de ligne de vue (Anguille sous roche), aucun n'a de relance.</li>
+</ul>
+<h3 id="essentiel-sans-ca-ce-nest-pas-un-dofus-like">Essentiel : sans ça, ce n'est pas un Dofus-like</h3>
+<p><strong>1. La ligne de vue.</strong>
+Dans Dofus : elle coupe 71 % des sorts ; se cacher derrière un obstacle ou un allié est la base du jeu.
+Dans Orvane : le plan l'annonce pour le Fourneau, mais la maquette ne la calcule pas. On frappe à travers le four, les billots et les autres Grumeaux.
+Proposition : un vrai calcul de vue (partie 3.8). Le décor plein et tous les combattants coupent la vue ; le vide entre les îles ne la coupe pas (on voit à travers, on ne marche pas dessus). Rayon visable en or plein, Rayon caché en or pâle hachuré. Un champ « vue : oui/non » sur chaque sort, à « non » pour environ un quart d'entre eux (pièges, poses au sol, sorts du Terroir qui passent sous terre). Le Fourneau doit avoir 3 à 5 obstacles qui cachent vraiment.</p>
+<p><strong>2. Le Rideau et le Faux-fuyant.</strong>
+Dans Dofus : quitter le contact coûte une part des PA et des PM, calculée d'avance et affichée.
+Dans Orvane : les deux caractéristiques existent mais ne font rien.
+Proposition : la règle « le Rideau tombe », avec une formule propre à Orvane, toujours au moins 1 Pas gardé (partie 3.7). Elle donne aussi de l'identité aux classes : le Bouchevalier a beaucoup de Rideau, le Traîtreur beaucoup de Faux-fuyant.</p>
+<p><strong>3. Une fiche de sort chiffrée, avec des limites.</strong>
+Dans Dofus : coût, portée, ligne de vue, lancers par tour, par cible, relance, critique… Le meilleur tour mélange 2 ou 3 sorts différents.
+Dans Orvane : rien de tout ça. Le meilleur tour est de répéter le même sort (trois Mie-raille).
+Proposition : le format de la partie 4, et un barème de départ (partie 3.10) : frappes à 2 CM 3 fois par tour et 2 fois par cible, frappes à 3 CM 2 fois par tour et 1 fois par cible, etc. Le bouton se grise avec la raison : « Plus de service pour ce tour », « Revient dans 2 tours ».</p>
+<p><strong>4. Des monstres avec une fiche, des sorts, une faiblesse et une IA.</strong>
+Dans Dofus : un monstre a ses PA, ses PM, ses sorts, ses résistances (souvent une faiblesse) et un rôle (il frappe, tire, soigne ou entrave).
+Dans Orvane : le Grumeau avance et tape. Il n'y a pas d'ennemi à distance, l'élément choisi ne change rien.
+Proposition : une fiche par monstre et une IA à priorités (partie 3.22). Au Fourneau, le Grumeau colle au contact et craint la Flambée ; le Mie-tron tire de loin, fuit le contact et craint le Terroir. Un appui long sur un monstre ouvre sa fiche. Objectif d'équilibrage : un bon placement coûte 30 à 40 % des Victuailles, un mauvais peut faire perdre.</p>
+<p><strong>5. Des classes qui se ressemblent au départ, et un soin pour tout le monde.</strong>
+Dans Dofus : dès le niveau 1, un tireur ne joue pas comme un combattant au contact. Le soin est le métier de quelques classes.
+Dans Orvane : les 5 premiers sorts des 8 classes suivent le même modèle (frappe à 3 CM, tir à 2 CM de 2 à 6, soin de 15 à 3 CM, croix à 4 CM, bond de 1 à 3). La mécanique de classe n'arrive qu'au niveau 10 ou 15.
+Proposition : réécrire les sorts des niveaux 1 à 6 classe par classe. La mécanique de classe dès le niveau 1 à 3 (une petite Fournée, une couche de Glaçage, un amuse-bouche, un Radis, la Marée active d'office…). Des Rayons qui disent le rôle (le Merlanceur tire de 3 à 8, le Bouchevalier frappe au contact). Le soin sur soi réservé au Pâtéladin et au Pâtissorcier, avec une relance ; les autres ont le « Pain de route » du Sac, une fois par tour, payé en CM. Des déplacements différents : bond pour le Levainqueur, échange de place pour le Traîtreur, recul pour le Merlanceur, aucun bond pour le Bouchevalier.</p>
+<p><strong>6. Le combat qui part de la carte, et la Mise en place.</strong>
+Dans Dofus : des groupes visibles qu'on touche pour combattre sur place, puis un placement libre sur des cases de départ.
+Dans Orvane : un bouton « Combat » et des positions fixes.
+Proposition : 2 ou 3 groupes de Grumeaux et de Mie-trons qui errent sur le Fourneau, avec un chef plus gros. Toucher un groupe ouvre sa fiche (niveau, membres, XP et butin prévus) et un bouton « Engager » : un combat ne part jamais d'un simple glissement de doigt (défaut reproché à Touch). Puis la Mise en place (partie 3.3).</p>
+<p><strong>7. L'ordre de jeu alterné.</strong>
+Dans Dofus : les camps alternent, selon l'initiative.
+Dans Orvane : l'Ouverture vaut 140 dans l'onglet Carac. mais ne sert à rien ; tu joues, puis tous les Grumeaux à la suite. À 4 contre 4, quatre tours ennemis d'affilée seraient injouables.
+Proposition : partie 3.4. La frise existe déjà : il suffit d'y mettre de petits portraits avec un anneau de Victuailles.</p>
+<p><strong>8. Agir en deux temps au doigt, voir son Rayon, cadrer le combat.</strong>
+Dans Dofus : sur PC, le survol montre le chemin, la zone et les dégâts avant le clic. Sur Touch, on touche d'abord pour voir.
+Dans Orvane : un seul toucher fait marcher ou lancer, sans aperçu ; une erreur de doigt coûte le tour. Les cases du Rayon sans ennemi sont dessinées en or à 22 % d'opacité, sans contour, sur un sol crème : on ne les voit pas. La caméra ne bouge pas : en combat, la Halle reste à l'écran et le Fourneau n'occupe qu'environ 40 % de la hauteur de la carte. Une case fait environ 40 × 20 pixels, sous les 44 pixels conseillés pour un doigt.
+Proposition : partie 3.23. Premier toucher = aperçu (chemin et « −2 Pas », ou zone, « −13 à −18 » sur chaque cible, une toque renversée si la cible tomberait). Second toucher sur la même case = validation. Caméra qui cadre l'île du combat (zoom d'environ ×1,5), pincer pour zoomer, double toucher pour recentrer. Un soin sur soi demande confirmation et se grise quand les Victuailles sont pleines.</p>
+<h3 id="important-ce-qui-fait-la-profondeur">Important : ce qui fait la profondeur</h3>
+<p><strong>9. La formule de dégâts, la Conservation, le coup de maître.</strong> Aujourd'hui, le jet est appliqué tel quel. Proposition : partie 3.11, avec un plafond de Conservation à 40 % pour les artisans, libre pour les monstres, et une fourchette « coup de maître » environ 25 % plus haute. Le bouton affiche la fourchette déjà calculée : « 13 à 18 (maître 16 à 22) ».</p>
+<p><strong>10. Des zones codées, et un Rayon modifiable ou non.</strong> Aujourd'hui, une seule croix, à pleine force, qui ne touche que les ennemis, et on ne sait pas quels sorts profitent du bonus de Rayon. Proposition : partie 3.12 (formes, baisse avec la distance, alliés touchés) et un champ « modifiable » vrai pour environ un tiers des sorts, affiché « Rayon 2 à 6 + ».</p>
+<p><strong>11. Poussée, attirance et Écrasement.</strong> 18 sorts repoussent et 8 attirent, sans règle de collision. Proposition : partie 3.13.</p>
+<p><strong>12. L'usure du combat.</strong> Rien ne limite les soins. Proposition : l'Entame (partie 3.15).</p>
+<p><strong>13. Le Minuteur.</strong> Pas de chrono. Le plan propose 30 s en ligne. Proposition : partie 3.5, une barre fine au-dessus des sorts.</p>
+<p><strong>14. Les défis.</strong> Aucun ; la victoire rapporte toujours la même chose. Proposition : la Commande (partie 3.21).</p>
+<p><strong>15. Toute la barre de sorts et le Coup d'outil.</strong> La barre ne montre que 5 sorts ; l'Outil est équipé mais ne frappe pas. Proposition : tous les sorts équipés sont disponibles en combat, sur 2 rangées de 6 (on glisse le doigt pour changer de page, un onglet Objets pour les consommables). La première case est le « Coup d'outil », dont la fiche vient de l'objet : 3 à 5 CM, une fois par tour, avec la forme de l'outil. Rouleau = 3 cases en travers (on étale), Fouet = croix, Couperet = 1 case avec un gros coup de maître, Couteau = 1 case, 2 fois par tour, Harpon = 2 à 5 cases, Sécateur = 2 cases côte à côte, Saucisson ferré = ligne de 2, Bâton-tranche-meule = 1 à 2 cases qui repousse.</p>
+<p><strong>16. La taille des cartes de combat et des groupes.</strong> Le Fourneau est un losange large qui laisse du vide sur un écran en portrait. Proposition : au plus 4 artisans, groupes de 1 à 4 monstres (1 ou 2 au Fourneau, 3 ou 4 en donjon). Des cartes de combat pensées pour le portrait : losange étiré en hauteur d'environ 9 × 13 cases (110 à 130 cases jouables), 3 à 5 obstacles qui cachent, 2 ou 3 jeux de cases de départ qui tournent d'un combat à l'autre.</p>
+<p><strong>17. Le rythme des déblocages, le CM du niveau 100, les plafonds.</strong> Aujourd'hui les sorts arrivent aux niveaux 1, 1, 1, 3, 6, 10, 15, 22, 30, 40, 52, 66, 85, 110, 150, 200, et leurs déclinaisons juste après. Entre 110 et 200, il y a des trous de 20 à 25 niveaux, là où l'XP est la plus longue à gagner. Aucun CM n'est lié au niveau, alors qu'un chef-d'œuvre coûte 7 CM pour une base de 6. Proposition : « quelque chose tous les 5 à 10 niveaux », jusqu'au bout. On garde ta règle (chaque déclinaison se débloque entre son sort et le suivant), mais on étale les 32 déblocages régulièrement, environ tous les 6 niveaux, avec le chef-d'œuvre et sa déclinaison au niveau 200. La première déclinaison s'ouvre par une courte quête à l'Astrelier plutôt que d'office au niveau 2. Les rangs 2 et 3 de chaque sort arrivent 50 et 100 niveaux après lui. +1 CM au niveau 100, avec le titre de Compagnon. Plafonds d'équipement : 11 CM, 6 Pas, +5 Rayon (partie 3.1).</p>
+<p><strong>18. Les éléments : trop dilués, sans rôle.</strong> Dans chaque classe, une déclinaison garde l'élément de son sort dans seulement 1 à 4 cas sur 16. Un joueur qui ne joue qu'un élément ne peut équiper ensemble que 2 à 4 sorts de cet élément au niveau 50, 2 à 5 au niveau 100 (Dofus : 8 à 10). Proposition : donner à chaque élément un rôle commun à toutes les classes. Flambée : les dégâts qui durent et les gros coups. Eaudace : ralentir (retirer des Pas, ramollir). Terroir : les coups au sol et les poussées. Soufflé : le placement et les zones. Éclair : les rebonds et la vitesse. Une déclinaison garde le plus souvent l'élément de son sort, et le choix porte sur l'usage (une cible ou une zone, le contact ou la distance). Vérifier par un petit script qu'une voie à un seul élément a au moins 5 sorts au niveau 50 et 7 au niveau 200.</p>
+<p><strong>19. Le capital de points et les effets secondaires.</strong> Aujourd'hui, 5 points par niveau, seulement dans les affinités, sans palier ni effet secondaire. Proposition : partie 3.1 (paliers propres à Orvane, Victuailles et Savoir-faire achetables, un effet secondaire par affinité, différent des correspondances de Dofus).</p>
+<p><strong>20. La boucle hors combat.</strong> La maquette n'a qu'une île où l'on marche ; le PNJ « ! », les étals et la balance sont du décor. Proposition : faire de l'artisanat le cœur de la boucle (le jeu vient de La Place des Artisans). Ressources visibles dans le décor (épis, ruches, caves) récoltées d'un toucher. Ateliers à Grand-Étal. Équipement surtout fabriqué par les joueurs avec le butin. Comptoir découpé par corps de métier. « Fours banaux » à découvrir pour voyager, payés en Blé, qui servent aussi de point de retour. Un « Plat du jour » : une offrande quotidienne et un bonus du jour pour tous. Des clés de donjon fabriquées, les « bons de commande ». Des écrans fixes avec de grosses flèches aux bords.</p>
+<h3 id="secondaire-a-prevoir-pas-urgent">Secondaire : à prévoir, pas urgent</h3>
+<p><strong>21. Les retraits de CM et de Pas.</strong> Plusieurs sorts en retirent, sans règle. Proposition : des retraits garantis (pas de tirage au hasard, illisible au doigt) mais plafonnés (partie 3.14).</p>
+<p><strong>22. Les Commis.</strong> Rien sur leur ordre de jeu, leur durée, leur montée en puissance. Proposition : partie 3.18.</p>
+<p><strong>23. La fin du combat.</strong> Récompense fixe. Proposition : l'Addition (partie 3.20).</p>
+<p><strong>24. La fraîcheur des zones.</strong> Rien de tel. Proposition : « l'Arrivage ». Une zone peu fréquentée gagne de la Fraîcheur, jusqu'à +100 % de Savoir-faire et de Ristourne, affichée sur la fiche des groupes. À 100 %, un « Grand arrivage » fait venir un monstre rare pendant 2 heures.</p>
+<p><strong>25. La forme des donjons.</strong> 27 donjons et leurs Enseignes sont écrits, mais pas leur forme. Proposition : 2 salles puis la salle de l'Enseigne (format téléphone, groupes de 4). Entrée avec un bon de commande fabriqué. Après une défaite, on reprend à la dernière salle. Chaque Enseigne a une Commande spéciale liée à sa mécanique (par exemple, écraser chaque cocon de la Proxi-Mite avant qu'il n'éclose).</p>
+<p><strong>26. Des sorts communs à toutes les classes.</strong> Il n'en existe pas. Proposition : les « Recettes de famille », 6 à 10 sorts partagés, gagnés sur les Enseignes, groupés par paires comme les déclinaisons (un Commis de passage, une poussée, une attirance, un sort qui frappe dans le meilleur élément de l'artisan…).</p>
+<p><strong>27. Des déclinaisons dès le niveau 2.</strong> Un débutant fait un choix de build avant de connaître ses sorts. Proposition : la première déclinaison s'ouvre par une quête de l'Astrelier (« Décliner sa première recette »), après quelques combats gagnés.</p>
+<p><strong>28. Le journal de combat et les signaux.</strong> Seuls des chiffres flottants d'une seconde disent ce qui s'est passé. Proposition : un journal repliable de 2 lignes au-dessus de la barre, qui ne recouvre jamais la grille, et 4 signaux rapides pour le groupe : « Ici », « Cette cible », « Soin ! », « Je recule ».</p>
+<p><strong>29. L'agression et le jeu à deux.</strong> La Voie lactée doit apprendre à « éviter les Grumeaux », et les groupes n'ouvrent qu'au niveau 13. Proposition : une agression douce, limitée à quelques zones : un « ! » au-dessus du groupe, 3 s pour s'éloigner, jamais pendant une récolte. Jeu à deux possible dès la Halle des Ébauches.</p>
+<p><strong>30. 8 directions en balade.</strong> La balade utilise le chemin à 4 directions du combat. Proposition : 8 directions hors combat (trajets plus naturels), 4 en combat, et un bouton « Voir » qui fait pulser tout ce qui est interactif.</p>
+<h3 id="ce-qui-est-deja-juste">Ce qui est déjà juste</h3>
+<ul>
+<li>La grille en losanges, la marche en 4 directions à 1 Pas par case, les cases vertes qui contournent le décor : c'est la règle de Dofus.</li>
+<li>Le Rayon compté en cases (portée en losange), avec un minimum, un maximum et des sorts « en ligne ».</li>
+<li>6 CM et 3 Pas rendus à chaque tour, 90 % des sorts entre 2 et 4 CM, des chefs-d'œuvre à 7 : le bon budget de tour.</li>
+<li>Le combat sur une île de la même carte, sans arène séparée.</li>
+<li>Les repères de l'écran : frise avec le numéro du tour, barres de vie au-dessus des monstres, Victuailles, CM et Pas à côté des sorts, coût sur chaque bouton, « Fin du tour » sous le pouce.</li>
+<li>Le jeu en portrait, d'une main, avec « Masquer le menu » (la carte prend alors environ 75 % de l'écran) et des onglets réglables : la réponse directe au premier reproche fait à Touch.</li>
+<li>Les déclinaisons : même emplacement, l'une ou l'autre, changement hors combat seulement. Les 3 rangs proposés jouent le rôle des grades.</li>
+<li>L'élément appartient au sort, pas à la classe.</li>
+<li>Une liste de caractéristiques complète et déjà renommée ; il ne manque que les formules.</li>
+<li>Des mécaniques de classe fortes et lisibles (Fournée, Glaçage, Tranchant, Fumage, Affinage, Marée, Buffet, Potager) et des Enseignes à mécanique.</li>
+<li>Des groupes de 4, un serveur qui arbitre tout (Colyseus), des sorts rangés dans des données : la bonne architecture contre la triche et les robots, premier reproche fait à Touch.</li>
+</ul>
+<h3 id="ce-quil-ne-faut-pas-copier">Ce qu'il ne faut pas copier</h3>
+<ul>
+<li>Les mots de Dofus (voir la liste des mots protégés en annexe de la partie 3).</li>
+<li>Toutes les constantes de Dofus à l'identique (formule du tacle, 10 % d'érosion, −10 % par case en zone, 12 PA / 6 PM / 6 PO, paliers 1/2/3/4, 45 s de placement, 15 s + 1 s par point). Les mécaniques sont libres, mais tout reprendre au chiffre près renforcerait un risque de parasitisme : la partie 3 choisit exprès d'autres valeurs.</li>
+<li>Les correspondances caractéristique → élément → effet secondaire de Dofus (l'Agilité qui donne à la fois tacle et fuite, la Chance le butin, l'Intelligence les soins).</li>
+<li>Les couleurs de lecture de Dofus : portée bleue, zone rouge, cases de départ rouges et bleues. Orvane prend l'or et le cuivre.</li>
+<li>Les défauts connus : interface qui mange 40 % de l'écran, chat sur la grille, caméra fixe, combats lancés par erreur, retrait de PA/PM tiré au hasard, immobilisation totale par le tacle, courbe d'XP en mur, plus de 400 sorts qui posent des états, amélioration d'objets qui peut tout faire perdre, jeu à plusieurs comptes encouragé.</li>
+<li>Le mot « Dofus-like » sur la fiche du store ou dans les publicités.</li>
+</ul>
+<hr />
+<h2 id="3-les-regles-de-combat-dorvane-version-dofus-like">3. Les règles de combat d'Orvane, version Dofus-like</h2>
+<p>Fiche prête à coder. Toutes les valeurs sont des <strong>valeurs de départ</strong>, à régler par l'essai (des combats simulés par milliers, puis tes tests). Les constantes sont propres à Orvane.</p>
+<p>Lexique : <strong>artisan</strong> = un personnage joueur ; <strong>combattant</strong> = artisan, monstre ou Commis ; <strong>camp</strong> = les artisans d'un côté, les monstres de l'autre ; <strong>tour</strong> = le moment où un combattant agit ; <strong>manche</strong> = un passage complet de la frise. Les distances se comptent en cases, sur la grille (X, Y) : distance = |ΔX| + |ΔY|.</p>
+<h3 id="31-valeurs-de-depart-gains-et-plafonds">3.1 Valeurs de départ, gains et plafonds</h3>
+<div class="defile"><table>
+<thead>
+<tr>
+<th>Caractéristique</th>
+<th>Au départ</th>
+<th>Ce qui l'augmente</th>
+<th>Plafond (équipement compris, hors effets de combat)</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Coups de main (CM)</td>
+<td>6</td>
+<td>+1 au niveau 100 (titre de Compagnon), équipement</td>
+<td>11</td>
+</tr>
+<tr>
+<td>Pas</td>
+<td>3</td>
+<td>équipement (premier Pas vers le niveau 60, sur les Sabots)</td>
+<td>6</td>
+</tr>
+<tr>
+<td>Rayon (bonus)</td>
+<td>0</td>
+<td>équipement</td>
+<td>+5</td>
+</tr>
+<tr>
+<td>Victuailles</td>
+<td>90 + 5 × niveau</td>
+<td>capital (1 point = 2 Victuailles), Eaudace (+1 par 2 points), équipement</td>
+<td>aucun</td>
+</tr>
+<tr>
+<td>Rideau</td>
+<td>5</td>
+<td>+1 par 10 points de Terroir, équipement</td>
+<td>aucun</td>
+</tr>
+<tr>
+<td>Faux-fuyant</td>
+<td>5</td>
+<td>+1 par 10 points de Soufflé, équipement</td>
+<td>aucun</td>
+</tr>
+<tr>
+<td>Ouverture</td>
+<td>100</td>
+<td>+2 par point d'Éclair, équipement</td>
+<td>aucun</td>
+</tr>
+<tr>
+<td>Coup de maître</td>
+<td>0 %</td>
+<td>+1 % par 20 points de Flambée, équipement</td>
+<td>100 % sur un sort</td>
+</tr>
+<tr>
+<td>Commis</td>
+<td>1</td>
+<td>équipement</td>
+<td>5</td>
+</tr>
+<tr>
+<td>Conservation (par élément)</td>
+<td>0 %</td>
+<td>équipement, états</td>
+<td>40 % pour les artisans ; libre pour les monstres (de −50 % à +100 %)</td>
+</tr>
+<tr>
+<td>Levure, Remontant, Ristourne</td>
+<td>0</td>
+<td>équipement, états</td>
+<td>aucun</td>
+</tr>
+<tr>
+<td>Savoir-faire</td>
+<td>0</td>
+<td>équipement, capital (2 points = +1)</td>
+<td>aucun</td>
+</tr>
+</tbody>
+</table></div>
+<ul>
+<li><strong>Le capital</strong> : 5 points par niveau gagné. Une affinité coûte 1 point pour +1 jusqu'à 80, 2 points pour +1 de 81 à 160, 3 points au-delà. Victuailles : 1 point = 2 Victuailles. Savoir-faire : 2 points = +1. Le refaçonnage à l'Astrelier rend tous les points, gratuitement.</li>
+<li><strong>Les effets secondaires des affinités</strong> (le jeu de mots, pas la copie) : Terroir → Rideau (on est planté), Soufflé → Faux-fuyant (on file comme le vent), Éclair → Ouverture (rapide comme l'éclair), Flambée → Coup de maître (le coup de feu), Eaudace → Victuailles (il faut de l'audace pour encaisser).</li>
+<li><strong>Objectif d'un artisan de niveau 200</strong> : 10 à 11 CM, 5 à 6 Pas.</li>
+</ul>
+<h3 id="32-lengagement">3.2 L'engagement</h3>
+<ul>
+<li>Les groupes de 1 à 4 monstres sont visibles sur la carte et se promènent lentement. Le chef, plus gros, marche en tête.</li>
+<li>Toucher un groupe ouvre sa fiche : niveau de chaque membre, XP et Blé prévus, bonus d'Arrivage. Le bouton « Engager » lance le combat. Un glissement de doigt ne lance jamais de combat.</li>
+<li>Le combat se joue sur la carte de combat de la zone où l'on est. Les autres îles passent en grisé (la « vue en plan » d'Orvane : sol foncé, décor plein bien marqué).</li>
+</ul>
+<h3 id="33-la-mise-en-place">3.3 La Mise en place</h3>
+<ul>
+<li>Chaque carte de combat a 2 ou 3 jeux de cases de départ. En donjon, toujours le même ; ailleurs, on tourne d'un combat à l'autre.</li>
+<li>Les artisans ont 6 cases de départ dorées, les monstres 6 cases cuivre. Le jeu place les monstres ; chaque artisan touche une case dorée libre pour s'y poser, et peut en changer.</li>
+<li>On voit où sont les monstres. Toucher un monstre ouvre sa fiche.</li>
+<li>C'est là que l'initiateur du combat choisit la Commande (partie 3.21) et que chaque artisan choisit son bonus.</li>
+<li>Les alliés rejoignent en touchant la cloche de service posée à l'endroit où le combat a commencé.</li>
+<li>Le bouton « Envoyez ! » remplace « Prêt ». Le combat commence quand tous les artisans ont touché « Envoyez ! », ou au bout de 30 s en ligne. En solo, pas de limite.</li>
+</ul>
+<h3 id="34-lordre-de-jeu">3.4 L'ordre de jeu</h3>
+<ul>
+<li>On calcule l'Ouverture moyenne de chaque camp. Le camp le plus haut commence ; en cas d'égalité, tirage au sort.</li>
+<li>Dans chaque camp, on classe les combattants par Ouverture décroissante. Puis on alterne : 1er du camp A, 1er du camp B, 2e de A, 2e de B… Quand un camp n'a plus personne à faire jouer, l'autre enchaîne.</li>
+<li>L'ordre est fixé au début du combat. Un Commis s'insère juste après son artisan. Un combattant tombé est sauté.</li>
+<li>La frise montre de petits portraits ronds, entourés d'un anneau de Victuailles, le combattant actif agrandi. Elle se replie vers le haut. Toucher un portrait amène la caméra sur ce combattant et ouvre sa fiche.</li>
+</ul>
+<h3 id="35-le-tour-et-le-minuteur">3.5 Le tour et le Minuteur</h3>
+<ul>
+<li>Au début de son tour, un combattant retrouve tous ses CM et ses Pas (moins les retraits reçus, partie 3.14). Puis les effets « début de tour » s'appliquent : états, nappes, fournées.</li>
+<li>Il agit dans l'ordre qu'il veut : marcher, lancer, remarcher, relancer…</li>
+<li>Le tour finit quand il touche « Fin du tour », quand le Minuteur arrive au bout, ou quand il tombe. Les CM et Pas restants sont perdus.</li>
+<li><strong>Le Minuteur</strong> : au début du tour, 25 s + 1 s par CM et par Pas (34 s avec 6 CM et 3 Pas). La moitié du temps non utilisé s'ajoute au tour suivant, sans dépasser 60 s. Il s'affiche en barre fine au-dessus des sorts.</li>
+<li>En solo, le Minuteur est désactivé par défaut. L'option « Minuteur strict » rapporte +10 % de Savoir-faire.</li>
+<li>En groupe, un artisan absent voit ses tours passés automatiquement. Après 3 tours manqués d'affilée, il quitte le service (il compte comme tombé).</li>
+</ul>
+<h3 id="36-le-deplacement">3.6 Le déplacement</h3>
+<ul>
+<li>Une case voisine = une des 4 cases qui touchent un côté du losange. Pas de diagonale en combat.</li>
+<li>Chaque case coûte 1 Pas.</li>
+<li>On ne traverse ni le décor plein, ni le vide entre les îles, ni un Ustensile, ni un combattant (allié compris). Un combattant Dérobé ennemi bloque aussi la case, mais on ne le sait qu'en s'y cognant : le déplacement s'arrête là.</li>
+<li>Hors combat : 8 directions.</li>
+</ul>
+<h3 id="37-le-rideau-quitter-le-contact">3.7 Le Rideau : quitter le contact</h3>
+<ul>
+<li>On est <strong>au contact</strong> d'un ennemi quand on occupe une des 4 cases voisines de la sienne. Seuls les ennemis visibles et debout retiennent (les Commis ennemis aussi ; pas les Ustensiles ni les combattants Dérobés).</li>
+<li>Quand on <strong>quitte</strong> une case au contact d'un ou plusieurs ennemis, on calcule, pour chaque ennemi au contact :
+  <strong>part gardée = (Faux-fuyant + 5) / (2 × Rideau de l'ennemi + 5)</strong>, plafonnée à 100 %.
+  Avec plusieurs ennemis au contact, on multiplie les parts.</li>
+<li>Les CM et les Pas restants (avant de payer le pas qui fait sortir) sont multipliés par cette part, arrondis au plus proche. <strong>On garde toujours au moins 1 Pas</strong>, pour pouvoir faire ce pas-là : on n'est jamais immobilisé.</li>
+<li>On part sans aucune perte si Faux-fuyant ≥ 2 × Rideau. L'état <strong>Glissant</strong> fait aussi partir sans perte.</li>
+<li>La perte s'affiche pendant l'aperçu du chemin (« −1 Pas, −2 CM » au-dessus de la case de sortie), et les cases devenues hors d'atteinte passent en gris barré.</li>
+</ul>
+<div class="defile"><table>
+<thead>
+<tr>
+<th>Ton Faux-fuyant</th>
+<th>Ennemi(s) au contact</th>
+<th>Part gardée</th>
+<th>6 CM et 3 Pas deviennent</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>5</td>
+<td>1 Grumeau (Rideau 5)</td>
+<td>10 / 15 = 67 %</td>
+<td>4 CM et 2 Pas (puis le pas de sortie : 1 Pas)</td>
+</tr>
+<tr>
+<td>5</td>
+<td>2 Grumeaux (Rideau 5 et 5)</td>
+<td>67 % × 67 % = 44 %</td>
+<td>3 CM et 1 Pas (puis le pas de sortie : 0)</td>
+</tr>
+<tr>
+<td>10</td>
+<td>1 Grumeau (Rideau 5)</td>
+<td>15 / 15 = 100 %</td>
+<td>rien perdu</td>
+</tr>
+<tr>
+<td>5</td>
+<td>1 Bouchevalier ennemi (Rideau 20)</td>
+<td>10 / 45 = 22 %</td>
+<td>1 CM et 1 Pas (le minimum)</td>
+</tr>
+</tbody>
+</table></div>
+<h3 id="38-la-ligne-de-vue">3.8 La ligne de vue</h3>
+<ul>
+<li>On travaille sur la grille (X, Y), où les cases sont des carrés : l'écran en losanges n'en est qu'une rotation.</li>
+<li>On trace le segment entre le <strong>centre</strong> de la case du lanceur et le <strong>centre</strong> de la case visée, et on liste toutes les cases qu'il traverse (méthode dite « supercover »). Si le segment passe pile par un coin, entre deux cases, la vue n'est coupée que si <strong>les deux</strong> cases bloquent. La case du lanceur et la case visée ne comptent pas.</li>
+<li><strong>Coupent la vue</strong> : le décor plein (four, étal, billot, caisse, lanterne, étoile), les Ustensiles, tout combattant visible (allié, ennemi, Commis).</li>
+<li><strong>Ne coupent pas la vue</strong> : le vide entre les îles, les flaques et nappes au sol, les pièges, les combattants Dérobés.</li>
+<li>Le résultat est le même dans les deux sens : si je te vois, tu me vois.</li>
+<li>Un sort marqué « vue : non » ignore tout cela (poses au sol, sorts lancés en cloche, sorts du Terroir qui passent sous terre).</li>
+<li>À l'écran : Rayon visable en or plein avec contour, Rayon caché en or pâle hachuré, cases hors Rayon sans marque.</li>
+</ul>
+<h3 id="39-le-rayon">3.9 Le Rayon</h3>
+<ul>
+<li>Une case est dans le Rayon si <strong>min ≤ distance ≤ max</strong>. Cela dessine un losange (troué au centre si min &gt; 0).</li>
+<li>Si le sort est <strong>modifiable</strong>, max effectif = max du sort + bonus de Rayon du lanceur (jamais sous le min). Sinon, le bonus ne compte pas.</li>
+<li><strong>Manière de lancer</strong> : libre ; en ligne (même X ou même Y, ce qui suit les bords des losanges à l'écran) ; en diagonale (|ΔX| = |ΔY|, ce qui donne une ligne droite horizontale ou verticale à l'écran) ; en ligne et en diagonale (8 branches).</li>
+<li><strong>Ce qu'on vise</strong> : un ennemi, un allié, un combattant, une case libre, n'importe quelle case, ou soi.</li>
+<li>Une case est <strong>visable</strong> si elle est dans le Rayon, respecte la manière de lancer, a la vue (si le sort la demande) et le bon contenu.</li>
+</ul>
+<h3 id="310-limites-de-lancer-et-relances">3.10 Limites de lancer et relances</h3>
+<ul>
+<li><strong>parTour</strong> : lancers permis dans un même tour (0 = seulement limité par les CM).</li>
+<li><strong>parCible</strong> : lancers permis sur un même combattant dans un même tour (0 = pas de limite). Pour un sort de zone, la cible est le combattant de la case visée.</li>
+<li><strong>relance</strong> : nombre de tours du lanceur à attendre avant de relancer (0 = aucune).</li>
+<li><strong>relanceInitiale</strong> : nombre de tours du lanceur avant le premier lancer du combat.</li>
+<li><strong>plafondPose</strong> (sorts qui posent quelque chose) : nombre maximum d'objets de ce sort en même temps sur le terrain.</li>
+<li>Barème de départ :</li>
+</ul>
+<div class="defile"><table>
+<thead>
+<tr>
+<th>Type de sort</th>
+<th>parTour</th>
+<th>parCible</th>
+<th>relance</th>
+<th>Autre</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Frappe à 2 CM</td>
+<td>3</td>
+<td>2</td>
+<td>0</td>
+<td></td>
+</tr>
+<tr>
+<td>Frappe à 3 CM</td>
+<td>2</td>
+<td>1</td>
+<td>0</td>
+<td></td>
+</tr>
+<tr>
+<td>Frappe à 4 CM et plus</td>
+<td>1</td>
+<td>1</td>
+<td>0</td>
+<td></td>
+</tr>
+<tr>
+<td>Zone de dégâts</td>
+<td>2</td>
+<td>1</td>
+<td>0</td>
+<td></td>
+</tr>
+<tr>
+<td>Soin, bouclier</td>
+<td>1</td>
+<td>1</td>
+<td>2</td>
+<td></td>
+</tr>
+<tr>
+<td>Bond, échange, téléportation</td>
+<td>1</td>
+<td>0</td>
+<td>2</td>
+<td></td>
+</tr>
+<tr>
+<td>Retrait de CM ou de Pas</td>
+<td>2</td>
+<td>1</td>
+<td>0</td>
+<td></td>
+</tr>
+<tr>
+<td>Pose au sol (piège, nappe, fournée, graine)</td>
+<td>2</td>
+<td>0</td>
+<td>0</td>
+<td>plafondPose 3</td>
+</tr>
+<tr>
+<td>Bonus sur soi ou ses alliés</td>
+<td>1</td>
+<td>0</td>
+<td>3</td>
+<td></td>
+</tr>
+<tr>
+<td>Appel d'un Commis</td>
+<td>1</td>
+<td>0</td>
+<td>4</td>
+<td>relanceInitiale 1</td>
+</tr>
+<tr>
+<td>Chef-d'œuvre</td>
+<td>1</td>
+<td>0</td>
+<td>5</td>
+<td>relanceInitiale 2 (pas avant le 3e tour)</td>
+</tr>
+<tr>
+<td>Coup d'outil</td>
+<td>1 (Couteau : 2)</td>
+<td>0</td>
+<td>0</td>
+<td></td>
+</tr>
+</tbody>
+</table></div>
+<ul>
+<li>À l'écran, un sort qui ne peut plus partir se grise, avec sa raison : « Plus de service pour ce tour », « Déjà servi à cette cible », « Revient dans 2 tours ».</li>
+</ul>
+<h3 id="311-degats-soins-et-coup-de-maitre">3.11 Dégâts, soins et coup de maître</h3>
+<p><strong>Le coup de maître.</strong> Chance = taux du sort + Coup de maître du lanceur, plafonnée à 100 %. Un sort à 0 % ne fait jamais de coup de maître (soins, boucliers, déplacements). On tire le coup de maître <strong>avant</strong> le jet. En coup de maître, on utilise la fourchette « maître » du sort (environ 25 % plus haute), et une toque dorée s'affiche au-dessus du chiffre.</p>
+<p><strong>Les dégâts</strong>, dans l'ordre :
+1. Jet uniforme entre le minimum et le maximum (normal ou maître).
+2. Multiplier par (100 + affinité de l'élément + Levure) / 100, arrondir à l'inférieur. Pour le Neutre, seule la Levure compte.
+3. En zone, multiplier par la baisse de distance (partie 3.12).
+4. Multiplier par (100 − Conservation de la cible dans cet élément) / 100. Conservation plafonnée à 40 % pour un artisan ; libre pour un monstre (négative = faiblesse).
+5. Multiplier par les états qui changent les dégâts (Fumé, Marée basse…), qui se multiplient entre eux.
+6. Arrondir à l'inférieur, jamais sous 0. Les boucliers absorbent d'abord, le reste va sur les Victuailles.
+7. L'Entame s'applique aux dégâts reçus sur les Victuailles (partie 3.15).</p>
+<p><strong>Les soins</strong> : soin = jet × (100 + Levure) / 100 + Remontant. Un soin d'un élément (rare) ajoute aussi l'affinité de cet élément. Un soin ne dépasse pas le maximum de Victuailles (diminué de l'Entame).</p>
+<p><strong>Exemple</strong> : Mie-raille (10 à 14 Flambée) lancée par un Levainqueur qui a 30 en Flambée et 0 en Levure, sur un Grumeau qui craint la Flambée (Conservation −20 %). Jet 12 → 12 × 1,30 = 15,6 → 15 → 15 × 1,20 = 18 dégâts. Entame : 18 / 8 = 2, le maximum du Grumeau passe de 52 à 50.</p>
+<p><strong>L'infobulle et l'aperçu</strong> affichent la fourchette déjà calculée avec les caractéristiques du lanceur et la Conservation de la cible : « −13 à −18 (maître −16 à −22) ».</p>
+<h3 id="312-les-zones">3.12 Les zones</h3>
+<div class="defile"><table>
+<thead>
+<tr>
+<th>Forme</th>
+<th>Description</th>
+<th>Cases (taille 1 / 2 / 3)</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>case</td>
+<td>la case visée seule</td>
+<td>1</td>
+</tr>
+<tr>
+<td>croix</td>
+<td>la case visée et n cases dans les 4 directions</td>
+<td>5 / 9 / 13</td>
+</tr>
+<tr>
+<td>rond</td>
+<td>toutes les cases à distance ≤ n de la case visée (un losange à l'écran)</td>
+<td>5 / 13 / 25</td>
+</tr>
+<tr>
+<td>anneau</td>
+<td>le bord du rond seulement</td>
+<td>4 / 8 / 12</td>
+</tr>
+<tr>
+<td>ligne</td>
+<td>la case visée et les n cases derrière elle, dans l'axe lanceur → cible</td>
+<td>2 / 3 / 4</td>
+</tr>
+<tr>
+<td>travers</td>
+<td>n cases de chaque côté de la case visée, perpendiculaires à l'axe</td>
+<td>3 / 5 / 7</td>
+</tr>
+<tr>
+<td>cône</td>
+<td>rangées de 1, 3, 5… cases qui s'élargissent derrière la case visée</td>
+<td>4 / 9 / 16</td>
+</tr>
+<tr>
+<td>demi-rond</td>
+<td>la moitié du rond tournée vers l'arrière, la case visée comprise</td>
+<td>4 / 9 / 16</td>
+</tr>
+<tr>
+<td>carré</td>
+<td>carré de (2n + 1) cases de côté sur la grille</td>
+<td>9 / 25 / 49</td>
+</tr>
+<tr>
+<td>terrain</td>
+<td>toutes les cases</td>
+<td>toutes</td>
+</tr>
+</tbody>
+</table></div>
+<ul>
+<li><strong>Taille minimum</strong> possible (par exemple un rond de 2 sans son centre).</li>
+<li><strong>La baisse avec la distance</strong> : dans une zone, dégâts et soins baissent de <strong>15 % par case d'éloignement de la case visée</strong>, au plus 3 fois (55 % au minimum). Les états et la poussée ne baissent pas. Un sort peut être marqué « sans baisse ».</li>
+<li><strong>Qui est touché</strong> (champ « touche ») : « ennemis », « alliés » ou « tous ». Par défaut, une zone de dégâts touche <strong>tous</strong> les combattants dedans, alliés et lanceur compris ; une zone de soutien ne touche que les alliés. L'aperçu signale chaque allié touché.</li>
+<li>Pour un sort lancé sur soi (« Soi, zone de 2 »), la case visée est celle du lanceur.</li>
+</ul>
+<h3 id="313-poussee-attirance-et-ecrasement">3.13 Poussée, attirance et Écrasement</h3>
+<ul>
+<li><strong>Pousser de n cases</strong> : la cible s'éloigne du lanceur, case par case, dans l'axe lanceur → cible. Si la cible n'est pas alignée, on prend l'axe le plus long ; à égalité parfaite, elle part en diagonale (chaque pas avance d'une case en X et en Y). Pour une zone qui pousse, chaque cible s'éloigne de la case visée, en commençant par la plus éloignée.</li>
+<li><strong>Attirer de n cases</strong> : la cible vient vers le lanceur, et s'arrête au contact.</li>
+<li>La cible s'arrête si la case suivante est du décor plein, du vide, un Ustensile ou un combattant. <strong>L'Écrasement</strong> : pour chaque case de poussée qu'elle n'a pas pu faire, elle subit <strong>12 + niveau du lanceur / 4</strong> (arrondi à l'inférieur). Le combattant heurté en subit la moitié. Pas d'élément, pas de Conservation ; l'Entame s'applique. Rien ne se propage au-delà du premier heurté.</li>
+<li>Exemple : un Bouchevalier de niveau 40 lance Coup de jarret (repousse de 2) sur un Grumeau qui a un billot juste derrière lui : 2 cases bloquées × (12 + 10) = 44 dégâts.</li>
+<li><strong>Bond</strong> : le lanceur va sur une case libre visée. <strong>Échange</strong> : deux combattants échangent leurs cases. <strong>Passer dans le dos</strong> : le lanceur va sur la case derrière la cible, si elle est libre.</li>
+<li>L'état <strong>Planté</strong> empêche tout déplacement forcé (poussée, attirance, échange, téléportation par un autre).</li>
+<li>Un piège sur le chemin d'une poussée se déclenche et arrête la cible.</li>
+<li>Idée à tester plus tard, propre à Orvane : pousser dans le vide fait « tomber dans les étoiles » (la cible revient au tour suivant sur une case de départ libre et perd 15 % de ses Victuailles).</li>
+</ul>
+<h3 id="314-retraits-de-cm-et-de-pas">3.14 Retraits de CM et de Pas</h3>
+<ul>
+<li>Les retraits sont <strong>garantis</strong> : pas de tirage au hasard.</li>
+<li>Un combattant ne peut pas perdre plus de <strong>2 CM et 2 Pas</strong> par retraits entre deux de ses tours, toutes sources confondues (état Ramolli compris).</li>
+<li>Un retrait s'applique à son prochain tour : ses CM et Pas de départ sont réduits. Si c'est son tour, il s'applique tout de suite.</li>
+</ul>
+<h3 id="315-lentame">3.15 L'Entame</h3>
+<ul>
+<li>Une part sur huit (12,5 %) des dégâts reçus sur les Victuailles réduit le maximum de Victuailles jusqu'à la fin du combat (comme une première tranche de pain qu'on ne remet pas).</li>
+<li>Certains sorts l'augmentent : le Tranchant du Bouchevalier la porte à 25 % sur sa cible pendant 2 tours. Plafond : 50 %.</li>
+<li>Les soins ne rendent pas l'Entame. Le maximum revient à la fin du combat.</li>
+<li>À l'écran, la part entamée s'affiche en gris hachuré au bout de la barre.</li>
+</ul>
+<h3 id="316-les-etats">3.16 Les états</h3>
+<p>Une douzaine d'états, chacun avec son icône, pas plus. Un état dure un nombre de tours <strong>du porteur</strong> et décompte à la fin de son tour. Reposer le même état remet sa durée au maximum, sans cumul, sauf mention.</p>
+<div class="defile"><table>
+<thead>
+<tr>
+<th>État</th>
+<th>Effet</th>
+<th>Durée type</th>
+<th>Exemples de sources</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Brûlé</td>
+<td>perd des Victuailles au début de son tour</td>
+<td>2 tours</td>
+<td>Flan-bé</td>
+</tr>
+<tr>
+<td>Ramolli</td>
+<td>−1 Pas par couche, 2 couches au plus</td>
+<td>1 à 2 tours</td>
+<td>Bâtard trempé, Coup de filet</td>
+</tr>
+<tr>
+<td>Enraciné</td>
+<td>ne peut plus marcher (il peut encore lancer)</td>
+<td>1 tour</td>
+<td>Canapé, Charlotte</td>
+</tr>
+<tr>
+<td>Planté</td>
+<td>ne peut être ni poussé, ni attiré, ni déplacé de force</td>
+<td>1 à 2 tours</td>
+<td>Billot</td>
+</tr>
+<tr>
+<td>Glissant</td>
+<td>quitte le contact sans rien perdre</td>
+<td>1 tour</td>
+<td>sorts de Soufflé</td>
+</tr>
+<tr>
+<td>Dérobé</td>
+<td>invisible pour l'ennemi ; ne coupe pas la vue, ne retient pas ; lancer un sort montre sa case un instant</td>
+<td>1 à 2 tours</td>
+<td>Service discret</td>
+</tr>
+<tr>
+<td>Nappé</td>
+<td>bouclier qui absorbe les dégâts ; jusqu'à 3 couches</td>
+<td>2 tours</td>
+<td>Glaçage</td>
+</tr>
+<tr>
+<td>Fumé</td>
+<td>inflige 15 % de dégâts en moins</td>
+<td>1 tour</td>
+<td>nappes de fumée du Pâtéladin</td>
+</tr>
+<tr>
+<td>Attendri</td>
+<td>−10 à −15 % de Conservation</td>
+<td>2 tours</td>
+<td>Marinade, Attendrisseur</td>
+</tr>
+<tr>
+<td>Affiné</td>
+<td>compteur +1 par tour passé (5 au plus), renforce l'effet du Fromagicien</td>
+<td>tant qu'il dure</td>
+<td>Fromagicien</td>
+</tr>
+<tr>
+<td>Fève</td>
+<td>celui qui fait tomber le porteur gagne 1 CM</td>
+<td>tout le combat</td>
+<td>Galette des rois</td>
+</tr>
+<tr>
+<td>Marée haute / Marée basse</td>
+<td>+2 Rayon / +20 % de dégâts, alterne à chaque tour</td>
+<td>permanent</td>
+<td>Merlanceur</td>
+</tr>
+</tbody>
+</table></div>
+<p>Les états posés par un artisan disparaissent quand il tombe.</p>
+<h3 id="317-au-sol-nappes-pieges-fournees-graines-ustensiles">3.17 Au sol : nappes, pièges, fournées, graines, Ustensiles</h3>
+<ul>
+<li><strong>Nappe</strong> (visible) : une zone posée pour N tours. Elle agit sur qui commence son tour dedans, ou qui y entre, ou qui y finit son tour (champ « déclenche »), une fois par tour et par combattant. Exemples : le gril de la Sardinade, la fumée du Pâtéladin, le bouillon de la Bouillabaisse.</li>
+<li><strong>Piège</strong> (caché à l'ennemi, visible pour ton camp) : 1 case. Il se déclenche quand un ennemi y entre, en marchant ou poussé. Il arrête son déplacement, applique ses effets (avec une zone éventuelle) puis disparaît. Pas sur une case occupée ni sur un autre piège. Au plus 3 pièges posés par artisan (le Buffet complet du Traîtreur).</li>
+<li><strong>Fournée</strong> (visible, avec un compte à rebours) : elle éclate au début du tour de son poseur, après N tours, dans sa zone. Un chef-d'œuvre peut toutes les faire cuire d'un coup.</li>
+<li><strong>Graine</strong> : elle devient un Commis au début du prochain tour du poseur, si la case est libre ; sinon elle attend.</li>
+<li><strong>Ustensile</strong> : un objet posé qui occupe une case (four à pain, pièce montée, banc de sardines). Il bloque les Pas et la vue, a des Victuailles (on peut le casser), ne joue pas, n'apparaît pas dans la frise et ne compte pas dans les Commis. Un four à pain cassé avant la fin de sa cuisson n'éclate pas.</li>
+<li>Tout ce qu'un artisan a posé disparaît quand il tombe.</li>
+</ul>
+<h3 id="318-les-commis">3.18 Les Commis</h3>
+<ul>
+<li>Un artisan peut avoir autant de Commis en même temps que sa caractéristique Commis (1 au départ, 5 au plus).</li>
+<li>Un Commis joue juste après son artisan, contrôlé par l'IA (une option « Commis dressés », pour les diriger soi-même, pourra venir plus tard).</li>
+<li>Ses Victuailles et ses dégâts sont multipliés par (1 + niveau de l'artisan / 120).</li>
+<li>Il disparaît s'il tombe ou si son artisan tombe.</li>
+</ul>
+<h3 id="319-tomber-au-combat">3.19 Tomber au combat</h3>
+<ul>
+<li>À 0 Victuailles, le combattant « rend son tablier » : il quitte la grille, sa case se libère, ses tours sont sautés.</li>
+<li>Ses Commis, ses nappes, ses pièges, ses fournées et ses Ustensiles disparaissent. Les états qu'il a posés sur d'autres s'arrêtent (sauf la Fève).</li>
+<li>Pas de retour en combat (un futur sort rare pourrait l'offrir).</li>
+<li>Un camp perd quand tous ses combattants sont tombés (les Commis et Ustensiles ne comptent pas). Abandonner vaut défaite, sans butin.</li>
+</ul>
+<h3 id="320-la-fin-du-combat-laddition">3.20 La fin du combat : l'Addition</h3>
+<ul>
+<li><strong>XP gagnée</strong> = somme de l'XP des monstres × coefficient de groupe × part du joueur × (1 + Savoir-faire / 100) × écart de niveau × (1 + bonus de Commande) × (1 + Arrivage).<ul>
+<li>Coefficient de groupe (nombre d'artisans) : 1 → 1 ; 2 → 1,15 ; 3 → 1,35 ; 4 → 1,6.</li>
+<li>Part du joueur = son niveau / somme des niveaux des artisans.</li>
+<li>Écart de niveau : si le plus fort monstre a plus de 10 niveaux de moins que le joueur, −5 % par niveau au-delà, 20 % au minimum.</li>
+</ul>
+</li>
+<li><strong>Blé</strong> : la somme du Blé des monstres, partagée à parts égales.</li>
+<li><strong>Objets</strong> : chaque monstre a sa liste d'objets et leurs taux. Taux réel = taux × (100 + Ristourne) / 100. On tire objet par objet, et les artisans sont servis dans l'ordre de Ristourne décroissante.</li>
+<li><strong>Défaite</strong> : retour au dernier Four banal ou Établi visité, un peu d'usure sur l'équipement, la moitié de l'XP des monstres tombés, aucun objet.</li>
+</ul>
+<h3 id="321-la-commande">3.21 La Commande</h3>
+<ul>
+<li>Pendant la Mise en place, l'initiateur choisit une Commande parmi deux tirées au hasard (deux Commandes en donjon).</li>
+<li>Chaque artisan choisit son bonus : Savoir-faire <strong>ou</strong> Ristourne, de +25 % à +100 % selon la difficulté de la Commande et le rapport entre artisans et monstres. Ce choix est mémorisé.</li>
+<li>Tous les artisans doivent la respecter. Un manquement l'annule pour tout le camp (elle passe en rayé).</li>
+<li>Premières Commandes :</li>
+</ul>
+<div class="defile"><table>
+<thead>
+<tr>
+<th>Commande</th>
+<th>Règle</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Sans contact</td>
+<td>ne jamais finir son tour à côté d'un ennemi</td>
+</tr>
+<tr>
+<td>Fait minute</td>
+<td>gagner avant la fin de la 5e manche</td>
+</tr>
+<tr>
+<td>À la chaîne</td>
+<td>faire tomber les ennemis dans l'ordre indiqué</td>
+</tr>
+<tr>
+<td>Fait main</td>
+<td>chaque ennemi tombe sous un Coup d'outil</td>
+</tr>
+<tr>
+<td>Sans sel</td>
+<td>aucun soin de tout le combat</td>
+</tr>
+<tr>
+<td>Sur le plan de travail</td>
+<td>au plus 1 Pas par tour</td>
+</tr>
+<tr>
+<td>Une seule cuisson</td>
+<td>ne jamais lancer deux fois le même sort dans un tour</td>
+</tr>
+<tr>
+<td>Service en salle</td>
+<td>ne jamais commencer deux tours de suite sur la même case</td>
+</tr>
+</tbody>
+</table></div>
+<h3 id="322-les-monstres-et-leur-ia">3.22 Les monstres et leur IA</h3>
+<p><strong>La fiche d'un monstre</strong> : niveau, Victuailles, CM, Pas, Ouverture, Rideau, Faux-fuyant, Conservation par élément, sorts (au format de la partie 4), comportement, XP, Blé, objets.</p>
+<div class="defile"><table>
+<thead>
+<tr>
+<th></th>
+<th>Grumeau (niveau 2)</th>
+<th>Mie-tron (niveau 3)</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Rôle</td>
+<td>colle au contact</td>
+<td>tire de loin, fuit le contact</td>
+</tr>
+<tr>
+<td>Victuailles</td>
+<td>52</td>
+<td>40</td>
+</tr>
+<tr>
+<td>CM / Pas</td>
+<td>4 / 3</td>
+<td>5 / 3</td>
+</tr>
+<tr>
+<td>Ouverture</td>
+<td>80</td>
+<td>130 (il joue avant toi)</td>
+</tr>
+<tr>
+<td>Rideau / Faux-fuyant</td>
+<td>5 / 0</td>
+<td>0 / 8</td>
+</tr>
+<tr>
+<td>Conservation</td>
+<td>Flambée −20 %, Eaudace +30 %</td>
+<td>Terroir −20 %, Soufflé +20 %</td>
+</tr>
+<tr>
+<td>Sort 1</td>
+<td>Coup de pâte : 3 CM, Rayon 1, 8 à 11 Terroir, 1 par tour</td>
+<td>Miettes : 2 CM, Rayon 2 à 5, vue, 6 à 9 Flambée, 2 par tour</td>
+</tr>
+<tr>
+<td>Sort 2</td>
+<td>Pâte collante : 2 CM, Rayon 1 à 2, Ramolli 1 tour, relance 2</td>
+<td>Pincée de farine : 3 CM, Rayon 1 à 3, Fumé 1 tour, relance 3</td>
+</tr>
+<tr>
+<td>XP / Blé</td>
+<td>25 / 4</td>
+<td>35 / 5</td>
+</tr>
+</tbody>
+</table></div>
+<p><strong>L'IA, tour par tour :</strong>
+1. Si un sort peut faire tomber une cible, le lancer (en marchant d'abord si besoin).
+2. Sinon, pour chaque case atteignable (en comptant la perte au Rideau) et chaque sort lançable depuis cette case : valeur = dégâts attendus (avec la Conservation de la cible) + bonus si la cible est la plus fragile − danger de la case (nombre d'artisans qui peuvent la frapper au prochain tour). Jouer le meilleur couple ; on peut lancer puis marcher.
+3. Selon le comportement : « colle » finit son tour au contact de l'artisan le plus fragile ; « tire » finit à 3 à 5 cases, hors du contact, et si possible hors de vue de l'artisan au plus grand Rayon.
+4. Sinon, avancer vers la cible choisie.</p>
+<h3 id="323-ce-que-lecran-doit-montrer">3.23 Ce que l'écran doit montrer</h3>
+<ul>
+<li><strong>Agir en deux temps.</strong> Premier toucher : l'aperçu. Pour la marche : le chemin, les Pas qui resteront, la perte au Rideau. Pour un sort : la zone dans la couleur de l'élément, « −13 à −18 » au-dessus de chaque cible, une toque renversée sur celles qui tomberaient, un avertissement sur chaque allié touché. Second toucher sur la même case (ou bouton « Lancer ») : on valide. Toucher ailleurs : on annule.</li>
+<li><strong>Les couleurs</strong> : Pas en vert ; Rayon visable en or plein avec contour ; Rayon caché en or pâle hachuré ; zone dans la couleur de l'élément ; cases de départ en or (artisans) et cuivre (monstres) ; cases hors d'atteinte en gris barré.</li>
+<li><strong>La caméra</strong> : elle cadre l'île du combat (zoom d'environ ×1,5, cases d'environ 55 × 28 pixels). On pince pour zoomer, double toucher pour recentrer sur son artisan.</li>
+<li><strong>Les fiches</strong> : un appui long sur un combattant, un sort ou un objet ouvre sa fiche complète.</li>
+<li><strong>La place</strong> : au moins 75 % de l'écran pour le terrain en combat. Le journal (2 lignes) et les signaux ne recouvrent jamais la grille.</li>
+</ul>
+<h3 id="annexe-les-mots-de-dofus-a-ne-pas-utiliser">Annexe : les mots de Dofus à ne pas utiliser</h3>
+<p>PA, PM, PO, Tacle, Fuite, Initiative, Prospection, Sagesse, Puissance, Érosion, variante, grade, sorts communs, challenge, glyphe, mode tactique, mode créature, kamas, Zaap, Havre-Sac, Almanax, Kolizéum, percepteur, prisme, pods, forgemagie (et son jargon : exo, over, puits, runes Pa et Ra), Dofus (les œufs), les noms des 19 classes, des monstres (Bouftou, Tofu, Wabbit, Bwork…), des sorts (Bond, Colère, Pression, Flèche Explosive, Flamiche…), des challenges (Statue, Zombie, Barbare, Économe, Doume…) et des états (Intaclable, Inébranlable, Pesanteur, Lourd, Brokle, Téléfrag, Poisse).</p>
+<hr />
+<h2 id="4-le-format-dun-sort">4. Le format d'un sort</h2>
+<p>Aujourd'hui, un sort est une ligne : <code>[niveau, nom, élément, coups de main, rayon en texte, effet en texte, moteur]</code>. Le moteur ne peut pas lire une phrase comme « Rayon 1 à 4, en ligne » ou « repousse d'une case ». Il faut une fiche où chaque règle de la partie 3 a son champ.</p>
+<h3 id="les-champs">Les champs</h3>
+<div class="defile"><table>
+<thead>
+<tr>
+<th>Champ</th>
+<th>Ce qu'il contient</th>
+<th>Exemple</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>id</td>
+<td>un nom unique</td>
+<td><code>"levainqueur.mie-raille"</code></td>
+</tr>
+<tr>
+<td>classe, emplacement</td>
+<td>la classe et la place dans le grimoire (1 à 16)</td>
+<td><code>"levainqueur"</code>, <code>2</code></td>
+</tr>
+<tr>
+<td>declinaisonDe</td>
+<td>l'id du sort de base (vide pour un sort de base)</td>
+<td><code>null</code></td>
+</tr>
+<tr>
+<td>niveau, nom, element, cm</td>
+<td>comme aujourd'hui</td>
+<td><code>1</code>, <code>"Mie-raille"</code>, <code>"F"</code>, <code>2</code></td>
+</tr>
+<tr>
+<td>rayon</td>
+<td><code>{ min, max, modifiable }</code></td>
+<td><code>{ "min": 2, "max": 6, "modifiable": true }</code></td>
+</tr>
+<tr>
+<td>lancer</td>
+<td><code>"libre"</code>, <code>"ligne"</code>, <code>"diagonale"</code>, <code>"ligne+diagonale"</code></td>
+<td><code>"libre"</code></td>
+</tr>
+<tr>
+<td>vue</td>
+<td>la ligne de vue est-elle demandée ?</td>
+<td><code>true</code></td>
+</tr>
+<tr>
+<td>cible</td>
+<td><code>"ennemi"</code>, <code>"allie"</code>, <code>"combattant"</code>, <code>"caseLibre"</code>, <code>"case"</code>, <code>"soi"</code></td>
+<td><code>"combattant"</code></td>
+</tr>
+<tr>
+<td>parTour, parCible</td>
+<td>limites par tour (0 = aucune)</td>
+<td><code>3</code>, <code>2</code></td>
+</tr>
+<tr>
+<td>relance, relanceInitiale</td>
+<td>en tours du lanceur</td>
+<td><code>0</code>, <code>0</code></td>
+</tr>
+<tr>
+<td>plafondPose</td>
+<td>objets posés en même temps (sorts qui posent)</td>
+<td><code>3</code></td>
+</tr>
+<tr>
+<td>maitre</td>
+<td>taux de coup de maître du sort, en %</td>
+<td><code>10</code></td>
+</tr>
+<tr>
+<td>zone</td>
+<td><code>{ forme, taille, tailleMin, baisse }</code></td>
+<td><code>{ "forme": "case" }</code></td>
+</tr>
+<tr>
+<td>touche</td>
+<td><code>"ennemis"</code>, <code>"allies"</code>, <code>"tous"</code></td>
+<td><code>"tous"</code></td>
+</tr>
+<tr>
+<td>effets</td>
+<td>la liste des effets, dans l'ordre</td>
+<td>voir ci-dessous</td>
+</tr>
+<tr>
+<td>texte</td>
+<td>la phrase d'ambiance (le jeu de mots), affichée dans l'infobulle, jamais lue par le moteur</td>
+<td><code>"Une volée de miettes brûlantes."</code></td>
+</tr>
+<tr>
+<td>change</td>
+<td>pour une déclinaison : ce qui change par rapport au sort de base (le 8e champ d'aujourd'hui)</td>
+<td></td>
+</tr>
+</tbody>
+</table></div>
+<h3 id="les-effets-des-briques">Les effets : des briques</h3>
+<p>Un sort = une liste de briques. Chaque brique a un <code>type</code> et ses réglages. Les premières briques à coder :</p>
+<div class="defile"><table>
+<thead>
+<tr>
+<th>type</th>
+<th>Réglages</th>
+<th>Sorts actuels qui en ont besoin</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>degats</td>
+<td>element, min, max, maitre [min, max]</td>
+<td>presque tous</td>
+</tr>
+<tr>
+<td>soin</td>
+<td>min, max, maitre</td>
+<td>Pain Béni, Puits d'amour</td>
+</tr>
+<tr>
+<td>bouclier</td>
+<td>valeur, tours, couchesMax</td>
+<td>Glaçage, Étal royal</td>
+</tr>
+<tr>
+<td>pousse / attire</td>
+<td>cases</td>
+<td>Baguette magique, Coup de jarret, Pétrissage, Hameçon</td>
+</tr>
+<tr>
+<td>bond / echange / dans-le-dos</td>
+<td>(aucun)</td>
+<td>Croûte que croûte, Cocktail explosif, Tournedos</td>
+</tr>
+<tr>
+<td>ramene</td>
+<td>cases (attire un allié)</td>
+<td>Paris-Brest</td>
+</tr>
+<tr>
+<td>etat</td>
+<td>nom, tours, couches</td>
+<td>Flan-bé (Brûlé), Canapé (Enraciné), Marinade (Attendri)</td>
+</tr>
+<tr>
+<td>retire</td>
+<td>quoi (<code>"cm"</code> ou <code>"pas"</code>), n</td>
+<td>Pain perdu, Bâtard trempé</td>
+</tr>
+<tr>
+<td>bonus</td>
+<td>carac, valeur, tours, qui</td>
+<td>La Levée, Marée montante, Opéra</td>
+</tr>
+<tr>
+<td>pose</td>
+<td>quoi (<code>"nappe"</code>, <code>"piege"</code>, <code>"fournee"</code>, <code>"graine"</code>, <code>"ustensile"</code>), tours, déclenche, effets de l'objet</td>
+<td>Four à pain, Amuse-bouche, Sardinade, Mitron</td>
+</tr>
+<tr>
+<td>rebond</td>
+<td>fois, rayon</td>
+<td>Ficelle électrique, Anguille électrique</td>
+</tr>
+<tr>
+<td>renforce</td>
+<td>sort ou famille, valeur, tours</td>
+<td>Fusil à aiguiser, Service à l'assiette</td>
+</tr>
+<tr>
+<td>si</td>
+<td>condition (<code>"cibleBlessee"</code>, <code>"dansLeDos"</code>, <code>"buffetComplet"</code>…), puis des briques</td>
+<td>Bouchée à la reine, Dessert surprise</td>
+</tr>
+<tr>
+<td>gainCM</td>
+<td>n</td>
+<td>Galette des rois (avec la Fève), Opéra</td>
+</tr>
+</tbody>
+</table></div>
+<p>Les sorts des monstres utilisent exactement le même format.</p>
+<h3 id="trois-exemples-tires-des-sorts-actuels">Trois exemples tirés des sorts actuels</h3>
+<p><strong>1. Mie-raille (Levainqueur, niveau 1) : une frappe à distance.</strong></p>
+<p>Aujourd'hui :</p>
+<pre><code>[1, &quot;Mie-raille&quot;, &quot;F&quot;, 2, &quot;2 à 6&quot;, &quot;10 à 14 dégâts Flambée : une volée de miettes brûlantes&quot;, &quot;c|2|6|10|14&quot;]
+</code></pre>
+<p>Demain :</p>
+<pre><code>{
+  &quot;id&quot;: &quot;levainqueur.mie-raille&quot;, &quot;classe&quot;: &quot;levainqueur&quot;, &quot;emplacement&quot;: 2, &quot;declinaisonDe&quot;: null,
+  &quot;niveau&quot;: 1, &quot;nom&quot;: &quot;Mie-raille&quot;, &quot;element&quot;: &quot;F&quot;, &quot;cm&quot;: 2,
+  &quot;rayon&quot;: { &quot;min&quot;: 2, &quot;max&quot;: 6, &quot;modifiable&quot;: true },
+  &quot;lancer&quot;: &quot;libre&quot;, &quot;vue&quot;: true, &quot;cible&quot;: &quot;combattant&quot;,
+  &quot;parTour&quot;: 3, &quot;parCible&quot;: 2, &quot;relance&quot;: 0, &quot;relanceInitiale&quot;: 0,
+  &quot;maitre&quot;: 10,
+  &quot;zone&quot;: { &quot;forme&quot;: &quot;case&quot; }, &quot;touche&quot;: &quot;tous&quot;,
+  &quot;effets&quot;: [
+    { &quot;type&quot;: &quot;degats&quot;, &quot;element&quot;: &quot;F&quot;, &quot;min&quot;: 10, &quot;max&quot;: 14, &quot;maitre&quot;: [13, 17] }
+  ],
+  &quot;texte&quot;: &quot;Une volée de miettes brûlantes.&quot;
+}
+</code></pre>
+<p>Ce qui change en jeu : elle ne passe plus à travers les billots, elle profite du bonus de Rayon, et on ne peut plus la lancer trois fois sur le même Grumeau.</p>
+<p><strong>2. Four à pain (Levainqueur, niveau 15) : une pose à retardement.</strong></p>
+<p>Aujourd'hui :</p>
+<pre><code>[15, &quot;Four à pain&quot;, &quot;F&quot;, 4, &quot;1 à 3&quot;, &quot;Enfourne un four qui cuit 2 tours puis éclate : 30 à 36 dégâts Flambée autour&quot;]
+</code></pre>
+<p>Demain :</p>
+<pre><code>{
+  &quot;id&quot;: &quot;levainqueur.four-a-pain&quot;, &quot;classe&quot;: &quot;levainqueur&quot;, &quot;emplacement&quot;: 7, &quot;declinaisonDe&quot;: null,
+  &quot;niveau&quot;: 15, &quot;nom&quot;: &quot;Four à pain&quot;, &quot;element&quot;: &quot;F&quot;, &quot;cm&quot;: 4,
+  &quot;rayon&quot;: { &quot;min&quot;: 1, &quot;max&quot;: 3, &quot;modifiable&quot;: false },
+  &quot;lancer&quot;: &quot;libre&quot;, &quot;vue&quot;: false, &quot;cible&quot;: &quot;caseLibre&quot;,
+  &quot;parTour&quot;: 1, &quot;parCible&quot;: 0, &quot;relance&quot;: 2, &quot;relanceInitiale&quot;: 0, &quot;plafondPose&quot;: 2,
+  &quot;maitre&quot;: 0,
+  &quot;zone&quot;: { &quot;forme&quot;: &quot;case&quot; }, &quot;touche&quot;: &quot;tous&quot;,
+  &quot;effets&quot;: [
+    { &quot;type&quot;: &quot;pose&quot;, &quot;quoi&quot;: &quot;fournee&quot;, &quot;ustensile&quot;: true, &quot;victuailles&quot;: 30, &quot;tours&quot;: 2,
+      &quot;aLaCuisson&quot;: {
+        &quot;zone&quot;: { &quot;forme&quot;: &quot;rond&quot;, &quot;taille&quot;: 1 }, &quot;touche&quot;: &quot;tous&quot;, &quot;maitre&quot;: 15,
+        &quot;effets&quot;: [ { &quot;type&quot;: &quot;degats&quot;, &quot;element&quot;: &quot;F&quot;, &quot;min&quot;: 30, &quot;max&quot;: 36, &quot;maitre&quot;: [37, 45] } ]
+      } }
+  ],
+  &quot;texte&quot;: &quot;Enfourne un four qui cuit 2 tours puis éclate.&quot;
+}
+</code></pre>
+<p>Ce qui change en jeu : le four occupe sa case et cache la vue pendant qu'il cuit, l'ennemi peut le casser avant qu'il n'éclate, et l'explosion touche aussi les alliés trop proches.</p>
+<p><strong>3. Coup de jarret (Bouchevalier, niveau 40) : contact et poussée.</strong></p>
+<p>Aujourd'hui :</p>
+<pre><code>[40, &quot;Coup de jarret&quot;, &quot;S&quot;, 3, &quot;1&quot;, &quot;16 à 20 dégâts Soufflé, repousse de 2 cases&quot;]
+</code></pre>
+<p>Demain :</p>
+<pre><code>{
+  &quot;id&quot;: &quot;bouchevalier.coup-de-jarret&quot;, &quot;classe&quot;: &quot;bouchevalier&quot;, &quot;emplacement&quot;: 10, &quot;declinaisonDe&quot;: null,
+  &quot;niveau&quot;: 40, &quot;nom&quot;: &quot;Coup de jarret&quot;, &quot;element&quot;: &quot;S&quot;, &quot;cm&quot;: 3,
+  &quot;rayon&quot;: { &quot;min&quot;: 1, &quot;max&quot;: 1, &quot;modifiable&quot;: false },
+  &quot;lancer&quot;: &quot;libre&quot;, &quot;vue&quot;: true, &quot;cible&quot;: &quot;ennemi&quot;,
+  &quot;parTour&quot;: 2, &quot;parCible&quot;: 1, &quot;relance&quot;: 0, &quot;relanceInitiale&quot;: 0,
+  &quot;maitre&quot;: 15,
+  &quot;zone&quot;: { &quot;forme&quot;: &quot;case&quot; }, &quot;touche&quot;: &quot;ennemis&quot;,
+  &quot;effets&quot;: [
+    { &quot;type&quot;: &quot;degats&quot;, &quot;element&quot;: &quot;S&quot;, &quot;min&quot;: 16, &quot;max&quot;: 20, &quot;maitre&quot;: [20, 25] },
+    { &quot;type&quot;: &quot;pousse&quot;, &quot;cases&quot;: 2 }
+  ],
+  &quot;texte&quot;: &quot;Un coup sec dans le jarret, et l'ennemi recule.&quot;
+}
+</code></pre>
+<p>Ce qui change en jeu : contre un billot ou un autre ennemi, la poussée bloquée inflige l'Écrasement (22 dégâts par case perdue au niveau 40), et un ennemi Planté ne bouge pas.</p>
+<h3 id="le-verificateur">Le vérificateur</h3>
+<p>Un petit script lit tous les sorts et signale : un champ manquant ; une frappe sans aucune limite (ni parTour, ni parCible, ni relance) ; une zone de dégâts sans « touche » ; un sort à 7 CM disponible avant le niveau 100 ; pour chaque classe et chaque élément, le nombre de sorts offensifs qu'on peut équiper ensemble aux niveaux 30, 50, 100 et 200.</p>
+<hr />
+<h2 id="5-le-moteur">5. Le moteur</h2>
+<h3 id="reponse-courte">Réponse courte</h3>
+<p>Oui, un moteur graphique aidera, mais <strong>pour l'écran, pas pour les règles</strong>. Aucun des écarts de la partie 2 ne vient du dessin en SVG : la ligne de vue, le Rideau, l'ordre de jeu, les limites de sorts et l'IA sont du calcul. Ce qui aide vraiment, c'est de sortir les règles dans un <strong>module à part, sans affichage</strong>, que je peux tester en quelques secondes sans navigateur, et qui servira tel quel au téléphone et au serveur. Ensuite, Phaser apportera la caméra, le zoom au doigt, les animations et la fluidité.</p>
+<h3 id="a-le-prototype-jouable-dans-la-page">a) Le prototype jouable dans la page</h3>
+<p><strong>Ce que la maquette SVG fait bien</strong> : dessiner les personnages (tes 8 classes sont dessinées en SVG, nettes à toutes les tailles), un petit terrain, des cases qu'on touche.</p>
+<p><strong>Ce qu'elle ne permet pas bien :</strong>
+- Pas de caméra ni de zoom au doigt : il faudrait tout coder à la main (cadrage, pincer, glisser, limites).
+- Chaque case, chaque effet est un élément de la page. C'est très bien pour 80 cases, mais les animations (farine qui vole, flammes de la Flambée, fumée du Pâtéladin, personnages qui marchent image par image, chiffres qui montent) deviennent vite lourdes sur un téléphone moyen.
+- Pas d'animations d'images, pas de transitions adoucies toutes prêtes, pas de particules, pas de sons gérés. Le tri de profondeur se fait à la main.
+- Les règles, le dessin et les menus sont mêlés dans un seul fichier : difficile à tester et à faire grandir.</p>
+<p><strong>Ce qu'apporterait Phaser 3</strong> (gratuit, licence MIT, disponible sur cdnjs : <code>https://cdnjs.cloudflare.com/ajax/libs/phaser/3.90.0/phaser.min.js</code>, environ 1 Mo) :
+- une caméra : zoom, déplacement, suivi d'un personnage, limites ;
+- le toucher à plusieurs doigts (le pincer se code en quelques lignes) ;
+- des transitions adoucies (un personnage qui glisse de case en case, un chiffre qui monte et s'efface), des particules, des animations d'images, des sons ;
+- un tri de profondeur simple (chaque objet reçoit une profondeur selon X + Y) ;
+- un dessin rapide en WebGL (avec repli automatique), pensé pour les téléphones ;
+- la lecture des cartes en losanges dessinées avec Tiled, déjà prévu dans le plan.</p>
+<p>Tes dessins SVG actuels restent : on les transforme en images au chargement. Les menus (barre de sorts, onglets) restent en HTML par-dessus le terrain : c'est exactement l'organisation de Dofus Touch.</p>
+<p><strong>PixiJS</strong> (8.23.0 sur cdnjs) dessine encore plus vite et pèse moins, mais il ne fait que dessiner : caméra, toucher, transitions et cartes seraient à écrire nous-mêmes.</p>
+<p><strong>Recommandation : Phaser 3.90.0</strong> pour le prototype. C'est la version la plus documentée (des milliers d'exemples) et c'est le moteur déjà choisi par le plan. Phaser 4 existe aussi (4.2.1, sur cdnjs) ; on pourra y passer au moment de créer le vrai projet, le code change peu.</p>
+<h3 id="b-le-vrai-jeu-sur-telephone">b) Le vrai jeu sur téléphone</h3>
+<div class="defile"><table>
+<thead>
+<tr>
+<th></th>
+<th>Phaser + TypeScript + Capacitor (le plan actuel)</th>
+<th>Godot 4</th>
+<th>Unity 6</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Coût</td>
+<td>gratuit</td>
+<td>gratuit (licence MIT)</td>
+<td>gratuit jusqu'à 200 000 $ de revenus, puis 2 310 $ par an et par poste</td>
+</tr>
+<tr>
+<td>Langage</td>
+<td>TypeScript (du JavaScript typé)</td>
+<td>GDScript (C# encore expérimental sur téléphone)</td>
+<td>C#</td>
+</tr>
+<tr>
+<td>Losanges</td>
+<td>à la main ou via Tiled, simple pour du tour par tour</td>
+<td>intégré (cartes en tuiles isométriques, tri par profondeur)</td>
+<td>intégré</td>
+</tr>
+<tr>
+<td>Tester sur ton téléphone</td>
+<td>un lien à ouvrir, rien à installer</td>
+<td>une application à installer à chaque essai (la version web est plus lourde)</td>
+<td>une application à installer à chaque essai</td>
+</tr>
+<tr>
+<td>Serveur qui arbitre les combats</td>
+<td>le <strong>même</strong> module de règles tourne sur le serveur Colyseus (même langage)</td>
+<td>règles à réécrire pour le serveur, ou un Godot sans écran sur le serveur</td>
+<td>règles à réécrire, ou un Unity sans écran sur le serveur</td>
+</tr>
+<tr>
+<td>Exemple connu</td>
+<td>Dofus Touch (JavaScript, canvas et HTML)</td>
+<td></td>
+<td>Dofus 3, Waven</td>
+</tr>
+<tr>
+<td>Point faible</td>
+<td>la batterie et les téléphones bas de gamme (reproche fait à Touch)</td>
+<td>export iPhone qui demande un Mac ; reprendre le prototype</td>
+<td>lourd, éditeur à apprendre, conditions de licence</td>
+</tr>
+</tbody>
+</table></div>
+<p><strong>Recommandation : garder le plan, Phaser + TypeScript + Capacitor, avec Colyseus pour le serveur.</strong> Les raisons :
+1. <strong>Les mêmes règles partout.</strong> Le module de règles, écrit en TypeScript, tourne dans le navigateur, dans l'application et sur le serveur. C'est le serveur qui tranche chaque action avec le même code : la meilleure protection contre la triche et les robots, premier reproche fait à Touch.
+2. <strong>Tu testes par un lien</strong>, à chaque étape, sans rien installer. Les données (sorts, cartes, monstres) se mettent à jour sans repasser par les stores.
+3. <strong>Un jeu de tour par tour en 2D ne demande pas un gros moteur.</strong> Dofus Touch tourne depuis 10 ans sur cette organisation (4,6 sur 5 sur l'App Store).
+4. <strong>Tout est gratuit</strong>, et c'est moi qui écris le code : un éditeur visuel comme celui de Godot ou d'Unity t'apporterait peu.</p>
+<p>Le risque à surveiller : la fluidité et la batterie sur un Android bas de gamme. On le mesure dès le premier prototype (dessiner seulement quand quelque chose bouge, 30 images par seconde au repos). Si le test échoue, <strong>Godot 4 est le plan B</strong>, et le serveur reste en TypeScript avec Colyseus, qui propose un kit pour Godot. Unity n'apporterait rien de décisif pour un jeu 2D au tour par tour, et coûterait une réécriture complète.</p>
+<p><strong>Les coûts à prévoir :</strong>
+- Phaser, TypeScript, Capacitor, Tiled, Colyseus : 0 €.
+- Serveur en ligne : environ 15 à 20 € par mois au début (Colyseus Cloud à partir de 15 $ par mois, ou un petit serveur loué).
+- Google Play : 25 $, une seule fois.
+- iPhone : 99 $ par an (programme développeur d'Apple), plus un Mac avec Xcode ou un service de compilation en ligne (par exemple les machines macOS de GitHub Actions ou Codemagic).</p>
+<p><strong>Ce que tu dois installer ou décider :</strong>
+- <strong>Maintenant</strong> : rien à installer. Une seule décision : confirmer Phaser (choix 7 de la partie 6).
+- <strong>Pour les essais sur téléphone</strong> : un téléphone Android, même ancien, pour juger la fluidité, en plus de ton téléphone habituel.
+- <strong>Pour publier</strong> : un compte Google Play ; pour l'iPhone, un compte Apple développeur et un Mac ou un service de compilation en ligne.</p>
+<hr />
+<h2 id="6-ce-que-je-propose-de-faire-maintenant">6. Ce que je propose de faire maintenant</h2>
+<ol>
+<li><strong>Tu valides 10 choix</strong> (ma proposition entre parenthèses) :<ul>
+<li>la formule du Rideau, avec toujours au moins 1 Pas gardé (oui) ;</li>
+<li>les zones de dégâts touchent aussi les alliés, avec un aperçu qui prévient (oui) ;</li>
+<li>le soin sur soi réservé au Pâtéladin et au Pâtissorcier, le Pain de route pour les autres (oui) ;</li>
+<li>le Minuteur de 25 s + 1 s par CM et par Pas, facultatif en solo (oui) ;</li>
+<li>les effets secondaires des affinités : Terroir → Rideau, Soufflé → Faux-fuyant, Éclair → Ouverture, Flambée → Coup de maître, Eaudace → Victuailles (oui) ;</li>
+<li>+1 CM au niveau 100 et le chef-d'œuvre gardé au niveau 200 (oui) ;</li>
+<li>Phaser pour le prototype et le vrai jeu, Godot en plan B (oui) ;</li>
+<li>un rôle par élément, commun à toutes les classes (Flambée : gros coups et dégâts qui durent ; Eaudace : ralentir ; Terroir : coups au sol et poussées ; Soufflé : placement et zones ; Éclair : rebonds et vitesse), et des déclinaisons qui gardent le plus souvent l'élément de leur sort, pour qu'on puisse jouer un seul élément (oui) ;</li>
+<li>les déblocages étalés tous les 6 niveaux environ, chaque déclinaison toujours entre son sort et le suivant, la première ouverte par une quête de l'Astrelier (oui) ;</li>
+<li>les sorts des niveaux 1 à 6 réécrits classe par classe, avec la mécanique de classe dès les premiers niveaux (oui).</li>
+</ul>
+</li>
+<li><strong>J'écris le module de règles</strong>, sans affichage : grille, chemins, Rideau, ligne de vue, Rayon, limites et relances, dégâts et coup de maître, zones, poussée et Écrasement, Entame, états, ordre de jeu, Minuteur, Commande. Avec une soixantaine de petits tests qui tournent en quelques secondes.</li>
+<li><strong>Je passe les sorts au nouveau format.</strong> D'abord les 40 sorts des niveaux 1 à 6 et leurs déclinaisons, en réécrivant le départ des 8 classes pour leur donner une identité. Puis un script pré-convertit les autres et me donne la liste de ceux à relire à la main.</li>
+<li><strong>Je fais les fiches du Grumeau et du Mie-tron et leur IA</strong>, puis je simule un millier de combats pour régler les chiffres : un bon placement doit coûter 30 à 40 % des Victuailles, un mauvais doit pouvoir faire perdre.</li>
+<li><strong>Je branche ces règles sur la maquette actuelle</strong> : ligne de vue, Rideau, limites, ordre alterné, monstres à sorts, aperçu en deux temps, Rayon bien visible. <strong>Tu la testes</strong> sur ton téléphone par le lien : est-ce que ça « sent » Dofus maintenant ?</li>
+<li><strong>Je refais le combat avec Phaser 3.90.0</strong> dans la page : Fourneau en portrait avec ses obstacles, caméra et zoom, Mise en place, groupes visibles sur la carte, Minuteur, une première Commande. Tes dessins SVG sont réutilisés.</li>
+<li><strong>Ensuite seulement</strong>, l'étape 1 du plan : le projet TypeScript + Capacitor + Colyseus, avec le même module de règles côté serveur.</li>
+</ol>
+</div>
