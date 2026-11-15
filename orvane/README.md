@@ -22,6 +22,16 @@ Un RPG tactique au tour par tour pour téléphone, en vue de 3/4, dans l'esprit 
 
 Ouvrir `jeu.html` dans un navigateur (il faut un accès à internet pour Phaser et les polices). Sur téléphone, en portrait.
 
+## L'application Android (APK)
+
+À chaque modification d'`orvane/`, GitHub construit l'APK (`.github/workflows/orvane-apk.yml`) et le publie dans la version **« orvane »** des Releases du dépôt. Sur le téléphone : télécharger `Orvane.apk`, l'ouvrir, autoriser l'installation depuis cette source. Le jeu y marche sans internet (Phaser et les polices sont inclus), la sauvegarde reste dans le téléphone, et une nouvelle version s'installe par-dessus l'ancienne (même clé de signature, gardée dans le cache de GitHub).
+
+`android/` contient l'application : une WebView en plein écran qui sert le jeu depuis ses fichiers (`WebViewAssetLoader`). La touche Retour ferme la fenêtre ouverte ou annule l'aperçu (`android/web/android.js`), sinon elle met le jeu en arrière-plan. Pour construire à la main (JDK 17+, Gradle 8.14, SDK Android dans `ANDROID_HOME`) :
+
+```bash
+orvane/android/construire-apk.sh     # → orvane/android/build/Orvane.apk
+```
+
 ## Vérifier
 
 ```bash

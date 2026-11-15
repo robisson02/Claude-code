@@ -1,0 +1,86 @@
+# Construit l'APK du jeu Orvane sur les serveurs de GitHub (qui ont le SDK Android) et le publie dans la version
+# « orvane » des Releases du dépôt, à télécharger depuis le téléphone.
+name: APK d'Orvane
+
+on:
+  push:
+    paths:
+      - "orvane/**"
+      - ".github/workflows/orvane-apk.yml"
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+concurrency:
+  group: orvane-apk
+  cancel-in-progress: true
+
+jobs:
+  apk:
+    runs-on: ubuntu-latest
+    timeout-minutes: 45
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+
+      - name: Tests du moteur de règles et du grimoire
+        working-directory: orvane
+        run: |
+          node moteur/tests.js
+          node moteur/tests-adverses.js
+          node outils/grimoire.js verifier
+
+      - uses: actions/setup-java@v4
+        with:
+          distribution: temurin
+          java-version: 21
+
+      - uses: gradle/actions/setup-gradle@v4
+        with:
+          gradle-version: "8.14.3"
+
+      - name: Licences du SDK Android
+        run: yes | "$ANDROID_HOME/cmdline-tools/latest/bin/sdkmanager" --licenses > /dev/null || true
+
+      # La clé de signature, créée à la première construction avec un mot de passe aléatoire, est gardée dans le
+      # cache de GitHub (jamais dans le dépôt) : les versions suivantes s'installent par-dessus sans perdre la sauvegarde.
+      - name: Clé de signature (cache)
+        uses: actions/cache@v4
+        with:
+          path: ~/.cle-orvane
+          key: cle-signature-orvane-v1
+
+      - name: Clé de signature (création la première fois)
+        run: |
+          if [ ! -f ~/.cle-orvane/signature.jks ]; then
+            mkdir -p ~/.cle-orvane
+            openssl rand -hex 24 > ~/.cle-orvane/mot-de-passe
+            keytool -genkeypair -keystore ~/.cle-orvane/signature.jks -storetype PKCS12 \
+              -storepass "$(cat ~/.cle-orvane/mot-de-passe)" -alias orvane -keyalg RSA -keysize 2048 \
+              -validity 10000 -dname "CN=Orvane"
+          fi
+
+      - name: Construction de l'APK
+        run: |
+          export ORVANE_CLE=$HOME/.cle-orvane/signature.jks
+          export ORVANE_MOT_DE_PASSE=$(cat ~/.cle-orvane/mot-de-passe)
+          orvane/android/construire-apk.sh
+
+      - uses: actions/upload-artifact@v4
+        with:
+          name: Orvane-apk
+          path: orvane/android/build/Orvane.apk
+
+      - name: Publication dans les Releases
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          gh release delete orvane --cleanup-tag --yes || true
+          gh release create orvane orvane/android/build/Orvane.apk \
+            --target "${{ github.sha }}" --prerelease \
+            --title "Orvane (prototype jouable)" \
+            --notes "Construit à partir du commit ${{ github.sha }} (version 0.1.${{ github.run_number }}). Sur le téléphone : télécharger Orvane.apk, l'ouvrir et autoriser l'installation depuis cette source. Le jeu marche sans internet ; la sauvegarde reste dans le téléphone et une nouvelle version s'installe par-dessus. La touche Retour ferme la fenêtre ouverte, puis met le jeu en arrière-plan. Voir orvane/README.md."

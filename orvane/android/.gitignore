@@ -1,0 +1,8 @@
+# construction Android
+.gradle/
+build/
+app/build/
+local.properties
+# copié par web/preparer-www.sh avant chaque construction
+app/src/main/assets/www/
+web/cache/
