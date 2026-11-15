@@ -1,0 +1,1736 @@
+[
+ {
+  "base": {
+   "id": "merlanceur.harpon",
+   "classe": "merlanceur",
+   "emplacement": 1,
+   "declinaisonDe": null,
+   "niveau": 1,
+   "nom": "Harpon",
+   "element": "E",
+   "cm": 3,
+   "rayon": {
+    "min": 3,
+    "max": 7,
+    "modifiable": true
+   },
+   "lancer": "ligne",
+   "vue": true,
+   "cible": "ennemi",
+   "parTour": 2,
+   "parCible": 1,
+   "relance": 0,
+   "relanceInitiale": 0,
+   "plafondPose": 0,
+   "maitre": 10,
+   "zone": {
+    "forme": "case",
+    "taille": 0,
+    "tailleMin": 0,
+    "baisse": true
+   },
+   "touche": "ennemis",
+   "effets": [
+    {
+     "type": "degats",
+     "element": "E",
+     "min": 13,
+     "max": 16,
+     "maitre": [
+      16,
+      20
+     ]
+    },
+    {
+     "type": "si",
+     "condition": "mareeBasse",
+     "effets": [
+      {
+       "type": "etat",
+       "etat": "ramolli",
+       "tours": 2,
+       "couches": 1
+      }
+     ]
+    }
+   ],
+   "texte": "Le harpon file droit et loin. À marée basse, la cible s'échoue sur le sable : elle est Ramollie (−1 Pas) pendant 2 tours.",
+   "change": ""
+  },
+  "declinaison": {
+   "id": "merlanceur.harpon-terre-a-terre",
+   "classe": "merlanceur",
+   "emplacement": 1,
+   "declinaisonDe": "merlanceur.harpon",
+   "niveau": 3,
+   "nom": "Harpon terre-à-terre",
+   "element": "T",
+   "cm": 3,
+   "rayon": {
+    "min": 1,
+    "max": 1,
+    "modifiable": false
+   },
+   "lancer": "libre",
+   "vue": true,
+   "cible": "ennemi",
+   "parTour": 2,
+   "parCible": 1,
+   "relance": 0,
+   "relanceInitiale": 0,
+   "plafondPose": 0,
+   "maitre": 10,
+   "zone": {
+    "forme": "case",
+    "taille": 0,
+    "tailleMin": 0,
+    "baisse": true
+   },
+   "touche": "ennemis",
+   "effets": [
+    {
+     "type": "degats",
+     "element": "T",
+     "min": 12,
+     "max": 15,
+     "maitre": [
+      15,
+      19
+     ]
+    },
+    {
+     "type": "pousse",
+     "cases": 1
+    },
+    {
+     "type": "si",
+     "condition": "mareeHaute",
+     "effets": [
+      {
+       "type": "pousse",
+       "cases": 1
+      }
+     ]
+    }
+   ],
+   "texte": "Pas de lancer, les pieds sur terre : un coup de manche, et l'ennemi recule d'une case. À marée haute, la vague l'emporte d'une case de plus.",
+   "change": "Le harpon ne se lance plus : il frappe au contact, en Terroir, et repousse l'ennemi d'une case (2 à marée haute)."
+  }
+ },
+ {
+  "base": {
+   "id": "merlanceur.eclat-d-ecaille",
+   "classe": "merlanceur",
+   "emplacement": 2,
+   "declinaisonDe": null,
+   "niveau": 1,
+   "nom": "Éclat d'écaille",
+   "element": "S",
+   "cm": 2,
+   "rayon": {
+    "min": 1,
+    "max": 5,
+    "modifiable": true
+   },
+   "lancer": "libre",
+   "vue": true,
+   "cible": "ennemi",
+   "parTour": 3,
+   "parCible": 2,
+   "relance": 0,
+   "relanceInitiale": 0,
+   "plafondPose": 0,
+   "maitre": 10,
+   "zone": {
+    "forme": "case",
+    "taille": 0,
+    "tailleMin": 0,
+    "baisse": true
+   },
+   "touche": "ennemis",
+   "effets": [
+    {
+     "type": "degats",
+     "element": "S",
+     "min": 6,
+     "max": 8,
+     "maitre": [
+      8,
+      10
+     ]
+    },
+    {
+     "type": "bonus",
+     "carac": "fauxFuyant",
+     "valeur": 7,
+     "tours": 1,
+     "qui": "soi"
+    }
+   ],
+   "texte": "Une écaille lancée d'une pichenette, même à bout portant. Et toi, tu glisses comme un poisson : +7 Faux-fuyant jusqu'à la fin du tour.",
+   "change": ""
+  },
+  "declinaison": {
+   "id": "merlanceur.eclair-d-ecaille",
+   "classe": "merlanceur",
+   "emplacement": 2,
+   "declinaisonDe": "merlanceur.eclat-d-ecaille",
+   "niveau": 5,
+   "nom": "Éclair d'écaille",
+   "element": "C",
+   "cm": 2,
+   "rayon": {
+    "min": 2,
+    "max": 7,
+    "modifiable": true
+   },
+   "lancer": "ligne",
+   "vue": true,
+   "cible": "ennemi",
+   "parTour": 3,
+   "parCible": 2,
+   "relance": 0,
+   "relanceInitiale": 0,
+   "plafondPose": 0,
+   "maitre": 10,
+   "zone": {
+    "forme": "case",
+    "taille": 0,
+    "tailleMin": 0,
+    "baisse": true
+   },
+   "touche": "ennemis",
+   "effets": [
+    {
+     "type": "degats",
+     "element": "C",
+     "min": 7,
+     "max": 9,
+     "maitre": [
+      9,
+      11
+     ]
+    },
+    {
+     "type": "rebond",
+     "fois": 1,
+     "rayon": 2,
+     "part": 50
+    }
+   ],
+   "texte": "Un reflet d'écaille file tout droit, puis saute sur l'ennemi le plus proche (à 2 cases au plus), à moitié des dégâts.",
+   "change": "Plus de glissade : le reflet part en ligne, plus loin, en Éclair, et rebondit sur un second ennemi à moitié des dégâts."
+  }
+ },
+ {
+  "base": {
+   "id": "merlanceur.saut-de-carpe",
+   "classe": "merlanceur",
+   "emplacement": 3,
+   "declinaisonDe": null,
+   "niveau": 1,
+   "nom": "Saut de carpe",
+   "element": "N",
+   "cm": 2,
+   "rayon": {
+    "min": 1,
+    "max": 3,
+    "modifiable": false
+   },
+   "lancer": "ligne",
+   "vue": true,
+   "cible": "caseLibre",
+   "parTour": 1,
+   "parCible": 0,
+   "relance": 2,
+   "relanceInitiale": 0,
+   "plafondPose": 0,
+   "maitre": 0,
+   "zone": {
+    "forme": "case",
+    "taille": 0,
+    "tailleMin": 0,
+    "baisse": true
+   },
+   "touche": "allies",
+   "effets": [
+    {
+     "type": "bond"
+    },
+    {
+     "type": "si",
+     "condition": "mareeBasse",
+     "effets": [
+      {
+       "type": "bonus",
+       "carac": "pas",
+       "valeur": 1,
+       "tours": 1,
+       "qui": "soi"
+      }
+     ]
+    }
+   ],
+   "texte": "La carpe bondit hors de l'eau, tout droit, jusqu'à 3 cases. À marée basse, elle retombe sur le sable et frétille : +1 Pas pour ce tour.",
+   "change": ""
+  },
+  "declinaison": {
+   "id": "merlanceur.saute-de-carpe",
+   "classe": "merlanceur",
+   "emplacement": 3,
+   "declinaisonDe": "merlanceur.saut-de-carpe",
+   "niveau": 7,
+   "nom": "Sauté de carpe",
+   "element": "F",
+   "cm": 2,
+   "rayon": {
+    "min": 1,
+    "max": 3,
+    "modifiable": false
+   },
+   "lancer": "libre",
+   "vue": true,
+   "cible": "ennemi",
+   "parTour": 3,
+   "parCible": 2,
+   "relance": 0,
+   "relanceInitiale": 0,
+   "plafondPose": 0,
+   "maitre": 15,
+   "zone": {
+    "forme": "case",
+    "taille": 0,
+    "tailleMin": 0,
+    "baisse": true
+   },
+   "touche": "ennemis",
+   "effets": [
+    {
+     "type": "degats",
+     "element": "F",
+     "min": 9,
+     "max": 12,
+     "maitre": [
+      11,
+      15
+     ]
+    },
+    {
+     "type": "si",
+     "condition": "mareeBasse",
+     "effets": [
+      {
+       "type": "etat",
+       "etat": "brule",
+       "tours": 2,
+       "couches": 1
+      }
+     ]
+    }
+   ],
+   "texte": "La carpe saute à la poêle et sort brûlante. À marée basse, la poêle est à sec : ça attache, la cible est Brûlée 2 tours.",
+   "change": "Plus de saut : une petite attaque Flambée de près, pas chère, qui fait Brûlé à marée basse."
+  }
+ },
+ {
+  "base": {
+   "id": "merlanceur.coup-de-filet",
+   "classe": "merlanceur",
+   "emplacement": 4,
+   "declinaisonDe": null,
+   "niveau": 10,
+   "nom": "Coup de filet",
+   "element": "S",
+   "cm": 3,
+   "rayon": {
+    "min": 2,
+    "max": 5,
+    "modifiable": true
+   },
+   "lancer": "libre",
+   "vue": true,
+   "cible": "case",
+   "parTour": 2,
+   "parCible": 1,
+   "relance": 0,
+   "relanceInitiale": 0,
+   "plafondPose": 0,
+   "maitre": 5,
+   "zone": {
+    "forme": "rond",
+    "taille": 1,
+    "tailleMin": 0,
+    "baisse": true
+   },
+   "touche": "ennemis",
+   "effets": [
+    {
+     "type": "degats",
+     "element": "S",
+     "min": 10,
+     "max": 13,
+     "maitre": [
+      13,
+      16
+     ]
+    },
+    {
+     "type": "attire",
+     "cases": 1
+    }
+   ],
+   "texte": "Un grand coup de filet sur le quai : chaque ennemi pris dedans est tiré d'une case vers toi.",
+   "change": ""
+  },
+  "declinaison": {
+   "id": "merlanceur.filet-d-eau",
+   "classe": "merlanceur",
+   "emplacement": 4,
+   "declinaisonDe": "merlanceur.coup-de-filet",
+   "niveau": 18,
+   "nom": "Filet d'eau",
+   "element": "E",
+   "cm": 3,
+   "rayon": {
+    "min": 2,
+    "max": 5,
+    "modifiable": true
+   },
+   "lancer": "libre",
+   "vue": true,
+   "cible": "ennemi",
+   "parTour": 2,
+   "parCible": 1,
+   "relance": 0,
+   "relanceInitiale": 0,
+   "plafondPose": 0,
+   "maitre": 5,
+   "zone": {
+    "forme": "case",
+    "taille": 0,
+    "tailleMin": 0,
+    "baisse": true
+   },
+   "touche": "ennemis",
+   "effets": [
+    {
+     "type": "degats",
+     "element": "E",
+     "min": 12,
+     "max": 15,
+     "maitre": [
+      15,
+      19
+     ]
+    },
+    {
+     "type": "retire",
+     "quoi": "pas",
+     "n": 2
+    }
+   ],
+   "texte": "Un filet d'eau glacée dans le cou : la cible perd 2 Pas à son prochain tour.",
+   "change": "Le filet ne ramasse plus tout un groupe : il vise un seul ennemi, en Eaudace, qui perd 2 Pas à son prochain tour."
+  }
+ },
+ {
+  "base": {
+   "id": "merlanceur.maree-montante",
+   "classe": "merlanceur",
+   "emplacement": 5,
+   "declinaisonDe": null,
+   "niveau": 26,
+   "nom": "Marée montante",
+   "element": "N",
+   "cm": 2,
+   "rayon": {
+    "min": 0,
+    "max": 0,
+    "modifiable": false
+   },
+   "lancer": "libre",
+   "vue": false,
+   "cible": "soi",
+   "parTour": 1,
+   "parCible": 0,
+   "relance": 3,
+   "relanceInitiale": 0,
+   "plafondPose": 0,
+   "maitre": 0,
+   "zone": {
+    "forme": "case",
+    "taille": 0,
+    "tailleMin": 0,
+    "baisse": true
+   },
+   "touche": "allies",
+   "effets": [
+    {
+     "type": "etat",
+     "etat": "maree-haute",
+     "tours": 0,
+     "couches": 1
+    },
+    {
+     "type": "bonus",
+     "carac": "rayon",
+     "valeur": 1,
+     "tours": 1,
+     "qui": "allies"
+    }
+   ],
+   "texte": "La mer monte d'un coup : ta marée passe à haute tout de suite, puis reprend son rythme. Toute l'équipe gagne +1 Rayon : toi pour ce tour, tes alliés jusqu'à la fin de leur prochain tour.",
+   "change": ""
+  },
+  "declinaison": {
+   "id": "merlanceur.mascaret",
+   "classe": "merlanceur",
+   "emplacement": 5,
+   "declinaisonDe": "merlanceur.maree-montante",
+   "niveau": 34,
+   "nom": "Mascaret",
+   "element": "E",
+   "cm": 3,
+   "rayon": {
+    "min": 1,
+    "max": 4,
+    "modifiable": true
+   },
+   "lancer": "ligne",
+   "vue": true,
+   "cible": "case",
+   "parTour": 2,
+   "parCible": 1,
+   "relance": 0,
+   "relanceInitiale": 0,
+   "plafondPose": 0,
+   "maitre": 5,
+   "zone": {
+    "forme": "ligne",
+    "taille": 2,
+    "tailleMin": 0,
+    "baisse": true
+   },
+   "touche": "ennemis",
+   "effets": [
+    {
+     "type": "degats",
+     "element": "E",
+     "min": 10,
+     "max": 13,
+     "maitre": [
+      13,
+      16
+     ]
+    },
+    {
+     "type": "etat",
+     "etat": "ramolli",
+     "tours": 1,
+     "couches": 1
+    },
+    {
+     "type": "si",
+     "condition": "mareeBasse",
+     "effets": [
+      {
+       "type": "bonus",
+       "carac": "rayon",
+       "valeur": 2,
+       "tours": 1,
+       "qui": "soi"
+      }
+     ]
+    }
+   ],
+   "texte": "La vague du mascaret remonte la ligne et noie les pieds : les ennemis touchés sont Ramollis. À marée basse, elle ramène la mer : +2 Rayon jusqu'à la fin du tour.",
+   "change": "Plus de bonus d'équipe : une vague d'Eaudace sur 3 cases en ligne qui ralentit, et te rend la portée de la marée haute quand la mer est basse."
+  }
+ },
+ {
+  "base": {
+   "id": "merlanceur.anguille-electrique",
+   "classe": "merlanceur",
+   "emplacement": 6,
+   "declinaisonDe": null,
+   "niveau": 41,
+   "nom": "Anguille électrique",
+   "element": "C",
+   "cm": 3,
+   "rayon": {
+    "min": 1,
+    "max": 6,
+    "modifiable": true
+   },
+   "lancer": "libre",
+   "vue": true,
+   "cible": "ennemi",
+   "parTour": 2,
+   "parCible": 1,
+   "relance": 0,
+   "relanceInitiale": 0,
+   "plafondPose": 0,
+   "maitre": 10,
+   "zone": {
+    "forme": "case",
+    "taille": 0,
+    "tailleMin": 0,
+    "baisse": true
+   },
+   "touche": "ennemis",
+   "effets": [
+    {
+     "type": "degats",
+     "element": "C",
+     "min": 14,
+     "max": 18,
+     "maitre": [
+      18,
+      23
+     ]
+    },
+    {
+     "type": "rebond",
+     "fois": 1,
+     "rayon": 2,
+     "part": 50
+    }
+   ],
+   "texte": "L'anguille frappe, puis file vers l'ennemi le plus proche (à 2 cases au plus) et le secoue à son tour, à moitié des dégâts.",
+   "change": ""
+  },
+  "declinaison": {
+   "id": "merlanceur.anguille-sous-roche",
+   "classe": "merlanceur",
+   "emplacement": 6,
+   "declinaisonDe": "merlanceur.anguille-electrique",
+   "niveau": 49,
+   "nom": "Anguille sous roche",
+   "element": "T",
+   "cm": 3,
+   "rayon": {
+    "min": 2,
+    "max": 5,
+    "modifiable": false
+   },
+   "lancer": "libre",
+   "vue": false,
+   "cible": "ennemi",
+   "parTour": 2,
+   "parCible": 1,
+   "relance": 0,
+   "relanceInitiale": 0,
+   "plafondPose": 0,
+   "maitre": 10,
+   "zone": {
+    "forme": "case",
+    "taille": 0,
+    "tailleMin": 0,
+    "baisse": true
+   },
+   "touche": "ennemis",
+   "effets": [
+    {
+     "type": "degats",
+     "element": "T",
+     "min": 14,
+     "max": 18,
+     "maitre": [
+      18,
+      23
+     ]
+    }
+   ],
+   "texte": "Il y a anguille sous roche : elle passe sous les obstacles et surgit sous la cible.",
+   "change": "Plus de rebond : l'anguille passe sous terre, en Terroir, et touche une cible hors de vue, mais sans bonus de Rayon."
+  }
+ },
+ {
+  "base": {
+   "id": "merlanceur.bouillabaisse",
+   "classe": "merlanceur",
+   "emplacement": 7,
+   "declinaisonDe": null,
+   "niveau": 57,
+   "nom": "Bouillabaisse",
+   "element": "F",
+   "cm": 4,
+   "rayon": {
+    "min": 2,
+    "max": 5,
+    "modifiable": true
+   },
+   "lancer": "libre",
+   "vue": true,
+   "cible": "case",
+   "parTour": 1,
+   "parCible": 1,
+   "relance": 0,
+   "relanceInitiale": 0,
+   "plafondPose": 2,
+   "maitre": 15,
+   "zone": {
+    "forme": "rond",
+    "taille": 1,
+    "tailleMin": 0,
+    "baisse": true
+   },
+   "touche": "ennemis",
+   "effets": [
+    {
+     "type": "degats",
+     "element": "F",
+     "min": 13,
+     "max": 16,
+     "maitre": [
+      16,
+      20
+     ]
+    },
+    {
+     "type": "pose",
+     "quoi": "nappe",
+     "tours": 2,
+     "declenche": "debut",
+     "zone": {
+      "forme": "rond",
+      "taille": 1,
+      "tailleMin": 0,
+      "baisse": false
+     },
+     "touche": "ennemis",
+     "maitre": 5,
+     "effets": [
+      {
+       "type": "degats",
+       "element": "F",
+       "min": 7,
+       "max": 9,
+       "maitre": [
+        9,
+        11
+       ]
+      }
+     ]
+    }
+   ],
+   "texte": "La soupe du port déborde sur le quai : pendant 2 tours, le bouillon brûle l'ennemi qui commence son tour dedans.",
+   "change": ""
+  },
+  "declinaison": {
+   "id": "merlanceur.fumet-de-poisson",
+   "classe": "merlanceur",
+   "emplacement": 7,
+   "declinaisonDe": "merlanceur.bouillabaisse",
+   "niveau": 65,
+   "nom": "Fumet de poisson",
+   "element": "S",
+   "cm": 4,
+   "rayon": {
+    "min": 0,
+    "max": 0,
+    "modifiable": false
+   },
+   "lancer": "libre",
+   "vue": false,
+   "cible": "soi",
+   "parTour": 1,
+   "parCible": 0,
+   "relance": 0,
+   "relanceInitiale": 0,
+   "plafondPose": 0,
+   "maitre": 5,
+   "zone": {
+    "forme": "rond",
+    "taille": 2,
+    "tailleMin": 1,
+    "baisse": true
+   },
+   "touche": "ennemis",
+   "effets": [
+    {
+     "type": "degats",
+     "element": "S",
+     "min": 13,
+     "max": 16,
+     "maitre": [
+      16,
+      20
+     ]
+    },
+    {
+     "type": "bonus",
+     "carac": "fauxFuyant",
+     "valeur": 10,
+     "tours": 1,
+     "qui": "soi"
+    }
+   ],
+   "texte": "Le fumet monte d'un coup tout autour de toi : personne n'y échappe à 2 cases à la ronde. Pendant qu'ils se bouchent le nez, tu files : +10 Faux-fuyant jusqu'à la fin du tour.",
+   "change": "Plus de soupe lancée au loin qui reste au sol : l'odeur part de toi, frappe tout de suite une zone bien plus large, en Soufflé, puis t'aide à sortir du contact."
+  }
+ },
+ {
+  "base": {
+   "id": "merlanceur.raie-pulsion",
+   "classe": "merlanceur",
+   "emplacement": 8,
+   "declinaisonDe": null,
+   "niveau": 73,
+   "nom": "Raie-pulsion",
+   "element": "T",
+   "cm": 3,
+   "rayon": {
+    "min": 1,
+    "max": 4,
+    "modifiable": false
+   },
+   "lancer": "libre",
+   "vue": true,
+   "cible": "ennemi",
+   "parTour": 2,
+   "parCible": 1,
+   "relance": 0,
+   "relanceInitiale": 0,
+   "plafondPose": 0,
+   "maitre": 10,
+   "zone": {
+    "forme": "case",
+    "taille": 0,
+    "tailleMin": 0,
+    "baisse": true
+   },
+   "touche": "ennemis",
+   "effets": [
+    {
+     "type": "degats",
+     "element": "T",
+     "min": 12,
+     "max": 15,
+     "maitre": [
+      15,
+      19
+     ]
+    },
+    {
+     "type": "pousse",
+     "cases": 3
+    }
+   ],
+   "texte": "La raie claque des ailes : répulsion garantie, la cible recule de 3 cases.",
+   "change": ""
+  },
+  "declinaison": {
+   "id": "merlanceur.raie-au-beurre-noir",
+   "classe": "merlanceur",
+   "emplacement": 8,
+   "declinaisonDe": "merlanceur.raie-pulsion",
+   "niveau": 81,
+   "nom": "Raie au beurre noir",
+   "element": "F",
+   "cm": 3,
+   "rayon": {
+    "min": 2,
+    "max": 5,
+    "modifiable": true
+   },
+   "lancer": "libre",
+   "vue": true,
+   "cible": "ennemi",
+   "parTour": 2,
+   "parCible": 1,
+   "relance": 0,
+   "relanceInitiale": 0,
+   "plafondPose": 0,
+   "maitre": 25,
+   "zone": {
+    "forme": "case",
+    "taille": 0,
+    "tailleMin": 0,
+    "baisse": true
+   },
+   "touche": "ennemis",
+   "effets": [
+    {
+     "type": "degats",
+     "element": "F",
+     "min": 15,
+     "max": 19,
+     "maitre": [
+      19,
+      24
+     ]
+    }
+   ],
+   "texte": "Une raie au beurre noir, servie bien chaude : un coup sec qui tombe souvent en coup de maître (taux 25 %). La cible repart avec un œil au beurre noir.",
+   "change": "Plus de poussée : un coup de Flambée à distance, plus fort, qui fait souvent un coup de maître (25 % au lieu de 10 %)."
+  }
+ },
+ {
+  "base": {
+   "id": "merlanceur.hamecon",
+   "classe": "merlanceur",
+   "emplacement": 9,
+   "declinaisonDe": null,
+   "niveau": 88,
+   "nom": "Hameçon",
+   "element": "S",
+   "cm": 3,
+   "rayon": {
+    "min": 2,
+    "max": 6,
+    "modifiable": true
+   },
+   "lancer": "ligne",
+   "vue": true,
+   "cible": "ennemi",
+   "parTour": 2,
+   "parCible": 1,
+   "relance": 0,
+   "relanceInitiale": 0,
+   "plafondPose": 0,
+   "maitre": 10,
+   "zone": {
+    "forme": "case",
+    "taille": 0,
+    "tailleMin": 0,
+    "baisse": true
+   },
+   "touche": "ennemis",
+   "effets": [
+    {
+     "type": "degats",
+     "element": "S",
+     "min": 13,
+     "max": 16,
+     "maitre": [
+      16,
+      20
+     ]
+    },
+    {
+     "type": "attire",
+     "cases": 3
+    }
+   ],
+   "texte": "L'hameçon se plante et la ligne se tend : la cible est ferrée et tirée de 3 cases vers toi.",
+   "change": ""
+  },
+  "declinaison": {
+   "id": "merlanceur.hameconnage",
+   "classe": "merlanceur",
+   "emplacement": 9,
+   "declinaisonDe": "merlanceur.hamecon",
+   "niveau": 96,
+   "nom": "Hameçonnage",
+   "element": "C",
+   "cm": 3,
+   "rayon": {
+    "min": 2,
+    "max": 6,
+    "modifiable": true
+   },
+   "lancer": "libre",
+   "vue": true,
+   "cible": "ennemi",
+   "parTour": 1,
+   "parCible": 1,
+   "relance": 0,
+   "relanceInitiale": 0,
+   "plafondPose": 0,
+   "maitre": 10,
+   "zone": {
+    "forme": "case",
+    "taille": 0,
+    "tailleMin": 0,
+    "baisse": true
+   },
+   "touche": "ennemis",
+   "effets": [
+    {
+     "type": "degats",
+     "element": "C",
+     "min": 10,
+     "max": 13,
+     "maitre": [
+      13,
+      16
+     ]
+    },
+    {
+     "type": "retire",
+     "quoi": "cm",
+     "n": 1
+    },
+    {
+     "type": "gainCM",
+     "n": 1,
+     "qui": "soi"
+    }
+   ],
+   "texte": "Un bel appât, et la cible mord : elle perd 1 coup de main à son prochain tour, et c'est toi qui le gagnes. Une seule arnaque par tour.",
+   "change": "La ligne ne tire plus la cible : c'est une arnaque en Éclair, qui lui vole 1 coup de main pour te le donner."
+  }
+ },
+ {
+  "base": {
+   "id": "merlanceur.thon-nerre",
+   "classe": "merlanceur",
+   "emplacement": 10,
+   "declinaisonDe": null,
+   "niveau": 104,
+   "nom": "Thon-nerre",
+   "element": "C",
+   "cm": 4,
+   "rayon": {
+    "min": 2,
+    "max": 6,
+    "modifiable": true
+   },
+   "lancer": "libre",
+   "vue": true,
+   "cible": "ennemi",
+   "parTour": 1,
+   "parCible": 1,
+   "relance": 0,
+   "relanceInitiale": 0,
+   "plafondPose": 0,
+   "maitre": 10,
+   "zone": {
+    "forme": "case",
+    "taille": 0,
+    "tailleMin": 0,
+    "baisse": true
+   },
+   "touche": "ennemis",
+   "effets": [
+    {
+     "type": "degats",
+     "element": "C",
+     "min": 23,
+     "max": 28,
+     "maitre": [
+      29,
+      35
+     ]
+    },
+    {
+     "type": "si",
+     "condition": "cibleTombe",
+     "effets": [
+      {
+       "type": "gainCM",
+       "n": 1,
+       "qui": "soi"
+      }
+     ]
+    }
+   ],
+   "texte": "Un thon tombe du ciel dans un coup de tonnerre. Si la cible tombe, l'éclair te rend 1 coup de main.",
+   "change": ""
+  },
+  "declinaison": {
+   "id": "merlanceur.thon-nerre-de-brest",
+   "classe": "merlanceur",
+   "emplacement": 10,
+   "declinaisonDe": "merlanceur.thon-nerre",
+   "niveau": 112,
+   "nom": "Thon-nerre de Brest",
+   "element": "C",
+   "cm": 4,
+   "rayon": {
+    "min": 2,
+    "max": 5,
+    "modifiable": true
+   },
+   "lancer": "libre",
+   "vue": true,
+   "cible": "case",
+   "parTour": 1,
+   "parCible": 1,
+   "relance": 0,
+   "relanceInitiale": 0,
+   "plafondPose": 0,
+   "maitre": 10,
+   "zone": {
+    "forme": "croix",
+    "taille": 2,
+    "tailleMin": 0,
+    "baisse": true
+   },
+   "touche": "ennemis",
+   "effets": [
+    {
+     "type": "degats",
+     "element": "C",
+     "min": 15,
+     "max": 19,
+     "maitre": [
+      19,
+      24
+     ]
+    },
+    {
+     "type": "si",
+     "condition": "cibleTombe",
+     "effets": [
+      {
+       "type": "gainCM",
+       "n": 1,
+       "qui": "soi"
+      }
+     ]
+    }
+   ],
+   "texte": "Le juron du vieux marin tonne sur tout le quai : la foudre tombe en croix. Si un ennemi tombe, l'éclair te rend 1 coup de main (une fois par lancer).",
+   "change": "Le gros coup sur une seule cible devient un juron de marin qui tonne en croix : moins fort par ennemi, mais plusieurs ennemis touchés. Il rend toujours 1 coup de main si un ennemi tombe."
+  }
+ },
+ {
+  "base": {
+   "id": "merlanceur.banc-de-sardines",
+   "classe": "merlanceur",
+   "emplacement": 11,
+   "declinaisonDe": null,
+   "niveau": 120,
+   "nom": "Banc de sardines",
+   "element": "E",
+   "cm": 2,
+   "rayon": {
+    "min": 1,
+    "max": 4,
+    "modifiable": false
+   },
+   "lancer": "libre",
+   "vue": false,
+   "cible": "caseLibre",
+   "parTour": 2,
+   "parCible": 0,
+   "relance": 0,
+   "relanceInitiale": 0,
+   "plafondPose": 3,
+   "maitre": 0,
+   "zone": {
+    "forme": "case",
+    "taille": 0,
+    "tailleMin": 0,
+    "baisse": true
+   },
+   "touche": "ennemis",
+   "effets": [
+    {
+     "type": "pose",
+     "quoi": "ustensile",
+     "tours": 3,
+     "victuailles": 100,
+     "zone": {
+      "forme": "rond",
+      "taille": 1,
+      "tailleMin": 1,
+      "baisse": false
+     },
+     "touche": "ennemis",
+     "maitre": 5,
+     "effets": [
+      {
+       "type": "degats",
+       "element": "E",
+       "min": 7,
+       "max": 9,
+       "maitre": [
+        9,
+        11
+       ]
+      },
+      {
+       "type": "etat",
+       "etat": "ramolli",
+       "tours": 1,
+       "couches": 1
+      }
+     ]
+    }
+   ],
+   "texte": "Serrées comme des sardines : le banc bouche le passage et cache la vue pendant 3 tours. Il a 100 Victuailles : l'ennemi peut le casser. Au début de ton tour, il éclabousse les ennemis collés à lui, qui sont Ramollis (−1 Pas). Trois bancs font un mur.",
+   "change": ""
+  },
+  "declinaison": {
+   "id": "merlanceur.sardinade",
+   "classe": "merlanceur",
+   "emplacement": 11,
+   "declinaisonDe": "merlanceur.banc-de-sardines",
+   "niveau": 128,
+   "nom": "Sardinade",
+   "element": "F",
+   "cm": 3,
+   "rayon": {
+    "min": 1,
+    "max": 4,
+    "modifiable": false
+   },
+   "lancer": "libre",
+   "vue": false,
+   "cible": "case",
+   "parTour": 1,
+   "parCible": 0,
+   "relance": 0,
+   "relanceInitiale": 0,
+   "plafondPose": 2,
+   "maitre": 0,
+   "zone": {
+    "forme": "case",
+    "taille": 0,
+    "tailleMin": 0,
+    "baisse": true
+   },
+   "touche": "ennemis",
+   "effets": [
+    {
+     "type": "pose",
+     "quoi": "nappe",
+     "tours": 2,
+     "declenche": "entree",
+     "zone": {
+      "forme": "ligne",
+      "taille": 2,
+      "tailleMin": 0,
+      "baisse": false
+     },
+     "touche": "ennemis",
+     "maitre": 10,
+     "effets": [
+      {
+       "type": "degats",
+       "element": "F",
+       "min": 15,
+       "max": 19,
+       "maitre": [
+        19,
+        24
+       ]
+      }
+     ]
+    }
+   ],
+   "texte": "Un gril sur 3 cases en ligne, pendant 2 tours. Chaque ennemi qui y entre, en marchant ou poussé, grille une fois par tour. Un seul gril par tour : il couvre déjà 3 cases.",
+   "change": "Au lieu de boucher le passage, on le rend brûlant : on peut passer sur le gril, mais ça coûte cher en Flambée."
+  }
+ },
+ {
+  "base": {
+   "id": "merlanceur.bain-de-mer",
+   "classe": "merlanceur",
+   "emplacement": 12,
+   "declinaisonDe": null,
+   "niveau": 135,
+   "nom": "Bain de mer",
+   "element": "N",
+   "cm": 2,
+   "rayon": {
+    "min": 0,
+    "max": 0,
+    "modifiable": false
+   },
+   "lancer": "libre",
+   "vue": false,
+   "cible": "soi",
+   "parTour": 1,
+   "parCible": 0,
+   "relance": 3,
+   "relanceInitiale": 0,
+   "plafondPose": 0,
+   "maitre": 0,
+   "zone": {
+    "forme": "rond",
+    "taille": 2,
+    "tailleMin": 0,
+    "baisse": false
+   },
+   "touche": "allies",
+   "effets": [
+    {
+     "type": "etat",
+     "etat": "glissant",
+     "tours": 1,
+     "couches": 1
+    },
+    {
+     "type": "bonus",
+     "carac": "pas",
+     "valeur": 1,
+     "tours": 1,
+     "qui": "cible"
+    }
+   ],
+   "texte": "Un bain de mer pour toute l'équipe. Toi et tes alliés à 2 cases, vous devenez Glissants et gagnez 1 Pas : personne ne vous retient.",
+   "change": ""
+  },
+  "declinaison": {
+   "id": "merlanceur.bain-marie",
+   "classe": "merlanceur",
+   "emplacement": 12,
+   "declinaisonDe": "merlanceur.bain-de-mer",
+   "niveau": 143,
+   "nom": "Bain-marie",
+   "element": "F",
+   "cm": 3,
+   "rayon": {
+    "min": 2,
+    "max": 5,
+    "modifiable": true
+   },
+   "lancer": "libre",
+   "vue": true,
+   "cible": "ennemi",
+   "parTour": 2,
+   "parCible": 1,
+   "relance": 0,
+   "relanceInitiale": 0,
+   "plafondPose": 0,
+   "maitre": 15,
+   "zone": {
+    "forme": "case",
+    "taille": 0,
+    "tailleMin": 0,
+    "baisse": true
+   },
+   "touche": "ennemis",
+   "effets": [
+    {
+     "type": "degats",
+     "element": "F",
+     "min": 16,
+     "max": 20,
+     "maitre": [
+      20,
+      25
+     ]
+    },
+    {
+     "type": "etat",
+     "etat": "brule",
+     "tours": 2,
+     "couches": 1
+    }
+   ],
+   "texte": "La cuisson douce : la cible chauffe tout doucement, et reste Brûlée 2 tours.",
+   "change": "Plus de bain pour les alliés : la cuisson douce passe sur un ennemi, un coup de Flambée puis Brûlé pendant 2 tours."
+  }
+ },
+ {
+  "base": {
+   "id": "merlanceur.maree-basse",
+   "classe": "merlanceur",
+   "emplacement": 13,
+   "declinaisonDe": null,
+   "niveau": 151,
+   "nom": "Marée basse",
+   "element": "N",
+   "cm": 2,
+   "rayon": {
+    "min": 0,
+    "max": 0,
+    "modifiable": false
+   },
+   "lancer": "libre",
+   "vue": false,
+   "cible": "soi",
+   "parTour": 1,
+   "parCible": 0,
+   "relance": 3,
+   "relanceInitiale": 0,
+   "plafondPose": 0,
+   "maitre": 0,
+   "zone": {
+    "forme": "case",
+    "taille": 0,
+    "tailleMin": 0,
+    "baisse": true
+   },
+   "touche": "allies",
+   "effets": [
+    {
+     "type": "etat",
+     "etat": "maree-basse",
+     "tours": 0,
+     "couches": 1
+    },
+    {
+     "type": "bonus",
+     "carac": "degatsPct",
+     "valeur": 10,
+     "tours": 1,
+     "qui": "allies"
+    }
+   ],
+   "texte": "La mer se retire d'un coup : ta marée passe à basse tout de suite, puis reprend son rythme. Toute l'équipe fait +10 % de dégâts : toi pour ce tour, tes alliés jusqu'à la fin de leur prochain tour.",
+   "change": ""
+  },
+  "declinaison": {
+   "id": "merlanceur.basse-tension",
+   "classe": "merlanceur",
+   "emplacement": 13,
+   "declinaisonDe": "merlanceur.maree-basse",
+   "niveau": 159,
+   "nom": "Basse tension",
+   "element": "C",
+   "cm": 4,
+   "rayon": {
+    "min": 2,
+    "max": 6,
+    "modifiable": true
+   },
+   "lancer": "libre",
+   "vue": true,
+   "cible": "ennemi",
+   "parTour": 1,
+   "parCible": 1,
+   "relance": 0,
+   "relanceInitiale": 0,
+   "plafondPose": 0,
+   "maitre": 10,
+   "zone": {
+    "forme": "case",
+    "taille": 0,
+    "tailleMin": 0,
+    "baisse": true
+   },
+   "touche": "ennemis",
+   "effets": [
+    {
+     "type": "degats",
+     "element": "C",
+     "min": 24,
+     "max": 29,
+     "maitre": [
+      30,
+      36
+     ]
+    },
+    {
+     "type": "si",
+     "condition": "mareeHaute",
+     "effets": [
+      {
+       "type": "bonus",
+       "carac": "degatsPct",
+       "valeur": 20,
+       "tours": 1,
+       "qui": "soi"
+      }
+     ]
+    }
+   ],
+   "texte": "L'orage gronde, la tension baisse avec la mer. À marée haute, tu prends d'avance la force de la marée basse : +20 % de dégâts pour tes sorts suivants, jusqu'à la fin du tour.",
+   "change": "Plus de changement de marée ni de bonus d'équipe : une frappe Éclair à distance qui, à marée haute, t'ajoute les +20 % de la marée basse."
+  }
+ },
+ {
+  "base": {
+   "id": "merlanceur.requin-marteau",
+   "classe": "merlanceur",
+   "emplacement": 14,
+   "declinaisonDe": null,
+   "niveau": 167,
+   "nom": "Requin-marteau",
+   "element": "T",
+   "cm": 5,
+   "rayon": {
+    "min": 1,
+    "max": 2,
+    "modifiable": false
+   },
+   "lancer": "libre",
+   "vue": true,
+   "cible": "ennemi",
+   "parTour": 1,
+   "parCible": 1,
+   "relance": 0,
+   "relanceInitiale": 0,
+   "plafondPose": 0,
+   "maitre": 15,
+   "zone": {
+    "forme": "case",
+    "taille": 0,
+    "tailleMin": 0,
+    "baisse": true
+   },
+   "touche": "ennemis",
+   "effets": [
+    {
+     "type": "degats",
+     "element": "T",
+     "min": 31,
+     "max": 37,
+     "maitre": [
+      39,
+      46
+     ]
+    },
+    {
+     "type": "pousse",
+     "cases": 1
+    }
+   ],
+   "texte": "Un coup de tête de requin-marteau : la cible recule d'une case, et si un obstacle l'arrête, elle s'écrase.",
+   "change": ""
+  },
+  "declinaison": {
+   "id": "merlanceur.requin-scie",
+   "classe": "merlanceur",
+   "emplacement": 14,
+   "declinaisonDe": "merlanceur.requin-marteau",
+   "niveau": 175,
+   "nom": "Requin-scie",
+   "element": "S",
+   "cm": 5,
+   "rayon": {
+    "min": 1,
+    "max": 4,
+    "modifiable": true
+   },
+   "lancer": "ligne",
+   "vue": true,
+   "cible": "case",
+   "parTour": 1,
+   "parCible": 1,
+   "relance": 0,
+   "relanceInitiale": 0,
+   "plafondPose": 0,
+   "maitre": 10,
+   "zone": {
+    "forme": "travers",
+    "taille": 2,
+    "tailleMin": 0,
+    "baisse": true
+   },
+   "touche": "ennemis",
+   "effets": [
+    {
+     "type": "degats",
+     "element": "S",
+     "min": 24,
+     "max": 30,
+     "maitre": [
+      30,
+      38
+     ]
+    }
+   ],
+   "texte": "Le requin-scie balaie de côté avec son nez en dents de scie : 5 cases en travers, tranchées d'un coup.",
+   "change": "Le marteau frappe une seule cible de près ; la scie balaie 5 cases en travers, en Soufflé, sans repousser."
+  }
+ },
+ {
+  "base": {
+   "id": "merlanceur.raz-de-maree",
+   "classe": "merlanceur",
+   "emplacement": 15,
+   "declinaisonDe": null,
+   "niveau": 182,
+   "nom": "Raz-de-marée",
+   "element": "E",
+   "cm": 5,
+   "rayon": {
+    "min": 1,
+    "max": 2,
+    "modifiable": true
+   },
+   "lancer": "ligne",
+   "vue": true,
+   "cible": "case",
+   "parTour": 1,
+   "parCible": 1,
+   "relance": 0,
+   "relanceInitiale": 0,
+   "plafondPose": 0,
+   "maitre": 10,
+   "zone": {
+    "forme": "ligne",
+    "taille": 4,
+    "tailleMin": 0,
+    "baisse": true
+   },
+   "touche": "ennemis",
+   "effets": [
+    {
+     "type": "degats",
+     "element": "E",
+     "min": 24,
+     "max": 29,
+     "maitre": [
+      30,
+      36
+     ]
+    },
+    {
+     "type": "etat",
+     "etat": "ramolli",
+     "tours": 1,
+     "couches": 1
+    }
+   ],
+   "texte": "Une vague immense balaie 5 cases en ligne : les ennemis noyés sont Ramollis.",
+   "change": ""
+  },
+  "declinaison": {
+   "id": "merlanceur.lame-de-fond",
+   "classe": "merlanceur",
+   "emplacement": 15,
+   "declinaisonDe": "merlanceur.raz-de-maree",
+   "niveau": 190,
+   "nom": "Lame de fond",
+   "element": "T",
+   "cm": 5,
+   "rayon": {
+    "min": 2,
+    "max": 5,
+    "modifiable": true
+   },
+   "lancer": "libre",
+   "vue": true,
+   "cible": "ennemi",
+   "parTour": 1,
+   "parCible": 1,
+   "relance": 0,
+   "relanceInitiale": 0,
+   "plafondPose": 0,
+   "maitre": 15,
+   "zone": {
+    "forme": "case",
+    "taille": 0,
+    "tailleMin": 0,
+    "baisse": true
+   },
+   "touche": "ennemis",
+   "effets": [
+    {
+     "type": "degats",
+     "element": "T",
+     "min": 27,
+     "max": 33,
+     "maitre": [
+      34,
+      41
+     ]
+    },
+    {
+     "type": "pousse",
+     "cases": 2
+    }
+   ],
+   "texte": "La vague remonte du fond, chargée de sable et de galets, et jette la cible 2 cases plus loin.",
+   "change": "Plus de vague sur toute une ligne qui ralentit : un seul gros coup de Terroir sur une cible, repoussée de 2 cases."
+  }
+ },
+ {
+  "base": {
+   "id": "merlanceur.chef-d-oeuvre-la-peche-miraculeuse",
+   "classe": "merlanceur",
+   "emplacement": 16,
+   "declinaisonDe": null,
+   "niveau": 200,
+   "nom": "Chef-d'œuvre : la Pêche miraculeuse",
+   "element": "S",
+   "cm": 7,
+   "rayon": {
+    "min": 0,
+    "max": 0,
+    "modifiable": false
+   },
+   "lancer": "libre",
+   "vue": false,
+   "cible": "soi",
+   "parTour": 1,
+   "parCible": 0,
+   "relance": 5,
+   "relanceInitiale": 2,
+   "plafondPose": 0,
+   "maitre": 10,
+   "zone": {
+    "forme": "terrain",
+    "taille": 0,
+    "tailleMin": 0,
+    "baisse": false
+   },
+   "touche": "ennemis",
+   "effets": [
+    {
+     "type": "degats",
+     "element": "S",
+     "min": 30,
+     "max": 37,
+     "maitre": [
+      38,
+      46
+     ]
+    },
+    {
+     "type": "attire",
+     "cases": 3
+    },
+    {
+     "type": "si",
+     "condition": "mareeHaute",
+     "effets": [
+      {
+       "type": "attire",
+       "cases": 2
+      }
+     ]
+    }
+   ],
+   "texte": "Le filet couvre tout le terrain : chaque ennemi est pris et tiré de 3 cases vers toi, de 5 à marée haute. Reste à servir la ligne.",
+   "change": ""
+  },
+  "declinaison": {
+   "id": "merlanceur.chef-d-oeuvre-la-criee",
+   "classe": "merlanceur",
+   "emplacement": 16,
+   "declinaisonDe": "merlanceur.chef-d-oeuvre-la-peche-miraculeuse",
+   "niveau": 200,
+   "nom": "Chef-d'œuvre : la Criée",
+   "element": "T",
+   "cm": 7,
+   "rayon": {
+    "min": 0,
+    "max": 0,
+    "modifiable": false
+   },
+   "lancer": "libre",
+   "vue": false,
+   "cible": "soi",
+   "parTour": 1,
+   "parCible": 0,
+   "relance": 5,
+   "relanceInitiale": 2,
+   "plafondPose": 0,
+   "maitre": 10,
+   "zone": {
+    "forme": "terrain",
+    "taille": 0,
+    "tailleMin": 0,
+    "baisse": false
+   },
+   "touche": "ennemis",
+   "effets": [
+    {
+     "type": "degats",
+     "element": "T",
+     "min": 29,
+     "max": 36,
+     "maitre": [
+      36,
+      45
+     ]
+    },
+    {
+     "type": "pousse",
+     "cases": 2
+    }
+   ],
+   "texte": "Adjugé, vendu ! Le marteau du commissaire-priseur s'abat et tout le port recule de 2 cases. Qui heurte un obstacle s'écrase.",
+   "change": "L'inverse de la Pêche miraculeuse : au lieu de tout ramener vers toi, tu renvoies chaque ennemi 2 cases plus loin, en Terroir."
+  }
+ }
+]

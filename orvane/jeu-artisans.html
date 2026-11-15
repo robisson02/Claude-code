@@ -1,0 +1,611 @@
+<title>Projet Orvane</title>
+<meta name="claude:viewport-fit-sides" content="cover">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Atkinson+Hyperlegible:wght@400;700&family=Bricolage+Grotesque:opsz,wght@12..96,600;12..96,800&display=swap">
+<style>
+/* Mise en page : une colonne de lecture avec sommaire ; captures du prototype, tableaux qui défilent sur téléphone.
+   DA reprise de La Place des Artisans : crème, encre, vert nuit, or. Le jeu garde son décor dans les deux thèmes. */
+:root {
+  --fond: #FAF7EF; --surface: #FFFDF7; --creux: #F2EADB; --encre: #1D2725; --doux: #55605C;
+  --trait: #E0D6BF; --vert: #15301F; --or: #C5A572; --ocre: #7A5F2E;
+  --rouge: #A8321F; --rouge-pale: #F8E4DE; --ambre: #855600; --ambre-pale: #F6EBD0; --ok: #1F6B45; --ok-pale: #DFEEE4;
+  --j-hud: #0D2D2A; --j-hud2: #1B3835; --j-hud3: #14302D; --j-texte: #F2EDE0; --j-or: #C5A572;
+  --j-pv: #C8553D; --j-pm: #7FC79A; --j-encre: #1D2725; --j-blanc: #FFFDF7;
+  --f-titre: "Bricolage Grotesque", "Segoe UI", system-ui, sans-serif;
+  --f-texte: "Atkinson Hyperlegible", system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;
+  --f-code: ui-monospace, Menlo, Consolas, monospace;
+}
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme="light"]) {
+    --fond: #082221; --surface: #14302D; --creux: #0D2D2A; --encre: #F2EDE0; --doux: #B5BFB8;
+    --trait: #2A4743; --vert: #C5A572; --or: #C5A572; --ocre: #D9BD8C;
+    --rouge: #FF9A85; --rouge-pale: #3A1A14; --ambre: #E4B54A; --ambre-pale: #33280C; --ok: #7FC79A; --ok-pale: #13301F;
+    color-scheme: dark;
+  }
+}
+:root[data-theme="dark"] {
+  --fond: #082221; --surface: #14302D; --creux: #0D2D2A; --encre: #F2EDE0; --doux: #B5BFB8;
+  --trait: #2A4743; --vert: #C5A572; --or: #C5A572; --ocre: #D9BD8C;
+  --rouge: #FF9A85; --rouge-pale: #3A1A14; --ambre: #E4B54A; --ambre-pale: #33280C; --ok: #7FC79A; --ok-pale: #13301F;
+  color-scheme: dark;
+}
+* { box-sizing: border-box; }
+[hidden] { display: none !important; }
+html { scroll-behavior: smooth; }
+@media (prefers-reduced-motion: reduce) { html { scroll-behavior: auto; } }
+body {
+  background: var(--fond); color: var(--encre); font: 17px/1.55 var(--f-texte);
+  padding-left: max(16px, env(safe-area-inset-left, 0px));
+  padding-right: max(16px, env(safe-area-inset-right, 0px));
+  padding-block: 28px 64px;
+}
+.page { max-width: 1040px; margin: 0 auto; display: grid; gap: 52px; }
+h1, h2, h3 { font-family: var(--f-titre); text-wrap: balance; margin: 0; line-height: 1.15; }
+h1 { font-size: clamp(2rem, 6vw, 3rem); font-weight: 800; }
+h2 { font-size: 1.5rem; font-weight: 800; padding-top: 14px; border-top: 2px solid var(--or); scroll-margin-top: 16px; }
+h3 { font-size: 1.06rem; font-weight: 600; }
+p { margin: 0; max-width: 68ch; }
+section, header { display: grid; gap: 16px; }
+.surtitre { font-size: .8rem; letter-spacing: .09em; text-transform: uppercase; color: var(--ocre); font-weight: 700; }
+.chapo { font-size: 1.12rem; color: var(--doux); }
+.doux { color: var(--doux); }
+.petit { font-size: .92rem; }
+ul, ol { margin: 0; padding-left: 1.2em; display: grid; gap: 6px; max-width: 68ch; }
+a { color: inherit; text-decoration-color: var(--or); text-underline-offset: 3px; }
+a:focus-visible, button:focus-visible, input:focus-visible { outline: 2px solid var(--or); outline-offset: 2px; }
+.sommaire { display: flex; flex-wrap: wrap; gap: 8px; }
+.sommaire a { text-decoration: none; border: 1px solid var(--trait); background: var(--surface); border-radius: 99px; padding: 5px 13px; font-size: .9rem; }
+.sommaire a:hover { border-color: var(--or); }
+.puces { display: flex; flex-wrap: wrap; gap: 6px; }
+.puces button { border: 1px solid var(--trait); background: var(--surface); color: var(--encre); font: inherit; font-size: .88rem; padding: 5px 12px; border-radius: 99px; cursor: pointer; }
+.puces button[aria-pressed="true"] { background: var(--vert); border-color: var(--vert); color: var(--fond); font-weight: 700; }
+.pastel { display: inline-block; width: .7em; height: .7em; border-radius: 50%; margin-right: .4em; vertical-align: baseline; }
+
+/* Prototype et règles */
+.modes { display: inline-flex; border: 1px solid var(--trait); border-radius: 99px; padding: 3px; background: var(--surface); justify-self: start; }
+.modes button { border: 0; background: none; color: var(--encre); font: inherit; font-size: .9rem; padding: 6px 16px; border-radius: 99px; cursor: pointer; }
+.modes button[aria-pressed="true"] { background: var(--vert); color: var(--fond); font-weight: 700; }
+.lien-proto { display: inline-block; background: var(--vert); color: var(--fond); text-decoration: none; font-weight: 700; padding: 10px 20px; border-radius: 99px; margin-right: 10px; }
+.lien-proto:hover { filter: brightness(1.12); }
+.captures { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 14px; margin: 0; }
+.captures figure { margin: 0; display: grid; gap: 6px; min-width: 0; }
+.captures img { width: 100%; height: auto; border-radius: 18px; border: 1px solid var(--trait); background: var(--j-hud); }
+.captures figcaption { font-size: .88rem; color: var(--doux); }
+@media (max-width: 560px) { .captures { grid-template-columns: none; grid-auto-flow: column; grid-auto-columns: 64%; overflow-x: auto; scroll-snap-type: x mandatory; padding-bottom: 6px; } .captures figure { scroll-snap-align: start; } }
+.comment-jouer { margin: 0; display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: 14px; }
+.comment-jouer dt { font-family: var(--f-titre); font-weight: 600; }
+.comment-jouer dd { margin: 0; color: var(--doux); }
+.table-regles th[scope], .table-regles tbody th { white-space: nowrap; }
+@media (max-width: 640px) {
+  .table-regles thead { display: none; }
+  .table-regles, .table-regles tbody, .table-regles tr, .table-regles th, .table-regles td { display: block; width: auto; min-width: 0; }
+  .table-regles tr { padding: 10px 0; border-bottom: 1px solid var(--trait); }
+  .table-regles tbody th { white-space: normal; padding: 0; border: 0; }
+  .table-regles td { padding: 2px 0 0; border: 0; }
+  .table-regles td:nth-child(2) { color: var(--doux); font-size: .92rem; }
+}
+.e-fait { background: var(--ok-pale); color: var(--ok); vertical-align: middle; margin-left: 6px; }
+
+/* Classes */
+.galerie { display: grid; grid-template-columns: repeat(auto-fill, minmax(230px, 1fr)); gap: 16px; }
+.classe { background: var(--surface); border: 1px solid var(--trait); border-radius: 16px; overflow: hidden; display: grid; grid-template-rows: auto 1fr; }
+.portrait { background: radial-gradient(circle at 50% 30%, #1B4A45, #0A2624 70%); display: grid; place-items: center; padding-top: 6px; }
+.portrait svg { width: 152px; height: 196px; display: block; }
+.classe .corps { padding: 14px 16px 16px; display: grid; gap: 8px; align-content: start; }
+.classe .metier { font-size: .82rem; letter-spacing: .06em; text-transform: uppercase; font-weight: 700; color: var(--ocre); }
+.classe .jeu { font-style: italic; color: var(--doux); font-size: .95rem; }
+.classe .ligne { font-size: .93rem; }
+.classe .ligne b { font-family: var(--f-titre); font-weight: 600; }
+.classe .morpho { font-size: .9rem; color: var(--doux); border-top: 1px solid var(--trait); padding-top: 8px; }
+.defile { overflow-x: auto; }
+table { border-collapse: collapse; width: 100%; min-width: 660px; font-size: .94rem; }
+th, td { text-align: left; vertical-align: top; padding: 9px 11px; border-bottom: 1px solid var(--trait); }
+thead th { font-family: var(--f-titre); font-weight: 600; color: var(--ocre); border-bottom: 2px solid var(--trait); }
+tbody th { font-family: var(--f-titre); font-weight: 600; }
+td.n { font-variant-numeric: tabular-nums; white-space: nowrap; }
+td.el { white-space: nowrap; }
+tr.oeuvre td, tr.oeuvre th { background: var(--creux); }
+tr.paire th, tr.paire td { border-bottom: 1px dashed var(--trait); }
+tr.decl th { padding-left: 26px; position: relative; }
+tr.decl th::before { content: "↳"; position: absolute; left: 10px; color: var(--ocre); font-weight: 400; }
+tr.decl th small { display: block; font-family: var(--f-texte); font-weight: 400; font-size: .78rem; color: var(--doux); }
+td .idee { display: block; margin-top: 3px; font-size: .84rem; color: var(--doux); font-style: italic; }
+#filtre-el { margin-top: 8px; }
+.mini-els { display: inline-flex; flex-wrap: wrap; gap: 2px 10px; font-variant-numeric: tabular-nums; }
+.vh { position: absolute; width: 1px; height: 1px; overflow: hidden; clip: rect(0 0 0 0); white-space: nowrap; }
+.elements { display: grid; grid-template-columns: repeat(auto-fit, minmax(180px, 1fr)); gap: 14px; }
+.element { background: var(--surface); border: 1px solid var(--trait); border-radius: 14px; padding: 14px; display: grid; gap: 6px; align-content: start; }
+.element svg { width: 28px; height: 28px; }
+.element h3 { font-size: 1.2rem; }
+.element .vrai { font-size: .8rem; letter-spacing: .06em; text-transform: uppercase; color: var(--doux); font-weight: 700; }
+.element p { font-size: .92rem; color: var(--doux); }
+
+/* Apparence et ombres */
+.apparence { display: flex; flex-wrap: wrap; gap: 10px 22px; align-items: center; background: var(--surface); border: 1px solid var(--trait); border-radius: 14px; padding: 12px 14px; }
+.apparence .groupe { display: flex; align-items: center; gap: 8px; flex-wrap: wrap; }
+.apparence .groupe > span { font-size: .82rem; letter-spacing: .06em; text-transform: uppercase; font-weight: 700; color: var(--ocre); }
+.nuancier { display: flex; gap: 6px; }
+.nuancier button { width: 28px; height: 28px; border-radius: 50%; border: 2px solid var(--trait); cursor: pointer; padding: 0; }
+.nuancier button[aria-pressed="true"] { border-color: var(--encre); box-shadow: 0 0 0 2px var(--surface), 0 0 0 4px var(--encre); }
+.galerie.ombres .portrait { background: #F4EEE0; }
+.galerie.ombres .portrait .perso { filter: brightness(0); }
+.galerie.ombres .portrait .sol { display: none; }
+
+/* Monde */
+.paliers { display: flex; flex-wrap: wrap; gap: 8px; list-style: none; padding: 0; max-width: none; }
+.paliers li { background: var(--creux); border-radius: 99px; padding: 4px 12px; font-size: .88rem; }
+.paliers b { font-variant-numeric: tabular-nums; color: var(--ocre); }
+.zones { display: grid; grid-template-columns: repeat(auto-fill, minmax(min(100%, 290px), 1fr)); gap: 14px; }
+.zone { background: var(--surface); border: 1px solid var(--trait); border-radius: 14px; padding: 14px 16px; display: grid; gap: 8px; align-content: start; min-width: 0; }
+.zone .tete { display: flex; justify-content: space-between; gap: 8px; align-items: baseline; flex-wrap: wrap; }
+.zone .niv { font-size: .78rem; letter-spacing: .07em; text-transform: uppercase; font-weight: 700; color: var(--ocre); }
+.zone .sens { font-style: italic; color: var(--doux); font-size: .92rem; }
+.zone .monstres { font-size: .92rem; }
+.boss { background: var(--creux); border-radius: 10px; padding: 10px 12px; display: grid; gap: 4px; }
+.boss .quoi { font-size: .75rem; letter-spacing: .07em; text-transform: uppercase; font-weight: 700; color: var(--doux); }
+.boss strong { font-family: var(--f-titre); font-size: 1.12rem; font-weight: 800; }
+.boss .apres { font-size: .85rem; color: var(--doux); }
+.boss p { font-size: .92rem; }
+details.plus summary { cursor: pointer; font-weight: 700; font-size: .9rem; color: var(--ocre); }
+details.plus[open] summary { margin-bottom: 6px; }
+details.plus p, details.plus li { font-size: .9rem; color: var(--doux); }
+details.plus ul { gap: 4px; }
+.final { border: 2px solid var(--or); border-radius: 16px; padding: 16px 18px; display: grid; gap: 10px; background: var(--surface); }
+.final h3 { font-size: 1.4rem; font-weight: 800; }
+.final .alt { display: grid; grid-template-columns: repeat(auto-fit, minmax(min(100%, 240px), 1fr)); gap: 10px; }
+.final .alt div { background: var(--creux); border-radius: 10px; padding: 10px 12px; display: grid; gap: 4px; font-size: .92rem; }
+.sbires { display: grid; grid-template-columns: repeat(auto-fill, minmax(min(100%, 230px), 1fr)); gap: 10px; }
+.sbires div { border: 1px solid var(--trait); border-radius: 12px; padding: 10px 12px; display: grid; gap: 4px; align-content: start; }
+.sbires b { font-family: var(--f-titre); font-weight: 600; }
+.sbires p { font-size: .88rem; color: var(--doux); }
+
+/* Blocs */
+.trois { display: grid; grid-template-columns: repeat(auto-fit, minmax(270px, 1fr)); gap: 18px; }
+.colonne { background: var(--surface); border: 1px solid var(--trait); border-radius: 14px; padding: 16px; display: grid; gap: 10px; align-content: start; }
+.colonne ul { gap: 8px; font-size: .95rem; }
+.etiq { justify-self: start; font-size: .75rem; letter-spacing: .07em; text-transform: uppercase; font-weight: 700; border-radius: 99px; padding: 3px 10px; }
+.e-interdit { background: var(--rouge-pale); color: var(--rouge); }
+.e-eviter { background: var(--ambre-pale); color: var(--ambre); }
+.e-libre { background: var(--ok-pale); color: var(--ok); }
+.encadre { background: var(--creux); border-radius: 14px; padding: 14px 16px; display: grid; gap: 8px; }
+.briques { display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: 20px 28px; }
+.briques div { display: grid; gap: 6px; align-content: start; min-width: 0; }
+.briques p, .briques li { color: var(--doux); font-size: .97rem; }
+.iles { list-style: none; padding: 0; max-width: none; display: grid; grid-template-columns: repeat(auto-fit, minmax(230px, 1fr)); gap: 14px; counter-reset: i; }
+.iles li { counter-increment: i; background: var(--surface); border: 1px solid var(--trait); border-radius: 14px; padding: 14px 16px; display: grid; gap: 6px; align-content: start; }
+.iles li::before { content: "Île " counter(i); font-size: .78rem; letter-spacing: .07em; text-transform: uppercase; font-weight: 700; color: var(--ocre); }
+.iles p { font-size: .94rem; color: var(--doux); }
+pre { margin: 0; background: var(--creux); border-radius: 12px; padding: 14px 16px; overflow-x: auto; font: 13.5px/1.5 var(--f-code); }
+.etapes { list-style: none; padding: 0; max-width: none; gap: 0; counter-reset: e; }
+.etapes li { counter-increment: e; display: grid; grid-template-columns: 2.6rem minmax(0, 1fr); gap: 4px 12px; padding: 16px 0; border-bottom: 1px solid var(--trait); }
+.etapes li::before { content: counter(e, decimal); font-family: var(--f-titre); font-weight: 800; font-size: 1.5rem; color: var(--or); grid-row: span 3; line-height: 1.1; }
+.etapes p { color: var(--doux); font-size: .97rem; }
+.etapes .test { color: var(--encre); font-size: .92rem; }
+.etapes .test b { color: var(--ocre); }
+.questions { display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 18px; }
+.questions div { background: var(--surface); border: 1px solid var(--trait); border-radius: 14px; padding: 16px; display: grid; gap: 10px; align-content: start; }
+.questions ol { gap: 10px; font-size: .95rem; }
+.questions li span { display: block; color: var(--doux); font-size: .88rem; }
+</style>
+
+<div class="page">
+<header>
+  <div class="surtitre">Plan de création · version 7</div>
+  <h1>Projet Orvane</h1>
+  <p class="chapo">Un RPG tactique au tour par tour pour téléphone, en vue de 3/4. Les huit classes sont les métiers de La Place des Artisans, et tout le jeu parle en jeux de mots : les classes, les éléments, les caractéristiques, les sorts, les monstres et les lieux.</p>
+  <p class="doux petit">Orvane reste un nom de travail. Les couleurs et la sobriété de l'interface viennent de La Place des Artisans ; tout le reste est original.</p>
+  <nav class="sommaire" aria-label="Sommaire">
+    <a href="#prototype">Le prototype</a><a href="#regles">Les règles du combat</a><a href="#classes">Les 8 classes</a><a href="#grimoire">Les sorts</a><a href="#elements">Éléments et caractéristiques</a>
+    <a href="#astrelier">L'Astrelier</a><a href="#niveaux">Du niveau 1 à 200</a><a href="#equipement">Équipement et quêtes</a>
+    <a href="#interdit">Ce qui est interdit</a><a href="#plan">Comment on fait</a><a href="#questions">Tes réponses</a>
+  </nav>
+</header>
+
+<section id="prototype">
+  <h2>Le prototype jouable</h2>
+  <p>La maquette dessinée a laissé place à un vrai prototype, fait avec Phaser, le moteur du futur jeu. On crée son artisan, on se promène au Fourneau de l'Astrelier, on engage un groupe de Grumeaux, on se place, on se bat au tour par tour, puis on lit l'Addition. Toutes les règles viennent du moteur de règles décrit plus bas : le prototype ne fait qu'afficher et animer.</p>
+  <p><a class="lien-proto" href="https://claude.ai/artifact/3yMCR7NhxSMuZ1pTwvVZX1" target="_blank" rel="noopener">Jouer au prototype</a> <span class="doux petit">Sur téléphone, en portrait. Il marche aussi à la souris sur ordinateur.</span></p>
+  <div class="captures">
+    <figure><img src="captures/exploration.webp" width="585" height="1266" alt="Exploration : l'île du Fourneau en 3/4 sous le ciel de l'Astrelier, avec trois groupes de monstres et l'artisan au centre" loading="lazy"><figcaption>Exploration : toucher un groupe ouvre sa fiche.</figcaption></figure>
+    <figure><img src="captures/marche.webp" width="585" height="1266" alt="Aperçu de marche : le chemin en vert, « −2 Pas, reste 0 Pas, 5 CM » et la perte au Rideau en rouge" loading="lazy"><figcaption>Premier toucher : l'aperçu. Ici, sortir du contact coûte au Rideau.</figcaption></figure>
+    <figure><img src="captures/sort.webp" width="585" height="1266" alt="Aperçu d'un sort de zone : deux monstres touchés, avec leurs dégâts prévus « −16 à −21 » et « −19 à −25 »" loading="lazy"><figcaption>Un sort : sa zone, et les dégâts prévus sur chaque cible.</figcaption></figure>
+  </div>
+  <dl class="comment-jouer">
+    <div><dt>Agir en deux temps</dt><dd>Premier toucher : l'aperçu (chemin et Pas restants, ou zone et dégâts prévus). Second toucher sur la même case, ou le bouton « Marcher », « Lancer » : l'action part. Toucher ailleurs annule.</dd></div>
+    <div><dt>Le Rayon</dt><dd>En or plein, les cases où le sort peut partir ; en or pâle hachuré, celles qui sont à portée mais cachées par un obstacle.</dd></div>
+    <div><dt>La caméra</dt><dd>On pince pour zoomer, on glisse pour se déplacer, un double toucher recentre sans jamais faire agir.</dd></div>
+    <div><dt>Pour débuter</dt><dd>Un tutoriel en quête, « Premier service », apprend les gestes en neuf étapes contre un Grumeau d'entraînement. Un lexique explique chaque mot du jeu.</dd></div>
+    <div><dt>Les fiches</dt><dd>Un appui long sur un combattant ou un sort ouvre sa fiche ; toucher un portrait de la frise aussi.</dd></div>
+  </dl>
+  <p class="doux petit">Ce qui manque encore : le son, les alliés en ligne, les autres zones. Les personnages sont les dessins de travail de cette page ; ils seront illustrés et animés.</p>
+</section>
+
+<section id="regles">
+  <h2>Les règles du combat</h2>
+  <p>Les règles s'inspirent de la façon dont se joue un tactique au tour par tour à la Dofus : on se place, chacun joue à son tour dans l'ordre de la frise, on dépense ses coups de main et ses Pas, on tient compte des obstacles et du contact. Les mots sont ceux d'Orvane.</p>
+  <div class="defile"><table class="table-regles">
+    <thead><tr><th>Mot</th><th>Ce que c'est</th><th>La règle</th></tr></thead>
+    <tbody>
+      <tr><th>Coups de main (CM)</th><td>Les actions du tour</td><td>6 au départ, 7 dès le niveau 100. Chaque sort coûte des CM. Ils reviennent à chaque tour.</td></tr>
+      <tr><th>Pas</th><td>La marche</td><td>3 au départ. Passer d'une case à sa voisine coûte un Pas ; jamais en diagonale.</td></tr>
+      <tr><th>Victuailles</th><td>La vie</td><td>À zéro, l'artisan « rend son tablier ».</td></tr>
+      <tr><th>Caractéristiques</th><td>Ses points à placer</td><td>5 points par niveau, placés librement : dans les cinq éléments (chaque point ajoute 1 % aux dégâts de ses sorts de cet élément, plus un petit effet secondaire) ou dans les Victuailles. Le conseil, jamais imposé : choisir 1 ou 2 éléments. « Répartir pour moi » le fait pour qui ne veut pas choisir.</td></tr>
+      <tr><th>Ouverture</th><td>L'ordre de jeu</td><td>Le camp qui a la meilleure Ouverture moyenne commence ; ensuite, les deux camps alternent, chacun dans l'ordre de son Ouverture. C'est la frise du haut.</td></tr>
+      <tr><th>Rayon</th><td>La portée</td><td>Chaque sort a un Rayon minimum et maximum. Certains Rayons se rallongent, d'autres non. Beaucoup de sorts demandent de voir la case : un décor ou un combattant bloque la vue.</td></tr>
+      <tr><th>Rideau et Faux-fuyant</th><td>Le contact</td><td>Quitter une case au contact d'un ennemi fait perdre des Pas et des CM, selon le Rideau de l'ennemi et son propre Faux-fuyant. Aucun Pas n'est garanti : on peut rester « pris dans le Rideau ». L'aperçu le montre avant de marcher.</td></tr>
+      <tr><th>Conservation</th><td>La résistance</td><td>Un pourcentage par élément qui réduit les dégâts reçus, plafonné.</td></tr>
+      <tr><th>Levure</th><td>La puissance</td><td>Ajoute un pourcentage aux dégâts de ses sorts.</td></tr>
+      <tr><th>Coup de maître</th><td>Le coup critique</td><td>Une chance par sort de frapper plus fort, avec sa propre fourchette. La toque dorée l'annonce.</td></tr>
+      <tr><th>Entame</th><td>L'usure</td><td>12,5 % des dégâts reçus sont retirés du maximum de Victuailles jusqu'à la fin du combat : on ne remonte jamais tout à fait. Certains sorts entament davantage.</td></tr>
+      <tr><th>Écrasement</th><td>Les dégâts de poussée</td><td>Un combattant poussé contre un obstacle ou un autre combattant prend des dégâts, et celui qu'il heurte aussi. Jamais un allié.</td></tr>
+      <tr><th>Zones</th><td>Croix, rond, ligne, cône…</td><td>Les dégâts baissent en général en s'éloignant du centre. Une zone de dégâts ne touche jamais un allié ni soi-même.</td></tr>
+      <tr><th>Soins</th><td>Réservés</td><td>Seuls le Pâtissorcier et le Pâtéladin soignent. Les autres ont le Pain de route du Sac : 2 CM, une fois par tour, trois par combat.</td></tr>
+      <tr><th>Mise en place</th><td>Avant le combat</td><td>On choisit sa case de départ parmi les cases dorées, et une Commande.</td></tr>
+      <tr><th>Commande</th><td>Le défi du combat</td><td>Par exemple « Sans contact » ou « Une seule cuisson ». Tenue jusqu'à la victoire, elle donne un bonus de Savoir-faire (XP) ou de Ristourne (butin) ; sur une défaite, elle ne compte pas.</td></tr>
+      <tr><th>Minuteur</th><td>Le temps du tour</td><td>45 secondes, sans report. En solo, on peut le couper. En groupe, trois tours passés sans jouer font quitter le service ; en solo, le tour passe et rien de plus.</td></tr>
+      <tr><th>Addition</th><td>La fin du combat</td><td>XP, Blé et objets. Un artisan bien plus fort que les monstres gagne moins d'XP ; un groupe qui attend sur la carte prend un Arrivage, jusqu'à +100 % d'XP.</td></tr>
+    </tbody>
+  </table></div>
+  <div class="encadre">
+    <h3>Les éléments ont un rôle, commun à toutes les classes</h3>
+    <p class="doux">Flambée : les gros coups et les dégâts qui durent (Brûlé, fournées). Eaudace : ralentir (Ramolli, retraits de Pas, Enraciné). Terroir : les coups au sol et les poussées. Soufflé : le placement et les zones larges (attirer, bondir, échanger). Éclair : les rebonds et la vitesse (gain de CM, Ouverture). Chaque point d'affinité a aussi un petit effet : Terroir donne du Rideau, Soufflé du Faux-fuyant, Éclair de l'Ouverture, Flambée du Coup de maître, Eaudace des Victuailles.</p>
+  </div>
+  <div class="encadre">
+    <h3>Les sorts prennent des rangs</h3>
+    <p class="doux">Cinquante niveaux après son déblocage, un sort passe au rang 2 (+15 % de dégâts, de soins et de boucliers) ; cent niveaux après, au rang 3 (+30 %, et un tour de moins avant de le relancer).</p>
+  </div>
+</section>
+
+<section id="classes">
+  <h2>Les 8 classes</h2>
+  <p>Une classe par métier de La Place des Artisans, et un jeu de mots par classe. On reconnaît chaque classe à son corps, jamais à ses vêtements : sa hauteur, sa carrure, la forme de sa tête et une signature que nulle autre ne partage. Les huit portent ici exactement la même tenue de départ.</p>
+  <p class="doux">Toutes se jouent en homme ou en femme, avec la peau et les cheveux de son choix : aucune classe n'a de teinte imposée. Passe en vue « Ombres » pour faire le test : même en noir, sans couleur, chaque classe se reconnaît. Lors de nos tests à l'aveugle, classes mélangées, en homme comme en femme, en silhouette comme en jeu, chaque classe a été reconnue à chaque fois. Ces tests ont été faits par des agents automatiques : il faudra les refaire avec de vrais joueurs.</p>
+  <div class="apparence" id="apparence">
+    <div class="groupe"><span>Corps</span><div class="modes" role="group" aria-label="Homme ou femme"><button type="button" data-sexe="h" aria-pressed="true">Homme</button><button type="button" data-sexe="f" aria-pressed="false">Femme</button></div></div>
+    <div class="groupe"><span>Peau</span><div class="nuancier" id="n-peau" role="group" aria-label="Couleur de peau"></div></div>
+    <div class="groupe"><span>Cheveux</span><div class="nuancier" id="n-poils" role="group" aria-label="Couleur des cheveux"></div></div>
+    <div class="groupe"><span>Vue</span><div class="modes" role="group" aria-label="Vue de la galerie"><button type="button" data-vue="couleurs" aria-pressed="true">Couleurs</button><button type="button" data-vue="ombres" aria-pressed="false">Ombres</button></div></div>
+  </div>
+  <div class="galerie" id="galerie"></div>
+</section>
+
+<section id="grimoire">
+  <h2>Les 256 sorts</h2>
+  <p>Seize sorts par classe, du niveau 1 au niveau 200, et pour chacun sa déclinaison. L'élément appartient au sort, pas à la classe : chaque classe a des sorts dans les cinq éléments, plus des sorts neutres (soins, boucliers, déplacements, invocations). C'est en choisissant ses sorts et ses déclinaisons qu'on joue Flambée, Terroir ou plusieurs éléments à la fois.</p>
+  <p>Comme une recette, chaque sort se décline : même ingrédient, autre usage, et souvent un autre élément. Le sort et sa déclinaison prennent la même place dans le grimoire : on équipe l'un ou l'autre, et on change hors combat. Chaque déclinaison se débloque entre son sort et le sort suivant ; dès le niveau 2, les trois sorts de départ se déclinent. Au niveau 200, le chef-d'œuvre de la classe a lui aussi ses deux versions.</p>
+  <div class="puces" id="choix-sorts" role="group" aria-label="Classe affichée"></div>
+  <div class="puces" id="filtre-el" role="group" aria-label="Élément affiché"></div>
+  <p class="doux petit" id="bilan-sorts"></p>
+  <div class="defile"><table>
+    <thead><tr><th>Niv.</th><th>Sort</th><th>Élément</th><th>Coût</th><th>Rayon</th><th>Effet</th></tr></thead>
+    <tbody id="table-sorts"></tbody>
+  </table></div>
+</section>
+
+<section id="elements">
+  <h2>Les éléments et les caractéristiques</h2>
+  <p>Cinq éléments, renommés en jeux de mots. Ils appartiennent aux sorts, pas aux classes : chaque classe a des sorts dans les cinq. Chacun se fait son personnage en choisissant ses sorts et leurs déclinaisons, et en plaçant ses points d'affinité dans les éléments qu'il joue.</p>
+  <div class="elements" id="liste-elements"></div>
+  <div class="defile"><table>
+    <thead><tr><th>Caractéristique</th><th>Ce qu'elle fait</th><th>Le jeu de mots</th></tr></thead>
+    <tbody id="table-caracs"></tbody>
+  </table></div>
+  <p>La monnaie est le <b>Blé</b>, pour le grain comme pour l'argent. La monnaie qu'on achète, si le jeu en a une, serait l'<b>Oseille</b>.</p>
+</section>
+
+<section id="astrelier">
+  <h2>L'Astrelier, le monde de départ</h2>
+  <p>L'astre et l'atelier. Avant d'entrer dans le monde, chaque artisan existe dans son propre atelier céleste : un monde intérieur fait de ses gestes et de ses outils, que les étoiles dessinent en constellations. On y arrive sous la forme d'une Ébauche, une silhouette de pâte d'étoile, et on en sort façonné. Il couvre les niveaux 1 à 12.</p>
+  <ol class="iles">
+    <li><h3>L'Établi</h3><p>Tu n'es qu'une Ébauche. Tu touches la constellation de ton métier, et ton corps prend forme sous tes yeux : la création du personnage se joue dans le monde, pas dans un menu.</p></li>
+    <li><h3>La Pesée</h3><p>Une balance géante. Tu poses tes premiers points de caractéristiques et découvres les cinq éléments.</p></li>
+    <li><h3>La Halle des Ébauches</h3><p>La zone partagée : les autres débutants, les marchands, le premier tablier, les premières quêtes.</p></li>
+    <li><h3>La Voie lactée</h3><p>Un pont de lait d'étoiles entre les îles. On apprend à marcher et à éviter les Grumeaux en chemin.</p></li>
+    <li><h3>Le Fourneau</h3><p>Les premiers combats, contre les Grumeaux et les Mie-trons : coups de main, Pas, Rayon, ligne de vue.</p></li>
+    <li><h3>La Penderie des Tabliers</h3><p>Le premier donjon d'enseigne. La Proxi-Mite, une mite géante aux ailes couvertes d'étiquettes, y ronge les tabliers des artisans : c'est elle qui révèle la menace des Grandes Enseignes.</p></li>
+    <li><h3>Le Moule</h3><p>Le premier donjon. Le Grand Moule veut te couler dans une forme toute faite ; le vaincre, c'est devenir unique.</p></li>
+    <li><h3>Le Défournement</h3><p>La sortie. Ton personnage est défourné dans le monde, à Grand-Étal, la ville neutre.</p></li>
+  </ol>
+  <div class="encadre">
+    <h3>Passer d'une île à l'autre</h3>
+    <p class="doux">Chaque moyen de voyage vient du décor de l'atelier. Ce qui brille d'or mène à une autre île : un premier toucher montre où, le second part. La carte de l'Astrelier montre les îles, leurs liaisons et les fours allumés ; la quête « Le tour de l'Astrelier » fait essayer chaque moyen.</p>
+    <ul class="doux">
+      <li><b>Marche</b> : une flèche d'or au bord de l'île, prolongée par une tête de pont ; on arrive sur l'île voisine.</li>
+      <li><b>Pont</b> : la Voie lactée, en lait d'étoiles, avec ses garde-corps dorés et ses Grumeaux en chemin.</li>
+      <li><b>Passe-plat</b> : le guichet entre la cuisine et la salle ; on y entre, on ressort par son jumeau (Halle et Penderie).</li>
+      <li><b>Monte-plats</b> : la petite caisse à cordes qui monte du Fourneau à la Penderie, plus haute.</li>
+      <li><b>Toboggan</b> : une crêpe en goulotte, à sens unique, de la Penderie jusqu'au Moule.</li>
+      <li><b>Four banal</b> : le four commun du village ; on l'allume en passant, puis on voyage entre les fours allumés.</li>
+      <li><b>La Grande Pelle</b> : le Défournement, dès le niveau 12 ; elle lance l'artisan vers Grand-Étal, à sens unique.</li>
+      <li><b>Sieste</b> : un sac de farine à Grand-Étal ; on revient à l'Astrelier en rêvant.</li>
+    </ul>
+  </div>
+  <div class="encadre">
+    <h3>Ce qui le distingue d'Incarnam</h3>
+    <p class="doux">Incarnam est une terre flottante au-dessus du monde, partagée par tous, avec son village. L'Astrelier en diffère par son principe :</p>
+    <ul class="doux">
+      <li>c'est un monde intérieur, propre à chaque artisan : les deux premières îles n'appartiennent qu'à toi ;</li>
+      <li>la création du personnage s'y joue, au lieu d'un écran de menu ;</li>
+      <li>on y revient toute sa vie en rêvant : s'y « refaçonner » permet de redistribuer ses caractéristiques, et les chefs-d'œuvre du niveau 200 s'y apprennent ;</li>
+      <li>son décor est un atelier dans les étoiles, avec des outils en constellations.</li>
+    </ul>
+  </div>
+</section>
+
+<section id="niveaux">
+  <h2>Du niveau 1 au niveau 200</h2>
+  <p id="fil-rouge"></p>
+  <p>27 zones, une Grande Enseigne par zone. Chaque boss vient d'une enseigne de la grande distribution, transformée en jeu de mots, et sa forme suit le jeu de mots : Cora devient le Rat-Co, un rat. Plus on s'éloigne de Grand-Étal, plus les enseignes grossissent : supérettes, discounters et bazars, spécialistes du frais et du froid, supermarchés, grossistes, hypermarchés, puis les fantômes des enseignes disparues, et un brochet d'or bien vivant sous Grand-Étal.</p>
+  <p class="doux petit">« D'après… » sert seulement à la conception : le vrai nom n'apparaît jamais dans le jeu. Les noms ont été choisis (voir « Tes réponses ») ; chaque boss garde ses alternatives, dont un repli plus sûr pour les plus risqués.</p>
+  <h3>Ce qui se débloque en chemin</h3>
+  <ul class="paliers">
+    <li><b>1–12</b> les 4 premiers sorts et 3 déclinaisons, ton premier métier, la panoplie du Grumeau</li>
+    <li><b>13</b> Grand-Étal, le comptoir, les groupes de 4</li>
+    <li><b>30</b> guildes et mascottes</li>
+    <li><b>60</b> montures et deuxième métier</li>
+    <li><b>90</b> l'arène contre d'autres joueurs</li>
+    <li><b>120</b> les gravures de sorts</li>
+    <li><b>150</b> les objets Grand cru</li>
+    <li><b>200</b> le chef-d'œuvre de classe, le titre de Maître artisan</li>
+  </ul>
+  <p class="doux petit">Les sorts arrivent aux niveaux 1, 1, 1, 10, 26, 41, 57, 73, 88, 104, 120, 135, 151, 167, 182 et 200 ; leurs déclinaisons aux niveaux 3, 5, 7, 18, 34, 49, 65, 81, 96, 112, 128, 143, 159, 175, 190 et 200.</p>
+  <div class="zones" id="zones"></div>
+  <h3>Le boss final</h3>
+  <div class="final" id="boss-final"></div>
+  <h3>Les sbires des enseignes</h3>
+  <p class="doux">Ils servent dans les donjons de toutes les enseignes, et leurs noms viennent du jargon des magasins.</p>
+  <div class="sbires" id="sbires"></div>
+</section>
+
+<section id="equipement">
+  <h2>Équipement et quêtes</h2>
+  <div class="briques">
+    <div>
+      <h3>Les emplacements</h3>
+      <ul>
+        <li><b>Outil :</b> l'arme. Rouleau, couperet, fouet, harpon, sécateur, louche, couteau, fusil à aiguiser.</li>
+        <li><b>Plateau :</b> le bouclier, avec un outil à une main.</li>
+        <li><b>Toque, Tablier, Ceinture, Sabots</b></li>
+        <li><b>Médaille</b> et deux <b>Bagues</b></li>
+        <li><b>Mascotte :</b> le familier.</li>
+        <li><b>Trois gravures :</b> elles modifient un sort.</li>
+      </ul>
+    </div>
+    <div>
+      <h3>Les qualités</h3>
+      <p>Ordinaire, Fait maison, Fin, Grand cru, Chef-d'œuvre. Les valeurs de chaque objet sont tirées au hasard dans une fourchette ; on les améliore par l'<b>assaisonnement</b>, avec des épices rares.</p>
+    </div>
+    <div>
+      <h3>Trois panoplies</h3>
+      <ul>
+        <li><b>Du Grumeau</b> (niv. 8) : Toque farineuse, Tablier taché, Sabots collants. 3 pièces : +10 Levure.</li>
+        <li><b>Du Croque-Monsieur</b> (niv. 25) : Toque gratinée, Médaille de béchamel, Bagues de jambon, Ceinture d'emmental. 4 pièces : +1 Rayon.</li>
+        <li><b>De la Grande Chantilly</b> (niv. 170) : Toque montée, Tablier fouetté, Plateau de nuage, Sabots meringués, Médaille sucrée. 5 pièces : +1 CM.</li>
+      </ul>
+    </div>
+    <div>
+      <h3>Des quêtes</h3>
+      <ul>
+        <li><b>L'Ébauche</b> (Astrelier) : prendre forme, choisir son outil, gagner au Fourneau.</li>
+        <li><b>Le Moule et la Manière</b> (Astrelier) : vaincre le Grand Moule et être défourné.</li>
+        <li><b>Croque-Monsieur cherche Croque-Madame</b> (Prés-Salés) : les réunir, ou les séparer pour toujours.</li>
+        <li><b>Pain perdu, pain retrouvé</b> (Forêt-Noire) : un fantôme de pain qui a oublié sa recette.</li>
+        <li><b>Du pain sur la planche</b> (quête de classe Levainqueur) : réussir trois fournées dans un même combat.</li>
+      </ul>
+    </div>
+  </div>
+</section>
+
+<section id="interdit">
+  <h2>Ce qu'on ne peut pas reprendre de Dofus</h2>
+  <p>La marque protège les noms, le droit d'auteur protège ce qui est dessiné, écrit, composé ou programmé, et le parasitisme sanctionne le fait de copier l'ensemble pour profiter de la notoriété d'un autre jeu. Les règles et les mécaniques ne sont protégées par personne.</p>
+  <div class="trois">
+    <div class="colonne">
+      <span class="etiq e-interdit">Interdit</span>
+      <ul>
+        <li>Les marques : Dofus, Dofus Touch, Wakfu, Waven, Krosmoz, Ankama.</li>
+        <li>Les noms de classes, de dieux, de monstres et de lieux : Iop, Crâ, Sadida, Bouftou, Tofu, Amakna, Astrub, Incarnam, Bonta…</li>
+        <li>Les mots inventés : kamas, ogrines, Zaap, Almanax, Kolizéum, Percepteur, forgemagie.</li>
+        <li>Les sorts existants, nom et effet.</li>
+        <li>Les dessins, musiques, textes, cartes, et les données ou le code du jeu.</li>
+      </ul>
+    </div>
+    <div class="colonne">
+      <span class="etiq e-eviter">À éviter</span>
+      <ul>
+        <li>« Dofus-like » sur la fiche du store ou dans les publicités.</li>
+        <li>Les correspondances Force/Terre, Intelligence/Feu, Chance/Eau, Agilité/Air, Sagesse, Prospection. Orvane a ses propres noms : Terroir, Flambée, Eaudace, Soufflé, Éclair, Savoir-faire, Ristourne.</li>
+        <li>Des noms de classes tous écrits en verlan, c'est la signature de Dofus. Orvane joue plutôt sur les mots-valises.</li>
+        <li>Le mot « variante » pour un sort qui en remplace un autre : Orvane dit « déclinaison », comme une recette qui se décline.</li>
+        <li>Un monde de départ flottant au-dessus du monde et dessiné comme Incarnam. L'Astrelier s'en écarte par son principe, voir plus haut.</li>
+        <li>Six œufs légendaires à équiper, l'élevage des montures par jauges, deux cités d'anges et de démons.</li>
+      </ul>
+    </div>
+    <div class="colonne">
+      <span class="etiq e-libre">Libre</span>
+      <ul>
+        <li>Le tour par tour sur une grille en losanges, la vue de 3/4.</li>
+        <li>200 niveaux, 15 sorts ou plus par classe, des éléments, des résistances.</li>
+        <li>Points d'action et de mouvement, portée, ligne de vue, zones, invocations, pièges.</li>
+        <li>Panoplies, métiers, donjons, quêtes, guildes, montures, arène.</li>
+        <li>Les jeux de mots : c'est un ton, pas une propriété.</li>
+      </ul>
+    </div>
+  </div>
+  <div class="encadre">
+    <h3>Les enseignes de la grande distribution</h3>
+    <p>Se moquer d'enseignes réelles est plus risqué que de s'inspirer de Dofus. Comme le jeu reprend l'identité de La Place des Artisans, qui vend elle-même aux mêmes clients, un boss qui ridiculise une enseigne peut être vu comme du dénigrement d'un concurrent, et pas seulement comme de la parodie. La parodie protège l'humour ; elle ne protège pas une attaque commerciale.</p>
+    <ul class="doux" id="precautions"></ul>
+  </div>
+  <p class="doux petit">Je ne suis pas juriste. Avant la sortie, vérifie que le nom est libre sur la base de l'INPI et de l'EUIPO, et demande un avis d'avocat en propriété intellectuelle.</p>
+</section>
+
+<section id="plan">
+  <h2>Comment on fait</h2>
+  <p>Pas besoin d'Unity. Le jeu s'écrit en technologies web avec Phaser, qui gère très bien la 3/4, puis devient une application Android et iPhone grâce à Capacitor. J'écris le code dans ton dépôt, et tu testes chaque étape sur ton téléphone.</p>
+  <div class="defile"><table>
+    <thead><tr><th>Besoin</th><th>Outil</th><th>Rôle</th><th>Coût</th></tr></thead>
+    <tbody>
+      <tr><th>Moteur du jeu</th><td>Phaser et TypeScript</td><td>Grille en losanges, tri de profondeur, animations</td><td>Gratuit</td></tr>
+      <tr><th>Application</th><td>Capacitor</td><td>APK Android et app iPhone</td><td>Gratuit ; un Mac ou un service en ligne pour l'iPhone</td></tr>
+      <tr><th>Cartes</th><td>Tiled</td><td>Dessiner les cartes en losanges, case par case</td><td>Gratuit</td></tr>
+      <tr><th>Personnages</th><td>Spine, ou animation image par image</td><td>Animer les corps et les couches d'équipement</td><td>Gratuit, ou environ 70 $ pour Spine</td></tr>
+      <tr><th>Serveur de jeu</th><td>Node.js et Colyseus</td><td>Arbitrer les combats en ligne, empêcher la triche</td><td>Quelques dizaines d'euros par mois au début</td></tr>
+      <tr><th>Comptes</th><td>Supabase, déjà relié à ton compte</td><td>Connexion, personnages, objets, comptoir</td><td>Gratuit au départ</td></tr>
+      <tr><th>Mesures en bêta</th><td>PostHog, déjà relié à ton compte</td><td>Voir où les joueurs bloquent</td><td>Gratuit au départ</td></tr>
+    </tbody>
+  </table></div>
+  <div class="encadre">
+    <h3>Des personnages en couches</h3>
+    <p class="doux">Comme la tenue change avec l'équipement, chaque personnage est assemblé en couches : le corps de la classe, avec sa morphologie, puis les sabots, le tablier, la toque et l'outil. Chaque couche est dessinée vue de face et vue de dos, de trois quarts ; le miroir donne les quatre directions. Les animations de base : attendre, marcher, lancer un sort, frapper, encaisser, gagner. Huit classes, deux corps chacune (homme et femme), soit seize corps à animer.</p>
+  </div>
+  <div class="encadre">
+    <h3>Les sorts vivent dans des fichiers de données</h3>
+    <p class="doux">Les 256 sorts de cette page (128 sorts et leurs 128 déclinaisons) sont écrits sous cette forme dans le grimoire, et le moteur de règles les lit tels quels : ajouter ou équilibrer un sort ne touche pas au moteur. Chaque sort est fait de briques (dégâts, poussée, état, pose d'une fournée…), vérifiées par le moteur.</p>
+    <pre>{ "id": "levainqueur.coup-de-petrin", "nom": "Coup de pétrin", "niveau": 1,
+  "element": "T", "cm": 3, "rayon": { "min": 1, "max": 1 }, "vue": true,
+  "cible": "ennemi", "parTour": 2, "maitre": 10,
+  "effets": [ { "type": "degats", "element": "T", "min": 18, "max": 22,
+                "maitre": [23, 28] } ] }</pre>
+  </div>
+  <h3>Les étapes</h3>
+  <ol class="etapes">
+    <li><h3>La fiche de règles <span class="etiq e-fait">Fait</span></h3><p>Le moteur de règles : formules de dégâts, Rideau, zones, états, Commandes, Addition, l'IA des monstres. Près de 300 tests automatiques.</p><p class="test"><b>Tu as validé :</b> les dix choix sur les règles.</p></li>
+    <li><h3>Un combat jouable en 3/4 <span class="etiq e-fait">Fait</span></h3><p>Le prototype Phaser : les huit classes, le Fourneau, les Grumeaux, les Mie-trons et le Grumeau chef, en solo contre l'ordinateur.</p><p class="test"><b>Tu testes :</b> sur ton téléphone, par le lien en haut de la page. Est-ce amusant ?</p></li>
+    <li><h3>L'interface du bas</h3><p>Barre de sorts, menu masquable, onglets réglables, sauvegarde sur le téléphone.</p><p class="test"><b>Tu testes :</b> tout se fait au pouce, d'une main.</p></li>
+    <li><h3>L'Astrelier complet</h3><p>Les sept îles, la création du personnage à l'Établi, le donjon du Moule, du niveau 1 à 12.</p><p class="test"><b>Tu testes :</b> une application Android installée.</p></li>
+    <li><h3>Les huit classes</h3><p>Les 256 sorts, les huit mécaniques, l'équilibrage entre classes.</p><p class="test"><b>Tu testes :</b> chaque classe sur un même combat.</p></li>
+    <li><h3>Grand-Étal et les Prés-Salés</h3><p>La ville neutre, la première région, l'équipement, les panoplies, les métiers.</p><p class="test"><b>Tu testes :</b> du niveau 1 au niveau 30.</p></li>
+    <li><h3>Le jeu en ligne</h3><p>Comptes, serveur, les autres joueurs en ville, combats en groupe, comptoir. L'étape la plus longue.</p><p class="test"><b>Tu testes :</b> un combat à deux avec un ami.</p></li>
+    <li><h3>La bêta, puis la suite du monde</h3><p>Des testeurs, l'équilibrage, puis les régions suivantes jusqu'au niveau 200, une par mise à jour.</p><p class="test"><b>Tu publies :</b> Google Play (25 $ une fois), App Store (99 $ par an).</p></li>
+  </ol>
+</section>
+
+<section id="questions">
+  <h2>Mes questions pour toi</h2>
+  <p>Pour combler les trous de mémoire : chaque question a ma proposition par défaut, garde-la si elle te va.</p>
+  <div class="questions">
+    <div><h3>Le combat</h3><ol>
+      <li>Seul d'abord, ou en ligne dès le départ ?<span>Proposé : seul d'abord, avec un code prêt pour le jeu en ligne.</span></li>
+      <li>Combien de joueurs par groupe ?<span>Proposé : 4, plus lisible sur un téléphone.</span></li>
+      <li>Un temps limite par tour ?<span>Réglé : 45 secondes, que l'on peut couper en solo.</span></li>
+      <li>Que perd-on en cas de défaite ?<span>Proposé : un peu d'usure sur l'équipement, rien d'autre.</span></li>
+    </ol></div>
+    <div><h3>Les personnages</h3><ol>
+      <li>Combien de personnages par compte ?<span>Proposé : 5, de classes différentes ou non.</span></li>
+      <li>Les points de caractéristiques : répartis par le joueur ou automatiques ?<span>Proposé : par le joueur, avec un bouton « répartir pour moi ».</span></li>
+      <li>Les sorts montent-ils en puissance avec des rangs ?<span>Réglé : 3 rangs, gagnés avec les niveaux (voir les règles).</span></li>
+      <li>Les classes te conviennent-elles : noms, rôles, mécaniques ?<span>Dis-moi celles à changer.</span></li>
+    </ol></div>
+    <div><h3>Le monde</h3><ol>
+      <li>Le nom du jeu et celui du monde ?<span>Orvane reste provisoire.</span></li>
+      <li>Une histoire principale forte, ou un monde libre ?<span>Proposé : une histoire en chapitres, une par région.</span></li>
+      <li>Des camps entre joueurs ?<span>Proposé : pas au départ ; plus tard, des corporations rivales.</span></li>
+      <li>Faut-il un lien réel avec La Place des Artisans ?<span>Par exemple, de vrais artisans de la plateforme en personnages du jeu, ou le jeu qui porte son nom.</span></li>
+    </ol></div>
+    <div><h3>Les noms d'enseignes</h3><ol>
+      <li>Tes choix, appliqués<span>Boss final : l'Élé-Clair (Leclerc). Action : la Hyène-Bric-à-Brac. Grand Frais : la Grande Frayeur. Intermarché : la Halle-à-Pattes. Géant Casino : le Géant Casse-Rhino. Les Patacombes, à la place de Prisunic : le Brochet-Doré (Brioche Dorée). La Reine Carrée-Fourmi passe en réserve.</span></li>
+      <li>À faire relire par un juriste en priorité<span>L'Élé-Clair (nom d'une famille réelle ; repli : le Dragon Vente-Flash) et le Brochet-Doré (concurrent direct de la plateforme ; repli : la Carpe-Miroir).</span></li>
+    </ol></div>
+    <div><h3>Métiers, argent, style</h3><ol>
+      <li>Les métiers de fabrication sont-ils séparés des classes ?<span>Proposé : oui, un Levainqueur peut devenir fromager.</span></li>
+      <li>Le commerce entre joueurs est-il libre ?<span>Proposé : oui, au comptoir de Grand-Étal.</span></li>
+      <li>Le modèle économique ?<span>Proposé : gratuit, apparences payantes, aucun avantage en combat.</span></li>
+      <li>Le style de dessin ?<span>Proposé : dessin vectoriel net, comme le prototype mais illustré.</span></li>
+    </ol></div>
+  </div>
+</section>
+
+
+</div>
+
+<script src="donnees.js"></script>
+<script src="grimoire.js"></script>
+<script src="grimoire-plan.js"></script>
+<script src="persos.js"></script>
+<script src="zones.js"></script>
+<script>
+(() => {
+  const O = window.ORVANE, E = O.ELEMENTS, NS = "http://www.w3.org/2000/svg";
+  // Apparence commune (homme ou femme, peau, cheveux) : galerie des classes
+  const PEAUX = ["#F1C9A5", "#E3BC94", "#C8956B", "#9C6B47", "#6B4A2E", "#4A3222"];
+  const POILS = ["#2B211C", "#6B4A2E", "#C9A26B", "#B5532F", "#E8E1D2"];
+  const AP = O.apparence = O.apparence || { sexe: "h", peau: "#C8956B", poils: "#6B4A2E" };
+  const gal = document.getElementById("galerie"), portraits = [];
+  const ELS = ["F", "E", "T", "S", "C"], DEC = O.DECLINAISONS || {};
+  const tousSorts = id => O.SORTS[id].concat(DEC[id] || []);
+  const compte = id => tousSorts(id).reduce((c, s) => (c[s[2]] = (c[s[2]] || 0) + 1, c), {});
+  O.CLASSES.forEach(c => {
+    const a = document.createElement("article"); a.className = "classe";
+    a.innerHTML = `<div class="portrait"><svg viewBox="-48 -112 96 124" role="img" aria-label="${c.nom}"><g class="sol"><polygon points="-32,0 0,-15 32,0 0,15" fill="#E7DBC2"/><polygon points="-32,0 0,15 0,21 -32,6" fill="#A8916A"/><polygon points="0,15 32,0 32,6 0,21" fill="#8A7550"/></g></svg></div>
+      <div class="corps"><div class="metier">${c.metier}</div><h3>${c.nom} · ${c.fem}</h3><p class="jeu">${c.jeu}</p>
+      <p class="ligne"><b>Rôle :</b> ${c.role}</p>
+      <p class="ligne"><b>Éléments :</b> <span class="mini-els">${ELS.map(k => `<span title="${E[k].nom}"><i class="pastel" style="background:${E[k].couleur}"></i>${compte(c.id)[k] || 0}<span class="vh"> sorts ${E[k].nom}</span></span>`).join("")}</span></p>
+      <p class="ligne"><b>${c.meca[0]} :</b> ${c.meca[1]}</p>
+      <p class="morpho">${c.morpho}</p></div>`;
+    gal.appendChild(a);
+    const g = document.createElementNS(NS, "g"); g.setAttribute("transform", "translate(0 4)"); g.setAttribute("class", "perso"); a.querySelector("svg").appendChild(g);
+    portraits.push([g, c]);
+  });
+  const dessineGalerie = () => portraits.forEach(([g, c]) => { g.replaceChildren(); O.dessinePerso(g, c, { s: 2.35, sexe: AP.sexe, peau: AP.peau, poils: AP.poils }); });
+  const nuancier = (id, liste, cle, nom) => { const n = document.getElementById(id);
+    liste.forEach((coul, i) => { const b = document.createElement("button"); b.type = "button"; b.style.background = coul; b.dataset.c = coul;
+      b.setAttribute("aria-label", nom + " " + (i + 1)); b.setAttribute("aria-pressed", coul === AP[cle]);
+      b.onclick = () => { AP[cle] = coul; [...n.children].forEach(x => x.setAttribute("aria-pressed", x === b)); appliquer(); }; n.appendChild(b); }); };
+  const ap = document.getElementById("apparence");
+  function appliquer() { dessineGalerie(); if (O.majApparence) O.majApparence(); }
+  nuancier("n-peau", PEAUX, "peau", "Peau"); nuancier("n-poils", POILS, "poils", "Cheveux");
+  ap.querySelectorAll("[data-sexe]").forEach(b => b.onclick = () => { AP.sexe = b.dataset.sexe;
+    ap.querySelectorAll("[data-sexe]").forEach(x => x.setAttribute("aria-pressed", x === b)); appliquer(); });
+  ap.querySelectorAll("[data-vue]").forEach(b => b.onclick = () => { gal.classList.toggle("ombres", b.dataset.vue === "ombres");
+    ap.querySelectorAll("[data-vue]").forEach(x => x.setAttribute("aria-pressed", x === b)); });
+  dessineGalerie();
+  // Table des sorts
+  const choix = document.getElementById("choix-sorts"), corps = document.getElementById("table-sorts"), filtre = document.getElementById("filtre-el"), bilan = document.getElementById("bilan-sorts");
+  let classeVue = O.CLASSES[0], elVu = "";
+  const ligne = (s, base) => `<tr class="${base ? "decl" : (DEC[classeVue.id] ? "paire" : "")}${s[0] === 200 ? " oeuvre" : ""}" data-el="${s[2]}"><td class="n">${s[0]}</td><th>${s[1]}${base ? `<small>déclinaison de ${base}</small>` : ""}</th><td class="el"><i class="pastel" style="background:${E[s[2]].couleur}"></i>${E[s[2]].nom}</td><td class="n">${s[3]} CM</td><td>${s[4]}</td><td>${s[5]}${base && s[7] ? `<span class="idee">${s[7]}</span>` : ""}</td></tr>`;
+  function montre(c) {
+    classeVue = c;
+    [...choix.children].forEach(b => b.setAttribute("aria-pressed", b.dataset.id === c.id));
+    const D = DEC[c.id] || [];
+    corps.innerHTML = O.SORTS[c.id].map((s, i) => ligne(s) + (D[i] ? ligne(D[i], s[1]) : "")).join("");
+    const n = compte(c.id), total = tousSorts(c.id).length;
+    bilan.textContent = `${c.nom} : ${total} sorts, dont ` + ELS.map(k => `${n[k] || 0} ${E[k].nom}`).join(", ") + ` et ${n.N || 0} neutres.`;
+    filtrer();
+  }
+  function filtrer() {
+    [...filtre.children].forEach(b => b.setAttribute("aria-pressed", b.dataset.el === elVu));
+    [...corps.children].forEach(tr => { tr.hidden = !!elVu && tr.dataset.el !== elVu; });
+  }
+  [["", "Tous"], ...ELS.concat("N").map(k => [k, E[k].nom])].forEach(([k, nom]) => { const b = document.createElement("button"); b.type = "button"; b.dataset.el = k;
+    b.innerHTML = (k ? `<i class="pastel" style="background:${E[k].couleur}"></i>` : "") + nom; b.onclick = () => { elVu = k; filtrer(); }; filtre.appendChild(b); });
+  O.CLASSES.forEach(c => { const b = document.createElement("button"); b.type = "button"; b.textContent = c.nom; b.dataset.id = c.id; b.onclick = () => montre(c); choix.appendChild(b); });
+  montre(O.CLASSES[0]);
+  // Éléments et caractéristiques
+  document.getElementById("liste-elements").innerHTML = ["F", "E", "T", "S", "C"].map(k => `<div class="element">
+    <svg viewBox="0 0 22 22" aria-hidden="true">${O.icone(k)}</svg><div class="vrai">${E[k].vrai}</div><h3>${E[k].nom}</h3>
+    <p>${E[k].jeu}</p><p><b>Dans le grimoire :</b> ${O.CLASSES.reduce((t, c) => t + (compte(c.id)[k] || 0), 0)} sorts, dans les huit classes.</p></div>`).join("");
+  document.getElementById("table-caracs").innerHTML = O.CARACS.map(c => `<tr><th>${c[0]}</th><td>${c[1]}</td><td>${c[2]}</td></tr>`).join("");
+
+  // Le monde : zones, boss final, sbires, précautions
+  const M = O.MONDE, esc = t => String(t).replace(/&/g, "&amp;").replace(/</g, "&lt;");
+  document.getElementById("fil-rouge").textContent = M.fil_rouge;
+  const niv = n => /^\d/.test(n) ? "Niveaux " + n.replace(/ \(.*\)$/, "") : "Ville neutre";
+  document.getElementById("zones").innerHTML = M.zones.map(z => { const e = z.enseigne;
+    return `<article class="zone"><div class="tete"><span class="niv">${esc(niv(z.niveaux))}</span>${z.confiance === "sûr" ? "" : '<span class="etiq e-eviter">À valider</span>'}</div>
+      <h3>${esc(z.nom)}</h3><p class="sens">${esc(z.jeu_zone.replace(/ \((nom )?déjà validé\)\.?/, "."))}</p>
+      <p class="monstres"><b>Monstres :</b> ${z.monstres.map(m => esc(m.nom)).join(", ")}</p>
+      <div class="boss"><span class="quoi">Grande Enseigne</span><strong>${esc(e.nom)}</strong><span class="apres">d'après ${esc(e.reelle)}</span><p>${esc(e.forme_boss)}</p></div>
+      <details class="plus"><summary>Jeu de mots, donjon et combat</summary>
+        <p><b>Le jeu de mots :</b> ${esc(e.jeu)}</p><p><b>Donjon :</b> ${esc(e.donjon)}</p><p><b>Combat :</b> ${esc(e.mecanique)}</p>
+        <p><b>Paysage :</b> ${esc(z.paysage)}</p>
+        <ul>${z.monstres.map(m => `<li><b>${esc(m.nom)}</b> : ${esc(m.jeu.replace(/ \(déjà validé\)/, ""))}</li>`).join("")}</ul>
+        ${z.alternatives && z.alternatives.length ? `<p><b>Autres noms possibles :</b></p><ul>${z.alternatives.map(a => `<li>${esc(a)}</li>`).join("")}</ul>` : ""}
+      </details></article>`; }).join("");
+  const B = M.boss_final, alts = B.alternatives.filter(a => !/Colissos/.test(a.nom)), secret = B.alternatives.find(a => /Colissos/.test(a.nom));
+  document.getElementById("boss-final").innerHTML = `<span class="niv etiq e-eviter">Niveau 200 · à valider</span><h3>${esc(B.nom)}</h3><span class="doux petit">d'après ${esc(B.reelle)}</span>
+    <p>${esc(B.jeu)}</p><p><b>Sa forme :</b> ${esc(B.forme)}</p><p><b>Son repaire :</b> ${esc(B.repaire)}</p><p><b>Le combat :</b> ${esc(B.mecanique)}</p>
+    <p><b>Autres choix possibles :</b></p><div class="alt">${alts.map(a => `<div><b>${esc(a.nom)}</b><span class="doux">d'après ${esc(a.reelle)}</span><span>${esc(a.jeu)}</span></div>`).join("")}</div>
+    ${secret ? `<p><b>Boss secret, après le jeu : ${esc(secret.nom)}.</b> <span class="doux">${esc(secret.jeu)}</span></p>` : ""}`;
+  document.getElementById("sbires").innerHTML = M.sbires.map(s => `<div><b>${esc(s.nom)}</b><p>${esc(s.jeu)}</p><p>${esc(s.role)}</p></div>`).join("");
+  document.getElementById("precautions").innerHTML = M.precautions.map(p => `<li>${esc(p)}</li>`).join("");})();
+</script>

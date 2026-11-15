@@ -1,0 +1,1652 @@
+[
+  {
+    "base": {
+      "id": "levainqueur.coup-de-petrin",
+      "classe": "levainqueur",
+      "emplacement": 1,
+      "declinaisonDe": null,
+      "niveau": 1,
+      "nom": "Coup de pétrin",
+      "element": "T",
+      "cm": 3,
+      "rayon": {
+        "min": 1,
+        "max": 1,
+        "modifiable": false
+      },
+      "lancer": "libre",
+      "vue": true,
+      "cible": "ennemi",
+      "parTour": 2,
+      "parCible": 1,
+      "relance": 0,
+      "relanceInitiale": 0,
+      "plafondPose": 0,
+      "maitre": 10,
+      "zone": {
+        "forme": "case",
+        "taille": 0,
+        "tailleMin": 0,
+        "baisse": true
+      },
+      "touche": "ennemis",
+      "effets": [
+        {
+          "type": "degats",
+          "element": "T",
+          "min": 18,
+          "max": 22,
+          "maitre": [
+            23,
+            28
+          ]
+        }
+      ],
+      "texte": "Un coup des deux pognes, et l'ennemi est dans le pétrin.",
+      "change": ""
+    },
+    "declinaison": {
+      "id": "levainqueur.bassinage",
+      "classe": "levainqueur",
+      "emplacement": 1,
+      "declinaisonDe": "levainqueur.coup-de-petrin",
+      "niveau": 3,
+      "nom": "Bassinage",
+      "element": "E",
+      "cm": 3,
+      "rayon": {
+        "min": 1,
+        "max": 3,
+        "modifiable": false
+      },
+      "lancer": "ligne",
+      "vue": true,
+      "cible": "ennemi",
+      "parTour": 2,
+      "parCible": 1,
+      "relance": 0,
+      "relanceInitiale": 0,
+      "plafondPose": 0,
+      "maitre": 5,
+      "zone": {
+        "forme": "case",
+        "taille": 0,
+        "tailleMin": 0,
+        "baisse": true
+      },
+      "touche": "ennemis",
+      "effets": [
+        {
+          "type": "degats",
+          "element": "E",
+          "min": 14,
+          "max": 18,
+          "maitre": [
+            18,
+            23
+          ]
+        },
+        {
+          "type": "etat",
+          "etat": "ramolli",
+          "tours": 1,
+          "couches": 2
+        }
+      ],
+      "texte": "Bassiner, c'est ajouter de l'eau pour assouplir la pâte. Ça marche aussi sur l'ennemi.",
+      "change": "Le pétrin ne frappe plus au contact : l'eau part en ligne jusqu'à 3 cases, en Eaudace, et détrempe la cible (Ramolli 2 couches : −2 Pas à son prochain tour)."
+    }
+  },
+  {
+    "base": {
+      "id": "levainqueur.fournee",
+      "classe": "levainqueur",
+      "emplacement": 2,
+      "declinaisonDe": null,
+      "niveau": 1,
+      "nom": "Fournée",
+      "element": "F",
+      "cm": 3,
+      "rayon": {
+        "min": 1,
+        "max": 3,
+        "modifiable": false
+      },
+      "lancer": "libre",
+      "vue": false,
+      "cible": "caseLibre",
+      "parTour": 2,
+      "parCible": 0,
+      "relance": 0,
+      "relanceInitiale": 0,
+      "plafondPose": 3,
+      "maitre": 0,
+      "zone": {
+        "forme": "case",
+        "taille": 0,
+        "tailleMin": 0,
+        "baisse": true
+      },
+      "touche": "ennemis",
+      "effets": [
+        {
+          "type": "pose",
+          "quoi": "fournee",
+          "tours": 1,
+          "zone": {
+            "forme": "croix",
+            "taille": 2,
+            "tailleMin": 0,
+            "baisse": true
+          },
+          "touche": "ennemis",
+          "maitre": 15,
+          "effets": [
+            {
+              "type": "degats",
+              "element": "F",
+              "min": 19,
+              "max": 23,
+              "maitre": [
+                24,
+                29
+              ]
+            }
+          ]
+        }
+      ],
+      "texte": "Tu poses une fournée au sol : elle cuit un tour, puis éclate en grande croix, jusqu'à 2 cases autour d'elle. Les ennemis qui y sont encore prennent tout.",
+      "change": ""
+    },
+    "declinaison": {
+      "id": "levainqueur.fournee-eclair",
+      "classe": "levainqueur",
+      "emplacement": 2,
+      "declinaisonDe": "levainqueur.fournee",
+      "niveau": 5,
+      "nom": "Fournée éclair",
+      "element": "C",
+      "cm": 2,
+      "rayon": {
+        "min": 1,
+        "max": 4,
+        "modifiable": false
+      },
+      "lancer": "ligne",
+      "vue": true,
+      "cible": "ennemi",
+      "parTour": 3,
+      "parCible": 2,
+      "relance": 0,
+      "relanceInitiale": 0,
+      "plafondPose": 0,
+      "maitre": 10,
+      "zone": {
+        "forme": "case",
+        "taille": 0,
+        "tailleMin": 0,
+        "baisse": true
+      },
+      "touche": "ennemis",
+      "effets": [
+        {
+          "type": "degats",
+          "element": "C",
+          "min": 9,
+          "max": 12,
+          "maitre": [
+            11,
+            15
+          ]
+        }
+      ],
+      "texte": "Une fournée faite en un éclair : pas le temps de cuire, et presque rien à payer.",
+      "change": "Elle ne cuit plus au sol : elle part tout de suite, en ligne, sur une seule cible, et ne coûte que 2 coups de main, en Éclair."
+    }
+  },
+  {
+    "base": {
+      "id": "levainqueur.croute-que-croute",
+      "classe": "levainqueur",
+      "emplacement": 3,
+      "declinaisonDe": null,
+      "niveau": 1,
+      "nom": "Croûte que croûte",
+      "element": "S",
+      "cm": 3,
+      "rayon": {
+        "min": 1,
+        "max": 3,
+        "modifiable": false
+      },
+      "lancer": "libre",
+      "vue": true,
+      "cible": "caseLibre",
+      "parTour": 1,
+      "parCible": 0,
+      "relance": 2,
+      "relanceInitiale": 0,
+      "plafondPose": 0,
+      "maitre": 5,
+      "zone": {
+        "forme": "rond",
+        "taille": 1,
+        "tailleMin": 1,
+        "baisse": false
+      },
+      "touche": "ennemis",
+      "effets": [
+        {
+          "type": "bond"
+        },
+        {
+          "type": "degats",
+          "element": "S",
+          "min": 15,
+          "max": 17,
+          "maitre": [
+            19,
+            21
+          ]
+        }
+      ],
+      "texte": "Coûte que coûte, il y va : il bondit, et sa croûte éclate autour de lui quand il retombe.",
+      "change": ""
+    },
+    "declinaison": {
+      "id": "levainqueur.casse-croute",
+      "classe": "levainqueur",
+      "emplacement": 3,
+      "declinaisonDe": "levainqueur.croute-que-croute",
+      "niveau": 7,
+      "nom": "Casse-croûte",
+      "element": "C",
+      "cm": 2,
+      "rayon": {
+        "min": 1,
+        "max": 1,
+        "modifiable": false
+      },
+      "lancer": "libre",
+      "vue": true,
+      "cible": "ennemi",
+      "parTour": 1,
+      "parCible": 1,
+      "relance": 2,
+      "relanceInitiale": 0,
+      "plafondPose": 0,
+      "maitre": 10,
+      "zone": {
+        "forme": "case",
+        "taille": 0,
+        "tailleMin": 0,
+        "baisse": true
+      },
+      "touche": "ennemis",
+      "effets": [
+        {
+          "type": "degats",
+          "element": "C",
+          "min": 10,
+          "max": 13,
+          "maitre": [
+            13,
+            16
+          ]
+        },
+        {
+          "type": "bonus",
+          "carac": "pas",
+          "valeur": 2,
+          "tours": 1,
+          "qui": "soi"
+        }
+      ],
+      "texte": "Un morceau sur le pouce, une pogne au passage, et ça repart.",
+      "change": "On ne bondit plus : on frappe au contact, en Éclair, et le casse-croûte donne +2 Pas ce tour. À cause de ces Pas, une fois par tour et un tour sur deux (relance 2)."
+    }
+  },
+  {
+    "base": {
+      "id": "levainqueur.mie-raille",
+      "classe": "levainqueur",
+      "emplacement": 4,
+      "declinaisonDe": null,
+      "niveau": 10,
+      "nom": "Mie-raille",
+      "element": "F",
+      "cm": 2,
+      "rayon": {
+        "min": 1,
+        "max": 3,
+        "modifiable": true
+      },
+      "lancer": "libre",
+      "vue": true,
+      "cible": "ennemi",
+      "parTour": 3,
+      "parCible": 2,
+      "relance": 0,
+      "relanceInitiale": 0,
+      "plafondPose": 0,
+      "maitre": 15,
+      "zone": {
+        "forme": "case",
+        "taille": 0,
+        "tailleMin": 0,
+        "baisse": true
+      },
+      "touche": "ennemis",
+      "effets": [
+        {
+          "type": "degats",
+          "element": "F",
+          "min": 9,
+          "max": 12,
+          "maitre": [
+            11,
+            15
+          ]
+        },
+        {
+          "type": "etat",
+          "etat": "brule",
+          "tours": 2,
+          "couches": 1
+        }
+      ],
+      "texte": "La mitraille de mie : des miettes brûlantes, tirées à bout portant, qui brûlent encore après.",
+      "change": ""
+    },
+    "declinaison": {
+      "id": "levainqueur.mie-stral",
+      "classe": "levainqueur",
+      "emplacement": 4,
+      "declinaisonDe": "levainqueur.mie-raille",
+      "niveau": 18,
+      "nom": "Mie-stral",
+      "element": "S",
+      "cm": 3,
+      "rayon": {
+        "min": 1,
+        "max": 1,
+        "modifiable": false
+      },
+      "lancer": "libre",
+      "vue": true,
+      "cible": "case",
+      "parTour": 2,
+      "parCible": 1,
+      "relance": 0,
+      "relanceInitiale": 0,
+      "plafondPose": 0,
+      "maitre": 5,
+      "zone": {
+        "forme": "cone",
+        "taille": 2,
+        "tailleMin": 0,
+        "baisse": true
+      },
+      "touche": "ennemis",
+      "effets": [
+        {
+          "type": "degats",
+          "element": "S",
+          "min": 12,
+          "max": 16,
+          "maitre": [
+            15,
+            20
+          ]
+        }
+      ],
+      "texte": "Le mistral se lève et emporte les miettes.",
+      "change": "Les miettes ne visent plus une cible : le vent les emporte en cône devant toi, sur 9 cases, en Soufflé, sans brûlure."
+    }
+  },
+  {
+    "base": {
+      "id": "levainqueur.pain-beni",
+      "classe": "levainqueur",
+      "emplacement": 5,
+      "declinaisonDe": null,
+      "niveau": 26,
+      "nom": "Pain béni",
+      "element": "N",
+      "cm": 2,
+      "rayon": {
+        "min": 0,
+        "max": 0,
+        "modifiable": false
+      },
+      "lancer": "libre",
+      "vue": false,
+      "cible": "soi",
+      "parTour": 1,
+      "parCible": 1,
+      "relance": 2,
+      "relanceInitiale": 0,
+      "plafondPose": 0,
+      "maitre": 0,
+      "zone": {
+        "forme": "case",
+        "taille": 0,
+        "tailleMin": 0,
+        "baisse": true
+      },
+      "touche": "allies",
+      "effets": [
+        {
+          "type": "bouclier",
+          "valeur": 22,
+          "tours": 2,
+          "couchesMax": 1
+        }
+      ],
+      "texte": "C'est pain béni : une croûte bénie qui encaisse à ta place.",
+      "change": ""
+    },
+    "declinaison": {
+      "id": "levainqueur.pain-banni",
+      "classe": "levainqueur",
+      "emplacement": 5,
+      "declinaisonDe": "levainqueur.pain-beni",
+      "niveau": 34,
+      "nom": "Pain banni",
+      "element": "C",
+      "cm": 3,
+      "rayon": {
+        "min": 2,
+        "max": 5,
+        "modifiable": true
+      },
+      "lancer": "libre",
+      "vue": true,
+      "cible": "ennemi",
+      "parTour": 2,
+      "parCible": 1,
+      "relance": 0,
+      "relanceInitiale": 0,
+      "plafondPose": 0,
+      "maitre": 10,
+      "zone": {
+        "forme": "case",
+        "taille": 0,
+        "tailleMin": 0,
+        "baisse": true
+      },
+      "touche": "ennemis",
+      "effets": [
+        {
+          "type": "degats",
+          "element": "C",
+          "min": 14,
+          "max": 18,
+          "maitre": [
+            18,
+            23
+          ]
+        },
+        {
+          "type": "rebond",
+          "fois": 1,
+          "rayon": 2,
+          "part": 50
+        }
+      ],
+      "texte": "Le ciel ne bénit plus : il foudroie, et la foudre saute sur le voisin.",
+      "change": "Le pain béni devient pain banni : plus de bouclier, une frappe Éclair de 2 à 5 cases qui rebondit sur un ennemi proche."
+    }
+  },
+  {
+    "base": {
+      "id": "levainqueur.baguette-magique",
+      "classe": "levainqueur",
+      "emplacement": 6,
+      "declinaisonDe": null,
+      "niveau": 41,
+      "nom": "Baguette magique",
+      "element": "T",
+      "cm": 3,
+      "rayon": {
+        "min": 1,
+        "max": 4,
+        "modifiable": false
+      },
+      "lancer": "ligne",
+      "vue": true,
+      "cible": "ennemi",
+      "parTour": 2,
+      "parCible": 1,
+      "relance": 0,
+      "relanceInitiale": 0,
+      "plafondPose": 0,
+      "maitre": 10,
+      "zone": {
+        "forme": "case",
+        "taille": 0,
+        "tailleMin": 0,
+        "baisse": true
+      },
+      "touche": "ennemis",
+      "effets": [
+        {
+          "type": "degats",
+          "element": "T",
+          "min": 16,
+          "max": 20,
+          "maitre": [
+            20,
+            25
+          ]
+        },
+        {
+          "type": "pousse",
+          "cases": 1
+        }
+      ],
+      "texte": "Pas de magie : une baguette de la veille, dure comme du bois, et l'ennemi recule.",
+      "change": ""
+    },
+    "declinaison": {
+      "id": "levainqueur.baguette-de-sourcier",
+      "classe": "levainqueur",
+      "emplacement": 6,
+      "declinaisonDe": "levainqueur.baguette-magique",
+      "niveau": 49,
+      "nom": "Baguette de sourcier",
+      "element": "E",
+      "cm": 3,
+      "rayon": {
+        "min": 2,
+        "max": 5,
+        "modifiable": true
+      },
+      "lancer": "libre",
+      "vue": true,
+      "cible": "case",
+      "parTour": 2,
+      "parCible": 1,
+      "relance": 0,
+      "relanceInitiale": 0,
+      "plafondPose": 0,
+      "maitre": 5,
+      "zone": {
+        "forme": "croix",
+        "taille": 1,
+        "tailleMin": 0,
+        "baisse": true
+      },
+      "touche": "ennemis",
+      "effets": [
+        {
+          "type": "degats",
+          "element": "E",
+          "min": 10,
+          "max": 14,
+          "maitre": [
+            13,
+            18
+          ]
+        },
+        {
+          "type": "etat",
+          "etat": "ramolli",
+          "tours": 1,
+          "couches": 1
+        }
+      ],
+      "texte": "Du sorcier au sourcier : la baguette tremble, et l'eau jaillit sous les pieds.",
+      "change": "La baguette ne pousse plus une cible en ligne : elle fait jaillir une source en croix qui ramollit (−1 Pas), en Eaudace."
+    }
+  },
+  {
+    "base": {
+      "id": "levainqueur.four-a-pain",
+      "classe": "levainqueur",
+      "emplacement": 7,
+      "declinaisonDe": null,
+      "niveau": 57,
+      "nom": "Four à pain",
+      "element": "F",
+      "cm": 4,
+      "rayon": {
+        "min": 1,
+        "max": 3,
+        "modifiable": false
+      },
+      "lancer": "libre",
+      "vue": false,
+      "cible": "caseLibre",
+      "parTour": 1,
+      "parCible": 0,
+      "relance": 2,
+      "relanceInitiale": 0,
+      "plafondPose": 2,
+      "maitre": 0,
+      "zone": {
+        "forme": "case",
+        "taille": 0,
+        "tailleMin": 0,
+        "baisse": true
+      },
+      "touche": "ennemis",
+      "effets": [
+        {
+          "type": "pose",
+          "quoi": "fournee",
+          "tours": 2,
+          "victuailles": 60,
+          "zone": {
+            "forme": "rond",
+            "taille": 1,
+            "tailleMin": 0,
+            "baisse": true
+          },
+          "touche": "ennemis",
+          "maitre": 15,
+          "effets": [
+            {
+              "type": "degats",
+              "element": "F",
+              "min": 31,
+              "max": 37,
+              "maitre": [
+                39,
+                46
+              ]
+            }
+          ]
+        }
+      ],
+      "texte": "Un vrai four au sol : il cuit deux tours en cachant la vue, puis il éclate, sauf si l'ennemi le casse avant. Un four, ça prend de la place : relance de 2 tours, deux au plus sur le terrain.",
+      "change": ""
+    },
+    "declinaison": {
+      "id": "levainqueur.chaleur-tournante",
+      "classe": "levainqueur",
+      "emplacement": 7,
+      "declinaisonDe": "levainqueur.four-a-pain",
+      "niveau": 65,
+      "nom": "Chaleur tournante",
+      "element": "S",
+      "cm": 4,
+      "rayon": {
+        "min": 1,
+        "max": 4,
+        "modifiable": false
+      },
+      "lancer": "libre",
+      "vue": false,
+      "cible": "caseLibre",
+      "parTour": 1,
+      "parCible": 0,
+      "relance": 0,
+      "relanceInitiale": 0,
+      "plafondPose": 2,
+      "maitre": 0,
+      "zone": {
+        "forme": "case",
+        "taille": 0,
+        "tailleMin": 0,
+        "baisse": true
+      },
+      "touche": "ennemis",
+      "effets": [
+        {
+          "type": "pose",
+          "quoi": "fournee",
+          "tours": 1,
+          "zone": {
+            "forme": "rond",
+            "taille": 2,
+            "tailleMin": 0,
+            "baisse": true
+          },
+          "touche": "ennemis",
+          "maitre": 5,
+          "effets": [
+            {
+              "type": "degats",
+              "element": "S",
+              "min": 22,
+              "max": 27,
+              "maitre": [
+                28,
+                34
+              ]
+            }
+          ]
+        }
+      ],
+      "texte": "Un four ventilé : la chaleur tourne un seul tour, puis elle souffle large, jusqu'à 2 cases autour.",
+      "change": "Toujours une fournée, mais le four ventilé ne bloque plus sa case et ne se casse pas : il cuit en un tour, sans relance, et souffle sur 2 cases autour, moins fort, en Soufflé."
+    }
+  },
+  {
+    "base": {
+      "id": "levainqueur.batard-trempe",
+      "classe": "levainqueur",
+      "emplacement": 8,
+      "declinaisonDe": null,
+      "niveau": 73,
+      "nom": "Bâtard trempé",
+      "element": "E",
+      "cm": 3,
+      "rayon": {
+        "min": 1,
+        "max": 4,
+        "modifiable": true
+      },
+      "lancer": "libre",
+      "vue": true,
+      "cible": "ennemi",
+      "parTour": 2,
+      "parCible": 1,
+      "relance": 0,
+      "relanceInitiale": 0,
+      "plafondPose": 0,
+      "maitre": 10,
+      "zone": {
+        "forme": "case",
+        "taille": 0,
+        "tailleMin": 0,
+        "baisse": true
+      },
+      "touche": "ennemis",
+      "effets": [
+        {
+          "type": "degats",
+          "element": "E",
+          "min": 15,
+          "max": 19,
+          "maitre": [
+            19,
+            24
+          ]
+        },
+        {
+          "type": "etat",
+          "etat": "ramolli",
+          "tours": 2,
+          "couches": 1
+        }
+      ],
+      "texte": "Un bâtard trempé : la mie molle colle aux pieds pendant deux tours.",
+      "change": ""
+    },
+    "declinaison": {
+      "id": "levainqueur.batard-rassis",
+      "classe": "levainqueur",
+      "emplacement": 8,
+      "declinaisonDe": "levainqueur.batard-trempe",
+      "niveau": 81,
+      "nom": "Bâtard rassis",
+      "element": "T",
+      "cm": 3,
+      "rayon": {
+        "min": 1,
+        "max": 2,
+        "modifiable": false
+      },
+      "lancer": "libre",
+      "vue": true,
+      "cible": "ennemi",
+      "parTour": 2,
+      "parCible": 1,
+      "relance": 0,
+      "relanceInitiale": 0,
+      "plafondPose": 0,
+      "maitre": 10,
+      "zone": {
+        "forme": "case",
+        "taille": 0,
+        "tailleMin": 0,
+        "baisse": true
+      },
+      "touche": "ennemis",
+      "effets": [
+        {
+          "type": "degats",
+          "element": "T",
+          "min": 18,
+          "max": 23,
+          "maitre": [
+            23,
+            29
+          ]
+        }
+      ],
+      "texte": "Trois jours d'âge, dur comme la pierre : on le lance de tout près, même sans être au contact.",
+      "change": "Le même bâtard, sec au lieu de trempé : il ne ralentit plus, il cogne plus fort, mais de 1 à 2 cases seulement, en Terroir."
+    }
+  },
+  {
+    "base": {
+      "id": "levainqueur.petrissage",
+      "classe": "levainqueur",
+      "emplacement": 9,
+      "declinaisonDe": null,
+      "niveau": 88,
+      "nom": "Pétrissage",
+      "element": "S",
+      "cm": 3,
+      "rayon": {
+        "min": 2,
+        "max": 4,
+        "modifiable": false
+      },
+      "lancer": "ligne",
+      "vue": true,
+      "cible": "ennemi",
+      "parTour": 2,
+      "parCible": 1,
+      "relance": 0,
+      "relanceInitiale": 0,
+      "plafondPose": 0,
+      "maitre": 5,
+      "zone": {
+        "forme": "case",
+        "taille": 0,
+        "tailleMin": 0,
+        "baisse": true
+      },
+      "touche": "ennemis",
+      "effets": [
+        {
+          "type": "degats",
+          "element": "S",
+          "min": 14,
+          "max": 17,
+          "maitre": [
+            18,
+            21
+          ]
+        },
+        {
+          "type": "attire",
+          "cases": 3
+        }
+      ],
+      "texte": "On ramène la pâte vers soi, encore et encore, et l'ennemi avec.",
+      "change": ""
+    },
+    "declinaison": {
+      "id": "levainqueur.coup-de-pousse",
+      "classe": "levainqueur",
+      "emplacement": 9,
+      "declinaisonDe": "levainqueur.petrissage",
+      "niveau": 96,
+      "nom": "Coup de pousse",
+      "element": "T",
+      "cm": 3,
+      "rayon": {
+        "min": 0,
+        "max": 0,
+        "modifiable": false
+      },
+      "lancer": "libre",
+      "vue": false,
+      "cible": "soi",
+      "parTour": 1,
+      "parCible": 0,
+      "relance": 0,
+      "relanceInitiale": 0,
+      "plafondPose": 0,
+      "maitre": 5,
+      "zone": {
+        "forme": "rond",
+        "taille": 1,
+        "tailleMin": 1,
+        "baisse": false
+      },
+      "touche": "ennemis",
+      "effets": [
+        {
+          "type": "degats",
+          "element": "T",
+          "min": 11,
+          "max": 15,
+          "maitre": [
+            14,
+            19
+          ]
+        },
+        {
+          "type": "pousse",
+          "cases": 2
+        }
+      ],
+      "texte": "La pâte a levé d'un coup : tout le monde dehors !",
+      "change": "Après le pétrissage, la pousse : au lieu d'attirer une cible, la pâte gonfle autour de toi et repousse tous les ennemis de 2 cases, en Terroir."
+    }
+  },
+  {
+    "base": {
+      "id": "levainqueur.ficelle-electrique",
+      "classe": "levainqueur",
+      "emplacement": 10,
+      "declinaisonDe": null,
+      "niveau": 104,
+      "nom": "Ficelle électrique",
+      "element": "C",
+      "cm": 3,
+      "rayon": {
+        "min": 1,
+        "max": 5,
+        "modifiable": true
+      },
+      "lancer": "ligne",
+      "vue": true,
+      "cible": "ennemi",
+      "parTour": 2,
+      "parCible": 1,
+      "relance": 0,
+      "relanceInitiale": 0,
+      "plafondPose": 0,
+      "maitre": 10,
+      "zone": {
+        "forme": "case",
+        "taille": 0,
+        "tailleMin": 0,
+        "baisse": true
+      },
+      "touche": "ennemis",
+      "effets": [
+        {
+          "type": "degats",
+          "element": "C",
+          "min": 15,
+          "max": 19,
+          "maitre": [
+            19,
+            24
+          ]
+        },
+        {
+          "type": "rebond",
+          "fois": 2,
+          "rayon": 2,
+          "part": 50
+        }
+      ],
+      "texte": "Une ficelle, c'est une baguette fine. Celle-ci conduit le courant d'un ennemi à l'autre.",
+      "change": ""
+    },
+    "declinaison": {
+      "id": "levainqueur.bien-ficele",
+      "classe": "levainqueur",
+      "emplacement": 10,
+      "declinaisonDe": "levainqueur.ficelle-electrique",
+      "niveau": 112,
+      "nom": "Bien ficelé",
+      "element": "E",
+      "cm": 3,
+      "rayon": {
+        "min": 1,
+        "max": 4,
+        "modifiable": true
+      },
+      "lancer": "libre",
+      "vue": true,
+      "cible": "ennemi",
+      "parTour": 2,
+      "parCible": 1,
+      "relance": 0,
+      "relanceInitiale": 0,
+      "plafondPose": 0,
+      "maitre": 5,
+      "zone": {
+        "forme": "case",
+        "taille": 0,
+        "tailleMin": 0,
+        "baisse": true
+      },
+      "touche": "ennemis",
+      "effets": [
+        {
+          "type": "degats",
+          "element": "E",
+          "min": 13,
+          "max": 17,
+          "maitre": [
+            16,
+            21
+          ]
+        },
+        {
+          "type": "etat",
+          "etat": "enracine",
+          "tours": 1,
+          "couches": 1
+        }
+      ],
+      "texte": "Ficelé comme un rôti, il ne bouge plus.",
+      "change": "La ficelle ne rebondit plus : elle ligote une seule cible et l'enracine 1 tour, moins fort mais avec du contrôle, en Eaudace."
+    }
+  },
+  {
+    "base": {
+      "id": "levainqueur.la-levee",
+      "classe": "levainqueur",
+      "emplacement": 11,
+      "declinaisonDe": null,
+      "niveau": 120,
+      "nom": "La levée",
+      "element": "N",
+      "cm": 2,
+      "rayon": {
+        "min": 0,
+        "max": 0,
+        "modifiable": false
+      },
+      "lancer": "libre",
+      "vue": false,
+      "cible": "soi",
+      "parTour": 1,
+      "parCible": 0,
+      "relance": 3,
+      "relanceInitiale": 0,
+      "plafondPose": 0,
+      "maitre": 0,
+      "zone": {
+        "forme": "case",
+        "taille": 0,
+        "tailleMin": 0,
+        "baisse": true
+      },
+      "touche": "allies",
+      "effets": [
+        {
+          "type": "bonus",
+          "carac": "levure",
+          "valeur": 80,
+          "tours": 2,
+          "qui": "soi"
+        }
+      ],
+      "texte": "La pâte prend l'air et monte : la Levure fait tout monter.",
+      "change": ""
+    },
+    "declinaison": {
+      "id": "levainqueur.levee-de-boucliers",
+      "classe": "levainqueur",
+      "emplacement": 11,
+      "declinaisonDe": "levainqueur.la-levee",
+      "niveau": 128,
+      "nom": "Levée de boucliers",
+      "element": "N",
+      "cm": 3,
+      "rayon": {
+        "min": 0,
+        "max": 0,
+        "modifiable": false
+      },
+      "lancer": "libre",
+      "vue": false,
+      "cible": "soi",
+      "parTour": 1,
+      "parCible": 1,
+      "relance": 2,
+      "relanceInitiale": 0,
+      "plafondPose": 0,
+      "maitre": 0,
+      "zone": {
+        "forme": "rond",
+        "taille": 1,
+        "tailleMin": 0,
+        "baisse": true
+      },
+      "touche": "allies",
+      "effets": [
+        {
+          "type": "bouclier",
+          "valeur": 30,
+          "tours": 2,
+          "couchesMax": 1
+        }
+      ],
+      "texte": "On ne lève plus la pâte, on lève les boucliers.",
+      "change": "La puissance pour toi seul devient un bouclier pour toi et chaque allié à côté de toi."
+    }
+  },
+  {
+    "base": {
+      "id": "levainqueur.galette-des-rois",
+      "classe": "levainqueur",
+      "emplacement": 12,
+      "declinaisonDe": null,
+      "niveau": 135,
+      "nom": "Galette des rois",
+      "element": "N",
+      "cm": 1,
+      "rayon": {
+        "min": 1,
+        "max": 4,
+        "modifiable": true
+      },
+      "lancer": "libre",
+      "vue": true,
+      "cible": "ennemi",
+      "parTour": 1,
+      "parCible": 1,
+      "relance": 2,
+      "relanceInitiale": 0,
+      "plafondPose": 0,
+      "maitre": 0,
+      "zone": {
+        "forme": "case",
+        "taille": 0,
+        "tailleMin": 0,
+        "baisse": true
+      },
+      "touche": "ennemis",
+      "effets": [
+        {
+          "type": "etat",
+          "etat": "feve",
+          "tours": 99,
+          "couches": 1
+        }
+      ],
+      "texte": "Une fève cachée sur un ennemi, pour un seul coup de main : celui qui le fait tomber devient roi et gagne 1 coup de main.",
+      "change": ""
+    },
+    "declinaison": {
+      "id": "levainqueur.tirer-les-rois",
+      "classe": "levainqueur",
+      "emplacement": 12,
+      "declinaisonDe": "levainqueur.galette-des-rois",
+      "niveau": 143,
+      "nom": "Tirer les rois",
+      "element": "C",
+      "cm": 3,
+      "rayon": {
+        "min": 2,
+        "max": 5,
+        "modifiable": true
+      },
+      "lancer": "libre",
+      "vue": true,
+      "cible": "ennemi",
+      "parTour": 2,
+      "parCible": 1,
+      "relance": 0,
+      "relanceInitiale": 0,
+      "plafondPose": 0,
+      "maitre": 10,
+      "zone": {
+        "forme": "case",
+        "taille": 0,
+        "tailleMin": 0,
+        "baisse": true
+      },
+      "touche": "ennemis",
+      "effets": [
+        {
+          "type": "degats",
+          "element": "C",
+          "min": 16,
+          "max": 21,
+          "maitre": [
+            20,
+            26
+          ]
+        },
+        {
+          "type": "si",
+          "condition": "cibleTombe",
+          "effets": [
+            {
+              "type": "gainCM",
+              "n": 1,
+              "qui": "soi"
+            }
+          ]
+        }
+      ],
+      "texte": "On tire les rois, et on tire tout court : si la cible tombe, la fève est pour toi.",
+      "change": "Plus de fève à cacher : tu tires toi-même, en Éclair, et si la cible tombe, c'est toi qui gagnes le coup de main."
+    }
+  },
+  {
+    "base": {
+      "id": "levainqueur.brioche-filante",
+      "classe": "levainqueur",
+      "emplacement": 13,
+      "declinaisonDe": null,
+      "niveau": 151,
+      "nom": "Brioche filante",
+      "element": "C",
+      "cm": 4,
+      "rayon": {
+        "min": 1,
+        "max": 4,
+        "modifiable": false
+      },
+      "lancer": "ligne",
+      "vue": true,
+      "cible": "ennemi",
+      "parTour": 1,
+      "parCible": 1,
+      "relance": 2,
+      "relanceInitiale": 0,
+      "plafondPose": 0,
+      "maitre": 10,
+      "zone": {
+        "forme": "case",
+        "taille": 0,
+        "tailleMin": 0,
+        "baisse": true
+      },
+      "touche": "ennemis",
+      "effets": [
+        {
+          "type": "degats",
+          "element": "C",
+          "min": 25,
+          "max": 31,
+          "maitre": [
+            31,
+            39
+          ]
+        },
+        {
+          "type": "dans-le-dos"
+        }
+      ],
+      "texte": "Comme une étoile filante, vive comme l'éclair : la brioche fonce, frappe et ressort derrière la cible. Elle revient un tour sur deux : on ne file pas deux fois de suite.",
+      "change": ""
+    },
+    "declinaison": {
+      "id": "levainqueur.tete-de-brioche",
+      "classe": "levainqueur",
+      "emplacement": 13,
+      "declinaisonDe": "levainqueur.brioche-filante",
+      "niveau": 159,
+      "nom": "Tête de brioche",
+      "element": "T",
+      "cm": 4,
+      "rayon": {
+        "min": 1,
+        "max": 1,
+        "modifiable": false
+      },
+      "lancer": "libre",
+      "vue": true,
+      "cible": "ennemi",
+      "parTour": 1,
+      "parCible": 1,
+      "relance": 0,
+      "relanceInitiale": 0,
+      "plafondPose": 0,
+      "maitre": 10,
+      "zone": {
+        "forme": "case",
+        "taille": 0,
+        "tailleMin": 0,
+        "baisse": true
+      },
+      "touche": "ennemis",
+      "effets": [
+        {
+          "type": "degats",
+          "element": "T",
+          "min": 26,
+          "max": 32,
+          "maitre": [
+            33,
+            40
+          ]
+        },
+        {
+          "type": "pousse",
+          "cases": 1
+        }
+      ],
+      "texte": "Un coup de tête de pioche, et la cible recule d'une case.",
+      "change": "Plus de course : la brioche à tête frappe au contact, sans bouger, plus fort, et repousse d'une case, en Terroir."
+    }
+  },
+  {
+    "base": {
+      "id": "levainqueur.geindre",
+      "classe": "levainqueur",
+      "emplacement": 14,
+      "declinaisonDe": null,
+      "niveau": 167,
+      "nom": "Geindre",
+      "element": "T",
+      "cm": 4,
+      "rayon": {
+        "min": 1,
+        "max": 2,
+        "modifiable": false
+      },
+      "lancer": "libre",
+      "vue": true,
+      "cible": "caseLibre",
+      "parTour": 1,
+      "parCible": 0,
+      "relance": 4,
+      "relanceInitiale": 1,
+      "plafondPose": 0,
+      "maitre": 0,
+      "zone": {
+        "forme": "case",
+        "taille": 0,
+        "tailleMin": 0,
+        "baisse": true
+      },
+      "touche": "ennemis",
+      "effets": [
+        {
+          "type": "invoque",
+          "commis": {
+            "nom": "Geindre",
+            "victuailles": 100,
+            "cm": 4,
+            "pas": 3,
+            "ouverture": 80,
+            "rideau": 12,
+            "fauxFuyant": 4,
+            "sorts": [
+              {
+                "id": "levainqueur.petite-pogne",
+                "classe": "levainqueur",
+                "declinaisonDe": null,
+                "niveau": 167,
+                "nom": "Petite pogne",
+                "element": "T",
+                "cm": 2,
+                "rayon": {
+                  "min": 1,
+                  "max": 1,
+                  "modifiable": false
+                },
+                "lancer": "libre",
+                "vue": true,
+                "cible": "ennemi",
+                "parTour": 3,
+                "parCible": 2,
+                "relance": 0,
+                "relanceInitiale": 0,
+                "plafondPose": 0,
+                "maitre": 5,
+                "zone": {
+                  "forme": "case",
+                  "taille": 0,
+                  "tailleMin": 0,
+                  "baisse": true
+                },
+                "touche": "ennemis",
+                "effets": [
+                  {
+                    "type": "degats",
+                    "element": "T",
+                    "min": 9,
+                    "max": 12,
+                    "maitre": [
+                      11,
+                      15
+                    ]
+                  }
+                ],
+                "texte": "Le geindre pétrit l'ennemi de ses pognes, en soufflant fort.",
+                "change": ""
+              }
+            ]
+          }
+        }
+      ],
+      "texte": "Le geindre, c'est l'ouvrier du fournil qui pétrit en soufflant fort. Il vient t'aider : il retient les ennemis au contact (beaucoup de Rideau) et les pétrit de ses grosses pognes.",
+      "change": ""
+    },
+    "declinaison": {
+      "id": "levainqueur.geindre-courant-d-air",
+      "classe": "levainqueur",
+      "emplacement": 14,
+      "declinaisonDe": "levainqueur.geindre",
+      "niveau": 175,
+      "nom": "Geindre courant d'air",
+      "element": "S",
+      "cm": 4,
+      "rayon": {
+        "min": 1,
+        "max": 2,
+        "modifiable": false
+      },
+      "lancer": "ligne",
+      "vue": true,
+      "cible": "case",
+      "parTour": 1,
+      "parCible": 1,
+      "relance": 0,
+      "relanceInitiale": 0,
+      "plafondPose": 0,
+      "maitre": 5,
+      "zone": {
+        "forme": "ligne",
+        "taille": 3,
+        "tailleMin": 0,
+        "baisse": false
+      },
+      "touche": "ennemis",
+      "effets": [
+        {
+          "type": "degats",
+          "element": "S",
+          "min": 20,
+          "max": 24,
+          "maitre": [
+            25,
+            30
+          ]
+        }
+      ],
+      "texte": "Un courant d'air en tablier : on l'a à peine vu passer.",
+      "change": "Le geindre ne reste plus : il passe en courant d'air et frappe tout de suite chaque ennemi d'une ligne de 4 cases, en Soufflé."
+    }
+  },
+  {
+    "base": {
+      "id": "levainqueur.pain-perdu",
+      "classe": "levainqueur",
+      "emplacement": 15,
+      "declinaisonDe": null,
+      "niveau": 182,
+      "nom": "Pain perdu",
+      "element": "E",
+      "cm": 4,
+      "rayon": {
+        "min": 1,
+        "max": 4,
+        "modifiable": true
+      },
+      "lancer": "libre",
+      "vue": true,
+      "cible": "ennemi",
+      "parTour": 1,
+      "parCible": 1,
+      "relance": 0,
+      "relanceInitiale": 0,
+      "plafondPose": 0,
+      "maitre": 10,
+      "zone": {
+        "forme": "case",
+        "taille": 0,
+        "tailleMin": 0,
+        "baisse": true
+      },
+      "touche": "ennemis",
+      "effets": [
+        {
+          "type": "degats",
+          "element": "E",
+          "min": 19,
+          "max": 24,
+          "maitre": [
+            24,
+            30
+          ]
+        },
+        {
+          "type": "retire",
+          "quoi": "cm",
+          "n": 2
+        }
+      ],
+      "texte": "Le pain perdu ne l'est pas pour tout le monde : la cible perd 2 coups de main.",
+      "change": ""
+    },
+    "declinaison": {
+      "id": "levainqueur.pain-dore",
+      "classe": "levainqueur",
+      "emplacement": 15,
+      "declinaisonDe": "levainqueur.pain-perdu",
+      "niveau": 190,
+      "nom": "Pain doré",
+      "element": "F",
+      "cm": 4,
+      "rayon": {
+        "min": 1,
+        "max": 4,
+        "modifiable": false
+      },
+      "lancer": "ligne",
+      "vue": true,
+      "cible": "ennemi",
+      "parTour": 1,
+      "parCible": 1,
+      "relance": 0,
+      "relanceInitiale": 0,
+      "plafondPose": 0,
+      "maitre": 15,
+      "zone": {
+        "forme": "ligne",
+        "taille": 1,
+        "tailleMin": 0,
+        "baisse": false
+      },
+      "touche": "ennemis",
+      "effets": [
+        {
+          "type": "degats",
+          "element": "F",
+          "min": 24,
+          "max": 30,
+          "maitre": [
+            30,
+            38
+          ]
+        }
+      ],
+      "texte": "Doré des deux côtés.",
+      "change": "Le pain perdu, doré à la poêle : il ne vole plus de coups de main, il frappe fort la cible et l'ennemi juste derrière, en Flambée."
+    }
+  },
+  {
+    "base": {
+      "id": "levainqueur.chef-d-oeuvre-la-grande-fournee",
+      "classe": "levainqueur",
+      "emplacement": 16,
+      "declinaisonDe": null,
+      "niveau": 200,
+      "nom": "Chef-d'œuvre : la Grande Fournée",
+      "element": "F",
+      "cm": 7,
+      "rayon": {
+        "min": 0,
+        "max": 0,
+        "modifiable": false
+      },
+      "lancer": "libre",
+      "vue": false,
+      "cible": "soi",
+      "parTour": 1,
+      "parCible": 0,
+      "relance": 5,
+      "relanceInitiale": 2,
+      "plafondPose": 0,
+      "maitre": 15,
+      "zone": {
+        "forme": "rond",
+        "taille": 3,
+        "tailleMin": 1,
+        "baisse": true
+      },
+      "touche": "ennemis",
+      "effets": [
+        {
+          "type": "degats",
+          "element": "F",
+          "min": 40,
+          "max": 50,
+          "maitre": [
+            50,
+            63
+          ]
+        },
+        {
+          "type": "renforce",
+          "quoi": "famille:fournee",
+          "valeur": 50,
+          "tours": 2,
+          "fois": 0
+        }
+      ],
+      "texte": "Le grand four s'ouvre : tout brûle autour de toi, et ce qui cuit encore éclate 50 % plus fort pendant 2 tours.",
+      "change": ""
+    },
+    "declinaison": {
+      "id": "levainqueur.chef-d-oeuvre-le-grand-petrin",
+      "classe": "levainqueur",
+      "emplacement": 16,
+      "declinaisonDe": "levainqueur.chef-d-oeuvre-la-grande-fournee",
+      "niveau": 200,
+      "nom": "Chef-d'œuvre : le Grand Pétrin",
+      "element": "E",
+      "cm": 7,
+      "rayon": {
+        "min": 0,
+        "max": 0,
+        "modifiable": false
+      },
+      "lancer": "libre",
+      "vue": false,
+      "cible": "soi",
+      "parTour": 1,
+      "parCible": 0,
+      "relance": 5,
+      "relanceInitiale": 2,
+      "plafondPose": 0,
+      "maitre": 5,
+      "zone": {
+        "forme": "terrain",
+        "taille": 0,
+        "tailleMin": 0,
+        "baisse": false
+      },
+      "touche": "ennemis",
+      "effets": [
+        {
+          "type": "degats",
+          "element": "E",
+          "min": 28,
+          "max": 35,
+          "maitre": [
+            35,
+            44
+          ]
+        },
+        {
+          "type": "retire",
+          "quoi": "pas",
+          "n": 2
+        }
+      ],
+      "texte": "Tout le monde dans le pétrin : la pâte trop mouillée colle à tous les pieds.",
+      "change": "Au lieu d'ouvrir le grand four autour de toi, tu mets tout le terrain dans le pétrin : moins fort, mais chaque ennemi est touché et perd 2 Pas, en Eaudace."
+    }
+  }
+]
